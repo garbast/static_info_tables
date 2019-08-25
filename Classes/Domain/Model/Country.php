@@ -27,7 +27,6 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  */
 
 use SJBR\StaticInfoTables\Utility\ModelUtility;
-use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
  * The Country model
@@ -48,7 +47,7 @@ class Country extends AbstractEntity
      * Country zones of this country
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone>
-     * @Lazy
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      * @lazy
      */
     protected $countryZones;
