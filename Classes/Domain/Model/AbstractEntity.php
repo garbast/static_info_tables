@@ -28,6 +28,9 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  * Abstract model for static entities
  */
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
@@ -85,7 +88,8 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getNameLocalized()
     {
         $language = LocalizationUtility::getCurrentLanguage();
-        $labelFields = LocalizationUtility::getLabelFields($this->tableName, $language);
+        $labelFields = LocalizationUtility::getLabelFields($this->getTableName(), $language);
+
         foreach ($labelFields as $labelField) {
             if ($this->_hasProperty($this->columnsMapping[$labelField]['mapOnProperty'])) {
                 $value = $this->_getProperty($this->columnsMapping[$labelField]['mapOnProperty']);
@@ -105,6 +109,9 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getTableName()
     {
+        if(!$this->tableName){
+            $this->tableName = $this->objectManager->get(DataMapper::class)->getDataMap(static::class)->getTableName();
+        }
         return $this->tableName;
     }
 
