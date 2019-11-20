@@ -27,7 +27,9 @@ namespace SJBR\StaticInfoTables\Cache;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Cached classes autoloader
@@ -85,10 +87,10 @@ class CachedClassLoader
         if (strpos($className, static::$namespace) !== false) {
             // Lookup the class in the array of static info entities and check its presence in the class cache
             $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][static::$extensionKey]['entities'];
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-            $cacheManager = $objectManager->get('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $cacheManager = $objectManager->get(CacheManager::class);
             // ClassCacheManager instantiation creates the class cache if not already available
-            $classCacheManager = $objectManager->get('SJBR\\StaticInfoTables\\Cache\\ClassCacheManager');
+            $classCacheManager = $objectManager->get(ClassCacheManager::class);
             $classCache = $cacheManager->getCache(static::$extensionKey);
             foreach ($entities as $entity) {
                 if ($className === static::$namespace . $entity) {
