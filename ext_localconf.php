@@ -110,9 +110,8 @@ call_user_func(
         $emConfUtility =
             \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extensionmanager\Utility\EmConfUtility::class);
         $emConf =
-            $emConfUtility->includeEmConf([
-                'key' => $extKey,
-                'siteRelPath' => \TYPO3\CMS\Core\Utility\PathUtility::stripPathSitePrefix(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extKey)),
+            $emConfUtility->includeEmConf($extKey, [
+                'packagePath' => \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:' . $extKey),
             ]);
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extKey]['version'] = $emConf['version'];
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extKey]['constraints'] = $emConf['constraints'];
