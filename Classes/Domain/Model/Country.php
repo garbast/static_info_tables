@@ -48,7 +48,6 @@ class Country extends AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone>
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
-     * @lazy
      */
     protected $countryZones;
 
