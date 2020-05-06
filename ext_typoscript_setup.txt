@@ -1,3 +1,5 @@
+# For TYPO3 10.1 we have to keep these settings here AND in /Configuration/Extbase/Persistence/Classes.php!
+# Otherwise, getting CONFIGURATION_TYPE_FRAMEWORK from configuration manager (when calling getNameLocalized() method in extbase) won't work!
 config.tx_extbase {
 	persistence {
 		classes {
