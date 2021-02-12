@@ -28,6 +28,11 @@
     "php": ">= 7.0, <7.5",
     "typo3/cms-core": ">=8.7, <12.0"
   },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "store_finder"
+    }
+  },
   "autoload": {
     "psr-4": {
       "SJBR\\StaticInfoTables\\": "Classes/"
