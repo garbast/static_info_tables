@@ -7,3 +7,7 @@ services:
 
   SJBR\StaticInfoTables\:
     resource: '../Classes/*'
+
+  SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
+    public: true
+
