@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
+ *  (c) 2013-2020 Stanislas Rolland <typo32020(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,6 +29,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
 
 use SJBR\StaticInfoTables\Cache\ClassCacheManager;
 use SJBR\StaticInfoTables\Domain\Model\LanguagePack;
+use SJBR\StaticInfoTables\Utility\VersionNumberUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -63,7 +64,7 @@ class LanguagePackRepository extends Repository
         $localeCamel = GeneralUtility::underscoredToUpperCamelCase(strtolower($locale));
 
         $languagePackExtensionKey = $extensionKey . '_' . $localeLowerCase;
-        $languagePackExtensionPath = (class_exists('TYPO3\\CMS\\Core\\Core\\Environment') ? (\TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/') : PATH_site) . 'typo3conf/ext/' . $languagePackExtensionKey . '/';
+        $languagePackExtensionPath = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/typo3conf/ext/' . $languagePackExtensionKey . '/';
 
         // Cleanup any pre-existing language pack
         if (is_dir($languagePackExtensionPath)) {
@@ -85,8 +86,8 @@ class LanguagePackRepository extends Repository
         if (!is_dir($languagePackExtensionPath . 'Configuration/PageTSconfig/')) {
             GeneralUtility::mkdir_deep($languagePackExtensionPath . 'Configuration/PageTSconfig/');
         }
-        if (!is_dir($languagePackExtensionPath . 'Configuration/TypoScript/Extbase/')) {
-            GeneralUtility::mkdir_deep($languagePackExtensionPath . 'Configuration/TypoScript/Extbase/');
+        if (!is_dir($languagePackExtensionPath . 'Configuration/Extbase/Persistence/')) {
+            GeneralUtility::mkdir_deep($languagePackExtensionPath . 'Configuration/Extbase/Persistence/');
         }
         if (!is_dir($languagePackExtensionPath . 'Resources/Private/Language/')) {
             GeneralUtility::mkdir_deep($languagePackExtensionPath . 'Resources/Private/Language/');
@@ -100,12 +101,17 @@ class LanguagePackRepository extends Repository
         $sourceFiles = [];
         $sourceFiles = GeneralUtility::getAllFilesAndFoldersInPath($sourceFiles, $sourcePath);
         $sourceFiles = GeneralUtility::removePrefixPathFromList($sourceFiles, $sourcePath);
+        $typo3VersionRange = VersionNumberUtility::splitVersionRange($languagePack->getTypo3VersionRange());
+        $typo3VersionMinArray = VersionNumberUtility::convertVersionStringToArray($typo3VersionRange[0]);
+        $typo3VersionMaxArray = VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::raiseVersionNumber('main', $typo3VersionRange[1]));
         // Set markers replacement values
         $replace = [
             '###LANG_ISO_LOWER###' => $localeLowerCase,
             '###LANG_ISO_UPPER###' => $localeUpperCase,
             '###LANG_ISO_CAMEL###' => $localeCamel,
             '###TYPO3_VERSION_RANGE###' => $languagePack->getTypo3VersionRange(),
+            '###TYPO3_VERSION_MIN###' => $typo3VersionMinArray['version_main'] . '.' . $typo3VersionMinArray['version_sub'],
+            '###TYPO3_VERSION_MAX###' => $typo3VersionMaxArray['version_main'] . '.0',
             '###VERSION###' => $languagePack->getVersion(),
             '###LANG_NAME###' => $languagePack->getLanguage(),
             '###AUTHOR###' => $languagePack->getAuthor(),

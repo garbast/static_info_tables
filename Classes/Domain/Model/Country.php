@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
+ *  (c) 2013-2020 Stanislas Rolland <typo32020(arobas)sjbr.ca>
  *
  *  All rights reserved
  *
@@ -26,7 +26,10 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use SJBR\StaticInfoTables\Utility\ModelUtility;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * The Country model
@@ -47,7 +50,7 @@ class Country extends AbstractEntity
      * Country zones of this country
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected $countryZones;
 
@@ -170,7 +173,7 @@ class Country extends AbstractEntity
         parent::initializeObject();
         $this->tableName = ModelUtility::getModelMapping(self::class, ModelUtility::MAPPING_TABLENAME);
         $this->columnsMapping = ModelUtility::getModelMapping(self::class, ModelUtility::MAPPING_COLUMNS);
-        $this->countryZones = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class);
+        $this->countryZones = $this->objectManager->get(ObjectStorage::class);
     }
 
     /**
@@ -292,7 +295,7 @@ class Country extends AbstractEntity
      */
     public function setDeleted($deleted)
     {
-        return $this->deleted = $deleted;
+        $this->deleted = $deleted;
     }
 
     /**
@@ -596,11 +599,11 @@ class Country extends AbstractEntity
     /**
      * Sets the country zones
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $countryZones
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone> $countryZones
      *
      * @return void
      */
-    public function setCountryZones(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $countryZones)
+    public function setCountryZones($countryZones)
     {
         $this->countryZones = $countryZones;
     }
@@ -608,7 +611,7 @@ class Country extends AbstractEntity
     /**
      * Gets the country zones
      *
-     * @return CountryZone[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage $countryZones
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone> $countryZones
      */
     public function getCountryZones()
     {
