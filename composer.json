@@ -30,7 +30,7 @@
   },
   "extra": {
     "typo3/cms": {
-      "extension-key": "store_finder"
+      "extension-key": "static_info_tables"
     }
   },
   "autoload": {
