@@ -104,8 +104,13 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extKey]['enableManager'] =
             isset($extConf['enableManager']) ? $extConf['enableManager'] : '0';
         // Make the extension version and constraints available when creating language packs and to other extensions
-        $emConfUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extensionmanager\Utility\EmConfUtility::class);
-        if (version_compare($typo3Branch, '10.4', '>=')) {
+	$emConfUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extensionmanager\Utility\EmConfUtility::class);
+	if (version_compare($typo3Branch, '11.0', '>=')) {
+            $emConf = $emConfUtility->includeEmConf(
+                $extKey,
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extKey)
+            );
+        } elseif (version_compare($typo3Branch, '10.4', '>=')) {
             $emConf =
                 $emConfUtility->includeEmConf(
                     $extKey,
