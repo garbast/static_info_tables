@@ -4,7 +4,7 @@
  */
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Static Info Tables',
-    'description' => 'Data and API for countries, languages and currencies.',
+    'description' => 'Data and API for countries, languages and currencies for use in TYPO3 CMS.',
     'category' => 'misc',
     'version' => '6.9.5',
     'state' => 'stable',
@@ -12,7 +12,7 @@ $EM_CONF[$_EXTKEY] = [
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
     'author' => 'Stanislas Rolland/René Fritz',
-    'author_email' => 'typo32020@sjbr.ca',
+    'author_email' => 'typo3AAAA@sjbr.ca',
     'author_company' => 'SJBR',
     'constraints' => [
         'depends' => [

@@ -17,9 +17,9 @@
   "keywords": [
     "TYPO3"
   ],
-  "homepage": "https://forge.typo3.org/projects/extension-static_info_tables",
+  "homepage": "https://codeberg.org/sjbr/static-info-tables",
   "support": {
-    "issues": "https://forge.typo3.org/projects/extension-static_info_tables/issues"
+    "issues": "https://codeberg.org/sjbr/static-info-tables/issues"
   },
   "replace": {
     "typo3-ter/static-info-tables": "self.version"
