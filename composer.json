@@ -33,7 +33,6 @@
       "SJBR\\StaticInfoTables\\": "Classes/"
     }
   },
-  {
   "extra": {
   	"typo3/cms": {
 	  "extension-key": "static_info_tables"
