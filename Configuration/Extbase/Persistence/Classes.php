@@ -99,6 +99,9 @@ return [
             'decimalPoint' => [
                 'fieldName' => 'cu_decimal_point'
             ],
+            'divisor' => [
+                'fieldName' => 'cu_sub_divisor'
+            ],
             'isoCodeA3' => [
                 'fieldName' => 'cu_iso_3'
             ],
