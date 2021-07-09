@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2020 Stanislas Rolland <typo32020(arobas)sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -117,6 +117,7 @@ class LanguagePackRepository extends Repository
             '###AUTHOR###' => $languagePack->getAuthor(),
             '###AUTHOR_EMAIL###' => $languagePack->getAuthorEmail(),
             '###AUTHOR_COMPANY###' => $languagePack->getAuthorCompany(),
+            '###VENDOR_NAME###' => $languagePack->getVendorName(),
             '###VERSION_BASE###' => $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extensionKey]['version'],
             '###LANG_TCA_LABELS###' => $languagePack->getLocalizationLabels(),
             '###LANG_SQL_UPDATE###' => $languagePack->getUpdateQueries(),

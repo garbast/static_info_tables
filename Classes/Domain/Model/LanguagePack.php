@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2020 Stanislas Rolland <typo32020(arobas)sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -66,6 +66,12 @@ class LanguagePack extends AbstractEntity
      * @var string
      */
     protected $authorCompany;
+
+    /**
+     * @var string
+     * @Validate("TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator")
+     */
+    protected $vendorName;
 
     /**
      * @var string
@@ -188,12 +194,14 @@ class LanguagePack extends AbstractEntity
     public function __construct(
             $author = '',
             $authorCompany = '',
+            $vendorName = '',
             $authorEmail = '',
             $locale = '',
             $language = ''
         ) {
         $this->setAuthor($author);
         $this->setAuthorCompany($authorCompany);
+        $this->setVendorName($vendorName);
         $this->setAuthorEmail($authorEmail);
         $this->setLocale($locale);
         $this->setLanguage($language);
@@ -217,6 +225,16 @@ class LanguagePack extends AbstractEntity
     public function getAuthorCompany()
     {
         return $this->authorCompany;
+    }
+
+    public function setVendorName($vendorName)
+    {
+        $this->vendorName = $vendorName;
+    }
+
+    public function getVendorName()
+    {
+        return $this->vendorName;
     }
 
     public function setAuthorEmail($authorEmail)

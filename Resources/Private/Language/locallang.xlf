@@ -40,6 +40,9 @@
 			<trans-unit id="authorCompany" xml:space="preserve">
 				<source>Name of company of extension author</source>
 			</trans-unit>
+			<trans-unit id="vendorName" xml:space="preserve">
+				<source>Vendor name of composer package</source>
+			</trans-unit>
 			<trans-unit id="authorEmail" xml:space="preserve">
 				<source>Email of extension author</source>
 			</trans-unit>

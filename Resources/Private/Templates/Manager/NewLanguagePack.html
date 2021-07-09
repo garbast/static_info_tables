@@ -19,6 +19,13 @@
 				<f:render partial="FormErrors" arguments="{for: 'languagePack.version'}" />
 			</dd>
 			<dt>
+			<label for="sjbr-static-info-tables-manager-vendorName">{f:translate(key: 'vendorName')}:</label>
+			</dt>
+			<dd>
+				<f:form.textfield id="sjbr-static-info-tables-manager-vendorName" property="vendorName" size="50" />
+				<f:render partial="FormErrors" arguments="{for: 'languagePack.vendorName'}" />
+			</dd>
+			<dt>
 			<label for="sjbr-static-info-tables-manager-author">{f:translate(key: 'author')}:</label>
 			</dt>
 			<dd>
