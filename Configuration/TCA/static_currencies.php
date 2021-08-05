@@ -168,21 +168,21 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'cu_name_en,--palette--;;1;;,--palette--;;2;;,cu_sub_name_en,--palette--;;3;;',
-        ],
+            'showitem' => 'cu_name_en,--palette--;;1,--palette--;;2,cu_sub_name_en,--palette--;;3'
+        ]
     ],
     'palettes' => [
         '1' => [
             'showitem' => 'cu_iso_nr,cu_iso_3',
-            'canNotCollapse' => '1',
+            'canNotCollapse' => '1'
         ],
         '2' => [
             'showitem' => 'cu_symbol_left,cu_symbol_right,cu_thousands_point,cu_decimal_point',
-            'canNotCollapse' => '1',
+            'canNotCollapse' => '1'
         ],
         '3' => [
             'showitem' => 'cu_sub_symbol_left,cu_sub_symbol_right,cu_decimal_digits,cu_sub_divisor',
-            'canNotCollapse' => '1',
-        ],
-    ],
+            'canNotCollapse' => '1'
+        ]
+    ]
 ];

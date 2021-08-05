@@ -15,7 +15,8 @@
     }
   ],
   "keywords": [
-    "TYPO3"
+    "TYPO3",
+    "Static Info Tables"
   ],
   "homepage": "https://codeberg.org/sjbr/static-info-tables",
   "support": {

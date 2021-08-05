@@ -75,13 +75,13 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'tr_iso_nr,tr_name_en,fk_billing_country,--palette--;;1;;',
-        ],
+            'showitem' => 'tr_iso_nr,tr_name_en,fk_billing_country,--palette--;;1'
+        ]
     ],
     'palettes' => [
         '1' => [
             'showitem' => 'tr_parent_territory_uid,tr_parent_iso_nr',
-            'canNotCollapse' => '1',
-        ],
-    ],
+            'canNotCollapse' => '1'
+        ]
+    ]
 ];

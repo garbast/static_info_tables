@@ -89,13 +89,13 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'zn_name_local,zn_code,--palette--;;1;;,zn_name_en',
-        ],
+            'showitem' => 'zn_name_local,zn_code,--palette--;;1,zn_name_en'
+        ]
     ],
     'palettes' => [
         '1' => [
             'showitem' => 'zn_country_uid,zn_country_iso_nr,zn_country_iso_2,zn_country_iso_3',
-            'canNotCollapse' => '1',
-        ],
-    ],
+            'canNotCollapse' => '1'
+        ]
+    ]
 ];

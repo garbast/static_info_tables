@@ -9,6 +9,10 @@
       "role": "Developer"
     }
   ],
+  "keywords": [
+    "TYPO3",
+    "Static Info Tables"
+  ],
   "replace": {
   	"###VENDOR_NAME###/static-info-tables-###LANG_ISO_LOWER###": "self.version",
     "typo3-ter/static-info-tables-###LANG_ISO_LOWER###": "self.version"

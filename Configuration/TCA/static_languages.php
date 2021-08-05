@@ -114,7 +114,7 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'lg_name_local,lg_name_en,lg_iso_2,lg_typo3,lg_country_iso_2,lg_collate_locale,lg_sacred,lg_constructed',
-        ],
-    ],
+            'showitem' => 'lg_name_local,lg_name_en,lg_iso_2,lg_typo3,lg_country_iso_2,lg_collate_locale,lg_sacred,lg_constructed'
+        ]
+    ]
 ];
