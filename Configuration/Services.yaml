@@ -7,3 +7,4 @@ services:
 
   SJBR\StaticInfoTables\:
     resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'

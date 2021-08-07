@@ -32,7 +32,10 @@
   "autoload": {
     "psr-4": {
       "SJBR\\StaticInfoTables\\": "Classes/"
-    }
+    },
+    "exclude-from-classmap": [
+      "Classes/Domain/Model/*"
+    ]
   },
   "extra": {
     "typo3/cms": {
