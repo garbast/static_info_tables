@@ -16,9 +16,6 @@ return [
         'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_territories.svg',
         'searchFields' => 'tr_name_en',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'tr_iso_nr,tr_parent_iso_nr,tr_name_en',
-    ],
     'columns' => [
         'deleted' => [
             'readonly' => 1,

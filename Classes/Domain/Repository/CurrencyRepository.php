@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
+use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /***************************************************************
@@ -45,7 +46,7 @@ class CurrencyRepository extends AbstractEntityRepository
      *
      * @return QueryResultInterface|array
      */
-    public function findByCountry(\SJBR\StaticInfoTables\Domain\Model\Country $country)
+    public function findByCountry(Country $country)
     {
         $query = $this->createQuery();
         $query->matching(

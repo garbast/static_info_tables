@@ -8,13 +8,12 @@ $EM_CONF[$_EXTKEY] = [
     'category' => 'misc',
     'version' => '6.9.6',
     'state' => 'stable',
-    'clearCacheOnLoad' => 0,
     'author' => 'Stanislas Rolland/René Fritz',
     'author_email' => 'typo3AAAA@sjbr.ca',
     'author_company' => 'SJBR',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.0-10.4.99',
+            'typo3' => '10.4.0-11.5.99',
         ]
     ],
     'autoload' => [

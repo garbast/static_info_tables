@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Utility;
 
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 /*
  *  Copyright notice
  *
@@ -275,7 +276,7 @@ class LocalizationUtility
             $tsfe = static::getTypoScriptFrontendController();
             $siteLanguage = self::getCurrentSiteLanguage();
             // Get values from site language, which takes precedence over TypoScript settings since TYPO3 9 LTS
-            if (class_exists('TYPO3\\CMS\\Core\\Site\\Entity\\SiteLanguage') && $siteLanguage instanceof \TYPO3\CMS\Core\Site\Entity\SiteLanguage) {
+            if (class_exists('TYPO3\\CMS\\Core\\Site\\Entity\\SiteLanguage') && $siteLanguage instanceof SiteLanguage) {
                 self::$languageKey = $siteLanguage->getTypo3Language();
             } elseif (isset($tsfe->config['config']['language'])) {
                 self::$languageKey = $tsfe->config['config']['language'];
@@ -359,7 +360,7 @@ class LocalizationUtility
     }
 
     /**
-     * @return \TYPO3\CMS\Core\Localization\LanguageService|\TYPO3\CMS\Lang\LanguageService
+     * @return \TYPO3\CMS\Core\Localization\LanguageService|\TYPO3\CMS\Core\Localization\LanguageService
      */
     protected static function getLanguageService()
     {

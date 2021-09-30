@@ -14,9 +14,6 @@ return [
         'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_country_zones.svg',
         'searchFields' => 'zn_name_en,zn_name_local',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'zn_country_iso_nr,zn_country_iso_2,zn_country_iso_3,zn_code,zn_name_local,zn_name_en',
-    ],
     'columns' => [
         'deleted' => [
             'readonly' => 1,

@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Model;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 /***************************************************************
 *  Copyright notice
 *
@@ -55,7 +56,7 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function initializeObject()
     {
-        $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php
 namespace SJBR\StaticInfoTables\Utility;
 
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /***************************************************************
 *  Copyright notice
 *
@@ -45,7 +47,7 @@ class LocaleUtility
      *
      * @return void
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
+    public function injectObjectManager(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -65,7 +67,7 @@ class LocaleUtility
             if ($locale != 'default') {
                 $languageObject = $this->objectManager->get('SJBR\\StaticInfoTables\\Domain\\Model\\Language');
                 $languageObject->setCollatingLocale($locale);
-                $localizedLanguage = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('lang_' . $locale, $this->extensionName);
+                $localizedLanguage = LocalizationUtility::translate('lang_' . $locale, $this->extensionName);
                 $label = ($localizedLanguage ? $localizedLanguage : $language) . ' (' . $locale . ')';
                 $languageObject->setNameEn($label);
                 $localeArray[$label] = $languageObject;

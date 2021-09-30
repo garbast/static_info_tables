@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider;
 
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 /*
  *  Copyright notice
  *
@@ -45,7 +46,7 @@ class TcaLabelProcessor
      */
     public function addIsoCodeToLabel(&$PA)
     {
-        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(\TYPO3\CMS\Core\Utility\VersionNumberUtility::getNumericTypo3Version()) < 8000000) {
+        if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) < 8000000) {
             $PA['title'] = $PA['row'][$GLOBALS['TCA'][$PA['table']]['ctrl']['label']];
         } else {
             $PA['title'] = LocalizationUtility::translate(['uid' => $PA['row']['uid']], $PA['table']);

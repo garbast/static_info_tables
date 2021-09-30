@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables;
 
+use Doctrine\DBAL\Exception\TableNotFoundException;
 /*
  *  Copyright notice
  *
@@ -183,7 +184,7 @@ class ext_update
                 try {
                     $connection->executeUpdate($connection->getDatabasePlatform()
                         ->getDropTableSQL($connection->quoteIdentifier($tableName)));
-                } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
+                } catch (TableNotFoundException $e) {
                     // Ignore table not found exception
                 }
             }

@@ -1,6 +1,11 @@
 <?php
 namespace SJBR\StaticInfoTables\Controller;
 
+use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
+use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
+use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
+use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
+use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 /***************************************************************
  *  Copyright notice
  *
@@ -62,7 +67,7 @@ class ManagerController extends ActionController
      *
      * @return void
      */
-    public function injectCountryRepository(\SJBR\StaticInfoTables\Domain\Repository\CountryRepository $countryRepository)
+    public function injectCountryRepository(CountryRepository $countryRepository)
     {
         $this->countryRepository = $countryRepository;
     }
@@ -79,7 +84,7 @@ class ManagerController extends ActionController
      *
      * @return void
      */
-    public function injectCountryZoneRepository(\SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository $countryZoneRepository)
+    public function injectCountryZoneRepository(CountryZoneRepository $countryZoneRepository)
     {
         $this->countryZoneRepository = $countryZoneRepository;
     }
@@ -96,7 +101,7 @@ class ManagerController extends ActionController
      *
      * @return void
      */
-    public function injectCurrencyRepository(\SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository $currencyRepository)
+    public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
     {
         $this->currencyRepository = $currencyRepository;
     }
@@ -113,7 +118,7 @@ class ManagerController extends ActionController
      *
      * @return void
      */
-    public function injectLanguageRepository(\SJBR\StaticInfoTables\Domain\Repository\LanguageRepository $languageRepository)
+    public function injectLanguageRepository(LanguageRepository $languageRepository)
     {
         $this->languageRepository = $languageRepository;
     }
@@ -130,7 +135,7 @@ class ManagerController extends ActionController
      *
      * @return void
      */
-    public function injectTerritoryRepository(\SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository $territoryRepository)
+    public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
     {
         $this->territoryRepository = $territoryRepository;
     }

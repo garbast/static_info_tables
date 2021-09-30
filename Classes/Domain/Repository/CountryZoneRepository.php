@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
+use SJBR\StaticInfoTables\Domain\Model\Country;
 /***************************************************************
 *  Copyright notice
 *
@@ -25,7 +26,6 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
 /**
  * Repository for \SJBR\StaticInfoTables\Domain\Model\CountryZone
  */
@@ -43,7 +43,7 @@ class CountryZoneRepository extends AbstractEntityRepository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
-    public function findByCountry(\SJBR\StaticInfoTables\Domain\Model\Country $country)
+    public function findByCountry(Country $country)
     {
         $query = $this->createQuery();
         $query->matching(
@@ -59,7 +59,7 @@ class CountryZoneRepository extends AbstractEntityRepository
      *
      * @return array Country zones of the country sorted by localized name
      */
-    public function findByCountryOrderedByLocalizedName(\SJBR\StaticInfoTables\Domain\Model\Country $country)
+    public function findByCountryOrderedByLocalizedName(Country $country)
     {
         $entities = $this->findByCountry($country);
         return $this->localizedSort($entities);

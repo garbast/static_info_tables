@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
+use SJBR\StaticInfoTables\Domain\Model\Territory;
 /*
  *  Copyright notice
  *
@@ -52,7 +53,7 @@ class CountryRepository extends AbstractEntityRepository
      *
      * @return void
      */
-    public function injectTerritoryRepository(\SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository $territoryRepository)
+    public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
     {
         $this->territoryRepository = $territoryRepository;
     }
@@ -64,7 +65,7 @@ class CountryRepository extends AbstractEntityRepository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
-    public function findByTerritory(\SJBR\StaticInfoTables\Domain\Model\Territory $territory)
+    public function findByTerritory(Territory $territory)
     {
         $unCodeNumbers = [$territory->getUnCodeNumber()];
         // Get UN code numbers of subterritories (recursively)
@@ -86,7 +87,7 @@ class CountryRepository extends AbstractEntityRepository
      *
      * @return array Countries of the territory sorted by localized name
      */
-    public function findByTerritoryOrderedByLocalizedName(\SJBR\StaticInfoTables\Domain\Model\Territory $territory)
+    public function findByTerritoryOrderedByLocalizedName(Territory $territory)
     {
         $entities = $this->findByTerritory($territory);
         return $this->localizedSort($entities);

@@ -7,7 +7,7 @@ if (TYPO3_MODE == 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_INSTALL)) {
      */
     if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['enableManager']) {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'SJBR.static_info_tables',
+            'StaticInfoTables',
             // Make module a submodule of 'tools'
             'tools',
             // Submodule key
@@ -16,7 +16,7 @@ if (TYPO3_MODE == 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_INSTALL)) {
             '',
             // An array holding the controller-action combinations that are accessible
             [
-                'Manager' => 'information,newLanguagePack,createLanguagePack,testForm,testFormResult,sqlDumpNonLocalizedData',
+                \SJBR\StaticInfoTables\Controller\ManagerController::class => 'information,newLanguagePack,createLanguagePack,testForm,testFormResult,sqlDumpNonLocalizedData',
             ],
             [
                 'access' => 'user,group',

@@ -1,6 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
+use TYPO3\CMS\Core\Core\Environment;
 /***************************************************************
  *  Copyright notice
  *
@@ -64,7 +65,7 @@ class LanguagePackRepository extends Repository
         $localeCamel = GeneralUtility::underscoredToUpperCamelCase(strtolower($locale));
 
         $languagePackExtensionKey = $extensionKey . '_' . $localeLowerCase;
-        $languagePackExtensionPath = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/typo3conf/ext/' . $languagePackExtensionKey . '/';
+        $languagePackExtensionPath = Environment::getPublicPath() . '/typo3conf/ext/' . $languagePackExtensionKey . '/';
 
         // Cleanup any pre-existing language pack
         if (is_dir($languagePackExtensionPath)) {
@@ -125,7 +126,7 @@ class LanguagePackRepository extends Repository
         // Create the language pack files
         $success = true;
         foreach ($sourceFiles as $hash => $file) {
-            $fileContent = GeneralUtility::getUrl($sourcePath . $file);
+            $fileContent = @file_get_contents($sourcePath . $file);
             foreach ($replace as $marker => $replacement) {
                 $fileContent = str_replace($marker, $replacement, $fileContent);
             }
