@@ -53,7 +53,7 @@ class DatabaseUpdateUtility
         $insertStatements = [];
         $updateStatements = [];
         $extPath = ExtensionManagementUtility::extPath($extensionKey);
-        $statements = explode(LF, GeneralUtility::getUrl($extPath . 'ext_tables_static+adt.sql'));
+        $statements = explode(LF, @file_get_contents($extPath . 'ext_tables_static+adt.sql'));
 
         foreach ($statements as $statement) {
             $statement = trim($statement);

@@ -108,10 +108,7 @@ call_user_func(
         if (version_compare($typo3Branch, '10.4', '>=')) {
             $emConf =
                 $emConfUtility->includeEmConf(
-                    $extKey,
-                    [
-                        'packagePath' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extKey)
-                    ]
+                    $extKey, \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extKey)
                 );
         } else {
             $emConf =

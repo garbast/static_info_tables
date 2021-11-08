@@ -16,9 +16,6 @@ return [
         'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_languages.svg',
         'searchFields' => 'lg_name_en,lg_name_local',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'lg_name_local,lg_name_en,lg_iso_2,lg_typo3,lg_country_iso_2,lg_collate_locale,lg_sacred,lg_constructed',
-    ],
     'columns' => [
         'deleted' => [
             'readonly' => 1,

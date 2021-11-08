@@ -16,9 +16,6 @@ return [
         'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_currencies.svg',
         'searchFields' => 'cu_name_en',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'cu_iso_3,cu_iso_nr,cu_name_en,cu_symbol_left,cu_symbol_right,cu_thousands_point,cu_decimal_point,cu_decimal_digits,cu_sub_name_en,cu_sub_divisor,cu_sub_symbol_left,cu_sub_symbol_right',
-    ],
     'columns' => [
         'deleted' => [
             'readonly' => 1,

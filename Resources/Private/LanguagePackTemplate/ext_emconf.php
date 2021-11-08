@@ -8,7 +8,6 @@ $EM_CONF[$_EXTKEY] = [
     'category' => 'misc',
     'version' => '###VERSION###',
     'state' => 'stable',
-    'clearCacheOnLoad' => 0,
     'author' => '###AUTHOR###',
     'author_email' => '###AUTHOR_EMAIL###',
     'author_company' => '###AUTHOR_COMPANY###',

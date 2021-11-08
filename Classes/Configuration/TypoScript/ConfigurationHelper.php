@@ -1,6 +1,10 @@
 <?php
 namespace SJBR\StaticInfoTables\Configuration\TypoScript;
 
+use TYPO3\CMS\Core\TypoScript\ExtendedTemplateService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use SJBR\StaticInfoTables\Utility\HtmlElementUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 /***************************************************************
 *  Copyright notice
 *
@@ -45,10 +49,10 @@ class ConfigurationHelper
      *
      * @return string The HTML input field
      */
-    public function buildEntitySelector(array $params, \TYPO3\CMS\Core\TypoScript\ExtendedTemplateService $pObj, $arg = '')
+    public function buildEntitySelector(array $params, ExtendedTemplateService $pObj, $arg = '')
     {
         $field = '';
-        $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
         switch ($params['fieldName']) {
             case 'data[plugin.tx_staticinfotables_pi1.countryCode]':
             case 'data[plugin.tx_staticinfotables_pi1.countriesAllowed]':
@@ -102,7 +106,7 @@ class ConfigurationHelper
             }
             $outSelected = [];
             $size = $params['fieldName'] == 'data[plugin.tx_staticinfotables_pi1.countriesAllowed]' ? 5 : 1;
-            $field = \SJBR\StaticInfoTables\Utility\HtmlElementUtility::selectConstructor($options, [$params['fieldValue']], $outSelected, $params['fieldName'], '', '', '', '', $size);
+            $field = HtmlElementUtility::selectConstructor($options, [$params['fieldValue']], $outSelected, $params['fieldName'], '', '', '', '', $size);
         }
         return $field;
     }
@@ -115,7 +119,7 @@ class ConfigurationHelper
     protected function getConfiguredCountryCode()
     {
         $configurationManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
-        $settings = $configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         return $settings['plugin.']['tx_staticinfotables_pi1.']['countryCode'];
     }
 }

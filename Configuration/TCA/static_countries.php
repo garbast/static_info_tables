@@ -16,9 +16,6 @@ return [
         'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_countries.svg',
         'searchFields' => 'cn_short_en,cn_official_name_local,cn_official_name_en',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'cn_iso_2,cn_iso_3,cn_iso_nr,cn_official_name_local,cn_official_name_en,cn_capital,cn_tldomain,cn_currency_iso_3,cn_currency_iso_nr,cn_phone,cn_uno_member,cn_eu_member,cn_address_format,cn_short_en',
-    ],
     'columns' => [
         'deleted' => [
             'readonly' => 1,

@@ -2,6 +2,7 @@
 
 namespace SJBR\StaticInfoTables\Tests\Unit\Domain\Repository;
 
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -17,7 +18,6 @@ namespace SJBR\StaticInfoTables\Tests\Unit\Domain\Repository;
 
 use SJBR\StaticInfoTables\Domain\Model\AbstractEntity;
 use SJBR\StaticInfoTables\Domain\Repository\AbstractEntityRepository;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**

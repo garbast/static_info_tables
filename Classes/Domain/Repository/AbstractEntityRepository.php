@@ -354,7 +354,7 @@ abstract class AbstractEntityRepository extends Repository
 
         $extensionKey = GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName);
         $extensionPath = ExtensionManagementUtility::extPath($extensionKey);
-        $ext_tables = GeneralUtility::getUrl($extensionPath . 'ext_tables.sql');
+        $ext_tables = @file_get_contents($extensionPath . 'ext_tables.sql');
 
         $tableFields = array_keys($dbFields[$tableName]['fields']);
         foreach ($tableFields as $field) {

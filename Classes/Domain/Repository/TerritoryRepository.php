@@ -1,6 +1,8 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
+use SJBR\StaticInfoTables\Domain\Model\Country;
+use SJBR\StaticInfoTables\Domain\Model\Territory;
 /***************************************************************
 *  Copyright notice
 *
@@ -44,7 +46,7 @@ class TerritoryRepository extends AbstractEntityRepository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
-    public function findByCountry(\SJBR\StaticInfoTables\Domain\Model\Country $country)
+    public function findByCountry(Country $country)
     {
         $query = $this->createQuery();
         $query->matching(
@@ -60,7 +62,7 @@ class TerritoryRepository extends AbstractEntityRepository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
-    public function findByTerritory(\SJBR\StaticInfoTables\Domain\Model\Territory $territory)
+    public function findByTerritory(Territory $territory)
     {
         $query = $this->createQuery();
         $query->matching(
@@ -77,7 +79,7 @@ class TerritoryRepository extends AbstractEntityRepository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
-    public function findWithinTerritory(\SJBR\StaticInfoTables\Domain\Model\Territory $territory, &$unCodeNumbers = [])
+    public function findWithinTerritory(Territory $territory, &$unCodeNumbers = [])
     {
         if (empty($unCodeNumbers)) {
             $unCodeNumbers = [$territory->getUnCodeNumber()];

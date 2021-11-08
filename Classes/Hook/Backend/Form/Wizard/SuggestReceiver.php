@@ -1,6 +1,8 @@
 <?php
 namespace SJBR\StaticInfoTables\Hook\Backend\Form\Wizard;
 
+use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 /***************************************************************
  *  Copyright notice
  *
@@ -40,7 +42,7 @@ use SJBR\StaticInfoTables\Utility\LocalizationUtility;
  * @author Benjamin Mack <benni@typo3.org>
  * @author Stanislas Rolland <typo3(arobas)sjbr.ca>
  */
-class SuggestReceiver extends \TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver
+class SuggestReceiver extends SuggestWizardDefaultReceiver
 {
     /**
      * Prepare the statement for selecting the records which will be returned to the selector. May also return some
@@ -61,7 +63,7 @@ class SuggestReceiver extends \TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaul
             $lang = LocalizationUtility::getIsoLanguageKey($lang);
             $labelFields = LocalizationUtility::getLabelFields($this->table, $lang);
             $selectFieldsList = $labelFields[0] . ',' . $this->config['additionalSearchFields'];
-            $selectFields = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $selectFieldsList, true);
+            $selectFields = GeneralUtility::trimExplode(',', $selectFieldsList, true);
             $selectFields = array_unique($selectFields);
             $selectParts = $expressionBuilder->orX();
             foreach ($selectFields as $field) {
