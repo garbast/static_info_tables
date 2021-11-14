@@ -1,13 +1,11 @@
 <?php
 namespace SJBR\StaticInfoTables\Hook\Backend\Form\Wizard;
 
-use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-/***************************************************************
+/*
  *  Copyright notice
  *
  *  (c) 2007-2011 Andreas Wolf <andreas.wolf@ikt-werk.de>
- *  (c) 2013-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,11 +24,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
+use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Default implementation of a handler class for an ajax record selector.

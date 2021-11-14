@@ -1,36 +1,47 @@
 <?php
 namespace SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider;
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2013-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
-*  All rights reserved
-*
-*  This script is part of the Typo3 project. The Typo3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
-/**
- * Processor for TCA select items
+/*
+ *  Copyright notice
+ *
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  All rights reserved
+ *
+ *  This script is part of the Typo3 project. The Typo3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
  */
+
+use SJBR\StaticInfoTables\Domain\Model\Country;
+use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use SJBR\StaticInfoTables\Domain\Model\Currency;
+use SJBR\StaticInfoTables\Domain\Model\Language;
+use SJBR\StaticInfoTables\Domain\Model\Territory;
+use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
+use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
+use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
+use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
+use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
 use SJBR\StaticInfoTables\Utility\ModelUtility;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * Processor for TCA select items
+ */
 class TcaSelectItemsProcessor
 {
     /**
@@ -38,7 +49,6 @@ class TcaSelectItemsProcessor
      *
      * @param array $PA: parameters: items, config, TSconfig, table, row, field
      * @param DataPreprocessor $fObj
-     *
      * @return void
      */
     public function translateTerritoriesSelector($PA, TcaSelectItems $fObj)
@@ -184,38 +194,36 @@ class TcaSelectItemsProcessor
             }
             $uidList = implode(',', $uids);
             if (!empty($uidList)) {
-                /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-                $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
                 switch ($PA['config']['foreign_table']) {
                     case 'static_territories':
                         /** @var $territoryRepository SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository */
-                        $territoryRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\TerritoryRepository');
+                        $territoryRepository = GeneralUtility::makeInstance(TerritoryRepository::class);
                         $objects = $territoryRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping('SJBR\\StaticInfoTables\\Domain\\Model\\Territory', ModelUtility::MAPPING_COLUMNS);
+                        $columnsMapping = ModelUtility::getModelMapping(Territory::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_countries':
                         /** @var $countryRepository SJBR\StaticInfoTables\Domain\Repository\CountryRepository */
-                        $countryRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CountryRepository');
+                        $countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
                         $objects = $countryRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping('SJBR\\StaticInfoTables\\Domain\\Model\\Country', ModelUtility::MAPPING_COLUMNS);
+                        $columnsMapping = ModelUtility::getModelMapping(Country::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_country_zones':
                         /** @var $countryZoneRepository SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository */
-                        $countryZoneRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CountryZoneRepository');
+                        $countryZoneRepository = GeneralUtility::makeInstance(CountryZoneRepository::class);
                         $objects = $countryZoneRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping('SJBR\\StaticInfoTables\\Domain\\Model\\CountryZone', ModelUtility::MAPPING_COLUMNS);
+                        $columnsMapping = ModelUtility::getModelMapping(CountryZone::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_languages':
                         /** @var $languageRepository SJBR\StaticInfoTables\Domain\Repository\LanguageRepository */
-                        $languageRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\LanguageRepository');
+                        $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
                         $objects = $languageRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping('SJBR\\StaticInfoTables\\Domain\\Model\\Language', ModelUtility::MAPPING_COLUMNS);
+                        $columnsMapping = ModelUtility::getModelMapping(Language::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_currencies':
                         /** @var $currencyRepository SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository */
-                        $currencyRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CurrencyRepository');
+                        $currencyRepository = GeneralUtility::makeInstance(CurrencyRepository::class);
                         $objects = $currencyRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping('SJBR\\StaticInfoTables\\Domain\\Model\\Currency', ModelUtility::MAPPING_COLUMNS);
+                        $columnsMapping = ModelUtility::getModelMapping(Currency::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     default:
                         break;

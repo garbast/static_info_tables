@@ -1,5 +1,5 @@
 <?php
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 // Configure static_lang_isocode field in TCA
 $GLOBALS['TCA']['sys_language']['columns']['static_lang_isocode'] = [

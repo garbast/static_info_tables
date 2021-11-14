@@ -17,6 +17,30 @@ return [
         'searchFields' => 'cn_short_en,cn_official_name_local,cn_official_name_en',
     ],
     'columns' => [
+        'cn_official_name_local' => [
+            'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_official_name_local',
+            'exclude' => '0',
+            'config' => [
+                'type' => 'input',
+                'size' => '25',
+                'max' => '128',
+                'eval' => 'trim',
+                'default' => '',
+                '_is_string' => '1',
+            ],
+        ],
+        'cn_official_name_en' => [
+            'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_official_name_en',
+            'exclude' => '0',
+            'config' => [
+                'type' => 'input',
+                'size' => '25',
+                'max' => '50',
+                'eval' => 'trim',
+                'default' => '',
+                '_is_string' => '1',
+            ],
+        ],
         'deleted' => [
             'readonly' => 1,
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:deleted',
@@ -77,30 +101,6 @@ return [
         'cn_parent_tr_iso_nr' => [
             'config' => [
                 'type' => 'passthrough',
-            ],
-        ],
-        'cn_official_name_local' => [
-            'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_official_name_local',
-            'exclude' => '0',
-            'config' => [
-                'type' => 'input',
-                'size' => '25',
-                'max' => '128',
-                'eval' => 'trim',
-                'default' => '',
-                '_is_string' => '1',
-            ],
-        ],
-        'cn_official_name_en' => [
-            'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_official_name_en',
-            'exclude' => '0',
-            'config' => [
-                'type' => 'input',
-                'size' => '25',
-                'max' => '50',
-                'eval' => 'trim',
-                'default' => '',
-                '_is_string' => '1',
             ],
         ],
         'cn_capital' => [

@@ -1,7 +1,6 @@
 <?php
 namespace SJBR\StaticInfoTables\Utility;
 
-use TYPO3\CMS\Core\SingletonInterface;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -16,6 +15,7 @@ use TYPO3\CMS\Core\SingletonInterface;
  */
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**

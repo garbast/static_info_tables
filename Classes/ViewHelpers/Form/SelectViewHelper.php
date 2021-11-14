@@ -32,7 +32,6 @@ use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**
  * StaticInfoTables SelectViewHelper
@@ -67,10 +66,6 @@ use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
  * territory
  * currency
  * countryZone
- *
- * Available Slots:
- * getItems
- * getItemsWithSubselect
  */
 class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper
 {
@@ -89,23 +84,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
     protected $settings;
 
     /**
-     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-     */
-    protected $signalSlotDispatcher;
-
-    /**
-     * Dependency injection of the Signal Slot Dispacher
-     *
-     * @param Dispatcher $signalSlotDispatcher
-     *
-     * @return void
-     */
-    public function injectSignalSlotDispatcher(Dispatcher $signalSlotDispatcher)
-    {
-        $this->signalSlotDispatcher = $signalSlotDispatcher;
-    }
-
-    /**
      * Country repository
      *
      * @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository
@@ -116,7 +94,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      * Dependency injection of the Country Repository
      *
      * @param CountryRepository $countryRepository
-     *
      * @return void
      */
     public function injectCountryRepository(CountryRepository $countryRepository)
@@ -135,7 +112,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      * Dependency injection of the Language Repository
      *
      * @param LanguageRepository $languageRepository
-     *
      * @return void
      */
     public function injectLanguageRepository(LanguageRepository $languageRepository)
@@ -154,7 +130,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      * Dependency injection of the Territory Repository
      *
      * @param TerritoryRepository $territoryRepository
-     *
      * @return void
      */
     public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
@@ -173,7 +148,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      * Dependency injection of the Currency Repository
      *
      * @param CurrencyRepository $currencyRepository
-     *
      * @return void
      */
     public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
@@ -192,7 +166,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      * Dependency injection of the CountryZone Repository
      *
      * @param CountryZoneRepository $countryZoneRepository
-     *
      * @return void
      */
     public function injectCountryZoneRepository(CountryZoneRepository $countryZoneRepository)
@@ -218,7 +191,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      * Render the Options.
      *
      * @throws Exception
-     *
      * @return string
      *
      * @api
@@ -235,7 +207,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
             throw new \Exception('Please configure the right table in the "staticInfoTable"-Argument for this ViewHelper.', 1378136533);
         }
         /** @var array $items */
-        $items = $this->emitGetItems($repository);
+        $items = $this->getItems($repository);
         /** @var string $valueFunction */
         $valueFunction = $this->getMethodnameFromArgumentsAndUnset('optionValueField', 'uid');
         /** @var string $labelFunction */
@@ -273,18 +245,15 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
     }
 
     /**
-     * Get Items and emit a signal to the dispatcher.
-     * Signal: getItems
+     * Get Items
      *
      * @param string $repository
-     *
      * @return array
      */
-    protected function emitGetItems($repository)
+    protected function getItems($repository)
     {
-        /** @var array $items */
         if ($this->hasArgument('staticInfoTableSubselect')) {
-            $items = $this->emitGetItemsWithSubselect($repository);
+            $items = $this->getItemsWithSubselect($repository);
         } elseif ($repository === 'countryRepository') {
             if ($this->settings['countriesAllowed']) {
                 $items = $this->{$repository}->findAllowedByIsoCodeA3($this->settings['countriesAllowed']);
@@ -299,28 +268,17 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
             $items = $this->{$repository}->findAll()
                 ->toArray();
         }
-        $list = $this->signalSlotDispatcher->dispatch(__CLASS__, 'getItems', [
-            'arguments' => $this->arguments,
-            'items'     => $items,
-        ]);
-        if ($list !== null) {
-            $this->arguments = $list['arguments'];
-            $items = $list['items'];
-        }
         return $items;
     }
 
     /**
      * Get items with custom sub select.
-     * Signal: getItemsWithSubselect
      *
      * @param string $repository
-     *
      * @return array
      */
-    protected function emitGetItemsWithSubselect($repository)
+    protected function getItemsWithSubselect($repository)
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array $items */
         $items = [];
         $subselects = $this->arguments['staticInfoTableSubselect'];
         foreach ($subselects as $fieldname => $fieldvalue) {
@@ -332,17 +290,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
                     $this->{$repository},
                     $findby,
                 ], [$fieldvalue]);
-            }
-            /** @var array $list */
-            $list = $this->signalSlotDispatcher->dispatch(__CLASS__, 'getItemsWithSubselect', [
-                'arguments'  => $this->arguments,
-                'items'      => $items,
-                'fieldname'  => $fieldname,
-                'fieldvalue' => $fieldvalue,
-            ]);
-            $this->arguments = $list['arguments'];
-            if ($list['items']) {
-                $items = $list['items']->toArray();
+                $items = $items->toArray();
             }
         }
         return $items;
@@ -354,7 +302,6 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      *
      * @param string $field   fieldname like 'optionLabelField'
      * @param string $default default value like 'nameLocalized'
-     *
      * @return string
      */
     protected function getMethodnameFromArgumentsAndUnset($field, $default)

@@ -1,11 +1,10 @@
 <?php
 namespace SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider;
 
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2016 Stanislas Rolland <typo3(arobas)sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -28,7 +27,12 @@ use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\Currency;
 use SJBR\StaticInfoTables\Domain\Model\Language;
 use SJBR\StaticInfoTables\Domain\Model\Territory;
+use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
+use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
+use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
+use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -36,32 +40,34 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class TcaLabelProcessor
 {
+	/**
+	 * @var TerritoryRepository
+	 */	
+    protected $territoryRepository;
+
+	/**
+	 * @param TerritoryRepository $territoryRepository
+	 */
+	public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
+	{
+		$this->territoryRepository = $territoryRepository;
+	}
+
     /**
      * Add ISO codes to the label of entities
      *
      * @param array $PA: parameters: items, config, TSconfig, table, row, field
-     * @param DataPreprocessor $fObj
-     *
      * @return void
      */
     public function addIsoCodeToLabel(&$PA)
     {
-        if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) < 8000000) {
-            $PA['title'] = $PA['row'][$GLOBALS['TCA'][$PA['table']]['ctrl']['label']];
-        } else {
-            $PA['title'] = LocalizationUtility::translate(['uid' => $PA['row']['uid']], $PA['table']);
-        }
-        if (TYPO3_MODE == 'BE') {
-            /** @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $PA['title'] = LocalizationUtility::translate(['uid' => $PA['row']['uid']], $PA['table']);
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
             switch ($PA['table']) {
                 case 'static_territories':
                     $isoCode = $PA['row']['tr_iso_nr'];
                     if (!$isoCode) {
-                        /** @var $territoryRepository SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository */
-                        $territoryRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\TerritoryRepository');
-                        /** @var $territory SJBR\StaticInfoTables\Domain\Model\Territory */
-                        $territory = $territoryRepository->findByUid($PA['row']['uid']);
+                        $territory = $this->territoryRepository->findByUid($PA['row']['uid']);
                         if ($territory instanceof Territory) {
                             $isoCode = $territory->getUnCodeNumber();
                         }
@@ -73,9 +79,7 @@ class TcaLabelProcessor
                 case 'static_countries':
                     $isoCode = $PA['row']['cn_iso_2'];
                     if (!$isoCode) {
-                        /** @var $countryRepository SJBR\StaticInfoTables\Domain\Repository\CountryRepository */
-                        $countryRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CountryRepository');
-                        /** @var $country SJBR\StaticInfoTables\Domain\Model\Country */
+                        $countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
                         $country = $countryRepository->findByUid($PA['row']['uid']);
                         if ($country instanceof Country) {
                             $isoCode = $country->getIsoCodeA2();
@@ -92,9 +96,7 @@ class TcaLabelProcessor
                     }
                     $isoCode = implode('_', $isoCodes);
                     if (!$isoCode || !$PA['row']['lg_country_iso_2']) {
-                        /** @var $languageRepository SJBR\StaticInfoTables\Domain\Repository\LanguageRepository */
-                        $languageRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\LanguageRepository');
-                        /** @var $language SJBR\StaticInfoTables\Domain\Model\Language */
+                        $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
                         $language = $languageRepository->findByUid($PA['row']['uid']);
                         if ($language instanceof Language) {
                             $isoCodes = [$language->getIsoCodeA2()];
@@ -111,9 +113,7 @@ class TcaLabelProcessor
                 case 'static_currencies':
                     $isoCode = $PA['row']['cu_iso_3'];
                     if (!$isoCode) {
-                        /** @var $currencyRepository SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository */
-                        $currencyRepository = $objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CurrencyRepository');
-                        /** @var $currency SJBR\StaticInfoTables\Domain\Model\Currency */
+                        $currencyRepository = GeneralUtility::makeInstance(CurrencyRepository::class);
                         $currency = $currencyRepository->findByUid($PA['row']['uid']);
                         if ($currency instanceof Currency) {
                             $isoCode = $currency->getIsoCodeA3();

@@ -1,8 +1,7 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
-use TYPO3\CMS\Core\Core\Environment;
-/***************************************************************
+/*
  *  Copyright notice
  *
  *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
@@ -26,11 +25,13 @@ use TYPO3\CMS\Core\Core\Environment;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 use SJBR\StaticInfoTables\Cache\ClassCacheManager;
 use SJBR\StaticInfoTables\Domain\Model\LanguagePack;
 use SJBR\StaticInfoTables\Utility\VersionNumberUtility;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -48,7 +49,6 @@ class LanguagePackRepository extends Repository
      * Writes the language pack files
      *
      * @param LanguagePack the object to be stored
-     *
      * @return array localized messages
      */
     public function writeLanguagePack(LanguagePack $languagePack)
@@ -119,7 +119,7 @@ class LanguagePackRepository extends Repository
             '###AUTHOR_EMAIL###' => $languagePack->getAuthorEmail(),
             '###AUTHOR_COMPANY###' => $languagePack->getAuthorCompany(),
             '###VENDOR_NAME###' => $languagePack->getVendorName(),
-            '###VERSION_BASE###' => $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extensionKey]['version'],
+            '###VERSION_BASE###' => $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extensionKey]['version'],
             '###LANG_TCA_LABELS###' => $languagePack->getLocalizationLabels(),
             '###LANG_SQL_UPDATE###' => $languagePack->getUpdateQueries(),
         ];
@@ -137,8 +137,9 @@ class LanguagePackRepository extends Repository
             }
         }
         if ($success) {
-            $classCacheManager = $this->objectManager->get(ClassCacheManager::class);
-            $installUtility = $this->objectManager->get(InstallUtility::class);
+        	$cacheManager = GeneralUtility::makeInstance(CacheManager::class);
+        	$classCacheManager = new ClassCacheManager($cacheManager);
+        	$installUtility = GeneralUtility::makeInstance(InstallUtility::class);
             $installed = ExtensionManagementUtility::isLoaded($languagePackExtensionKey);
             if ($installed) {
                 $content[] =  LocalizationUtility::translate('languagePack', $this->extensionName)

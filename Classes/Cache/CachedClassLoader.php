@@ -1,10 +1,10 @@
 <?php
 namespace SJBR\StaticInfoTables\Cache;
 
-/***************************************************************
+/*
  *  Copyright notice
  *
- *  (c) 2013 Stanislas Rolland <typo3@sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,8 +25,9 @@ namespace SJBR\StaticInfoTables\Cache;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -76,7 +77,6 @@ class CachedClassLoader
      * Autoload function for cached classes
      *
      * @param string $className Class name
-     *
      * @return void
      */
     public static function autoload($className)
@@ -84,11 +84,10 @@ class CachedClassLoader
         $className = ltrim($className, '\\');
         if (strpos($className, static::$namespace) !== false) {
             // Lookup the class in the array of static info entities and check its presence in the class cache
-            $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][static::$extensionKey]['entities'];
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-            $cacheManager = $objectManager->get('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+            $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][static::$extensionKey]['entities'];
             // ClassCacheManager instantiation creates the class cache if not already available
-            $classCacheManager = $objectManager->get('SJBR\\StaticInfoTables\\Cache\\ClassCacheManager');
+            $classCacheManager = GeneralUtility::makeInstance(ClassCacheManager::class);
+            $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
             $classCache = $cacheManager->getCache(static::$extensionKey);
             foreach ($entities as $entity) {
                 if ($className === static::$namespace . $entity) {

@@ -1,11 +1,13 @@
 <?php
 namespace SJBR\StaticInfoTables\Cache;
 
-/***************************************************************
+/*
  *  Copyright notice
  *  (c) 2012 Georg Ringer <typo3@ringerge.org>
- *  (c) 2013-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *
  *  All rights reserved
+ *
  *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,14 +20,16 @@ namespace SJBR\StaticInfoTables\Cache;
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
+use TYPO3\CMS\Core\Cache\Backend\FileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class Cache Manager
@@ -44,34 +48,31 @@ class ClassCacheManager implements SingletonInterface
      */
     protected $cacheConfiguration = [
         'static_info_tables' => [
-            'frontend' => 'TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend',
-            'backend' => 'TYPO3\\CMS\\Core\\Cache\\Backend\\FileBackend',
+            'frontend' => PhpFrontend::class,
+            'backend' => FileBackend::class,
             'options' => [],
             'groups' => ['all'],
         ],
     ];
 
-    /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected $objectManager;
+   /**
+    * Cache manager
+    *
+    * @var CacheManager
+    */
+    private $cacheManager;
 
     /**
-     * @var \TYPO3\CMS\Core\Cache\CacheManager
-     */
-    protected $cacheManager;
-
-    /**
-     * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+     * @var FrontendInterface
      */
     protected $cacheInstance;
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(CacheManager $cacheManager)
     {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->cacheManager = $cacheManager;
         $this->initializeCache();
     }
 
@@ -82,7 +83,6 @@ class ClassCacheManager implements SingletonInterface
      */
     protected function initializeCache()
     {
-        $this->cacheManager = $this->objectManager->get(CacheManager::class);
         if (!$this->cacheManager->hasCache($this->extensionKey)) {
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$this->extensionKey])) {
                 ArrayUtility::mergeRecursiveWithOverrule($this->cacheConfiguration[$this->extensionKey], $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$this->extensionKey]);
@@ -96,13 +96,12 @@ class ClassCacheManager implements SingletonInterface
      * Builds and caches the proxy files
      *
      * @return void
-     *
      * @throws \Exception
      */
     public function build()
     {
         $extensibleExtensions = $this->getExtensibleExtensions();
-        $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extensionKey]['entities'];
+        $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$this->extensionKey]['entities'];
         foreach ($entities as $entity) {
             $key = 'Domain/Model/' . $entity;
 
@@ -168,9 +167,7 @@ class ClassCacheManager implements SingletonInterface
      *
      * @param string $filePath path of the file
      * @param bool $removeClassDefinition If class definition should be removed
-     *
      * @return string path of the saved file
-     *
      * @throws \Exception
      * @throws \InvalidArgumentException
      */
@@ -188,9 +185,7 @@ class ClassCacheManager implements SingletonInterface
      * @param string $filePath
      * @param bool $removeClassDefinition
      * @param bool $renderPartialInfo
-     *
      * @return string
-     *
      * @throws \Exception
      */
     protected function changeCode($code, $filePath, $removeClassDefinition = true, $renderPartialInfo = true)

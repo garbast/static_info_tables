@@ -1,12 +1,11 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
-/***************************************************************
+/*
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
- *
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,7 +23,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\TableDiff;
@@ -57,7 +56,7 @@ abstract class AbstractEntityRepository extends Repository
     protected $extensionName = 'StaticInfoTables';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper
+     * @var DataMapper
      */
     protected $dataMapper;
 
@@ -108,8 +107,7 @@ abstract class AbstractEntityRepository extends Repository
      * Find all objects with uid in list
      *
      * @param string $list: list of uid's
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array all entries
+     * @return QueryResultInterface|array all entries
      */
     public function findAllByUidInList($list = '')
     {
@@ -126,8 +124,7 @@ abstract class AbstractEntityRepository extends Repository
      * Find all ordered by the localized name
      *
      * @param string $orderDirection may be "asc" or "desc". Default is "asc".
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array all entries ordered by localized name
+     * @return QueryResultInterface|array all entries ordered by localized name
      */
     protected function findAllOrderedByLocalizedName($orderDirection = 'asc')
     {
@@ -188,8 +185,7 @@ abstract class AbstractEntityRepository extends Repository
      *
      * @param string $propertyName property name to order by
      * @param string $orderDirection may be "asc" or "desc". Default is "asc".
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array all entries ordered by $propertyName
+     * @return QueryResultInterface|array all entries ordered by $propertyName
      */
     public function findAllOrderedBy($propertyName, $orderDirection = 'asc')
     {
@@ -225,7 +221,6 @@ abstract class AbstractEntityRepository extends Repository
      * Adds localization columns, if needed
      *
      * @param string $locale: the locale for which localization columns should be added
-     *
      * @return AbstractEntityRepository $this
      */
     public function addLocalizationColumns($locale)
@@ -287,7 +282,6 @@ abstract class AbstractEntityRepository extends Repository
      * Get update queries for the localization columns for a given locale
      *
      * @return array Update queries
-     *
      * @param mixed $locale
      */
     public function getUpdateQueries($locale)
@@ -373,9 +367,7 @@ abstract class AbstractEntityRepository extends Repository
      * Adds an object to this repository.
      *
      * @param object $object The object to add
-     *
      * @return void
-     *
      * @throws \BadMethodCallException(
      */
     public function add($object)
@@ -390,9 +382,7 @@ abstract class AbstractEntityRepository extends Repository
      * Removes an object from this repository.
      *
      * @param object $object The object to remove
-     *
      * @return void
-     *
      * @throws \BadMethodCallException(
      */
     public function remove($object)
@@ -406,10 +396,7 @@ abstract class AbstractEntityRepository extends Repository
     /**
      * Replaces an existing object with the same identifier by the given object.
      *
-     * @param object $modifiedObject The modified object
-     *
      * @return void
-     *
      * @throws \BadMethodCallException(
      */
     public function update($modifiedObject)
@@ -424,7 +411,6 @@ abstract class AbstractEntityRepository extends Repository
      * Removes all objects of this repository as if remove() was called for all of them.
      *
      * @return void
-     *
      * @throws \BadMethodCallException(
      */
     public function removeAll()

@@ -1,10 +1,10 @@
 <?php
 namespace SJBR\StaticInfoTables;
 
-/***************************************************************
+/*
  *  Copyright notice
  *
- *  (c) 2004-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
+ *  (c) 2004-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -25,7 +25,7 @@ namespace SJBR\StaticInfoTables;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 use SJBR\StaticInfoTables\Domain\Model\Currency;
 use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
@@ -35,8 +35,8 @@ use SJBR\StaticInfoTables\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
 
 /**
@@ -114,13 +114,12 @@ class PiBaseApi extends AbstractPlugin
      */
     public function init($conf = [])
     {
-        if (TYPO3_MODE === 'FE') {
+    	if (ApplicationType::fromRequest($this->cObj->getRequest())->isFrontend()) {
             $this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][$this->prefixId . '.'];
         }
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->countryRepository = $objectManager->get(CountryRepository::class);
-        $this->currencyRepository = $objectManager->get(CurrencyRepository::class);
+        $this->countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
+        $this->currencyRepository = GeneralUtility::makeInstance(CurrencyRepository::class);
 
         //Get the default currency and make sure it does exist in table static_currencies
         $this->currency = $conf['currencyCode'];
@@ -314,7 +313,7 @@ class PiBaseApi extends AbstractPlugin
         $titleFields = LocalizationUtility::getLabelFields($table, $lang, $local);
         $prefixedTitleFields = [];
         $prefixedTitleFields[] = $table . '.cn_iso_3';
-        foreach ($titleFields as $titleField) {
+        foreach ($titleFields as $titleField => $map) {
             $prefixedTitleFields[] = $table . '.' . $titleField;
         }
         array_unique($prefixedTitleFields);
@@ -387,7 +386,7 @@ class PiBaseApi extends AbstractPlugin
         $lang = LocalizationUtility::getIsoLanguageKey($lang);
         $titleFields = LocalizationUtility::getLabelFields($table, $lang);
         $prefixedTitleFields = [];
-        foreach ($titleFields as $titleField) {
+        foreach ($titleFields as $titleField => $map) {
             $prefixedTitleFields[] = $table . '.' . $titleField;
         }
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -441,7 +440,7 @@ class PiBaseApi extends AbstractPlugin
         $lang = LocalizationUtility::getIsoLanguageKey($lang);
         $titleFields = LocalizationUtility::getLabelFields($table, $lang);
         $prefixedTitleFields = [];
-        foreach ($titleFields as $titleField) {
+        foreach ($titleFields as $titleField => $map) {
             $prefixedTitleFields[] = $table . '.' . $titleField;
         }
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -488,7 +487,7 @@ class PiBaseApi extends AbstractPlugin
         $lang = LocalizationUtility::getIsoLanguageKey($lang);
         $titleFields = LocalizationUtility::getLabelFields($table, $lang);
         $prefixedTitleFields = [];
-        foreach ($titleFields as $titleField) {
+        foreach ($titleFields as $titleField => $map) {
             $prefixedTitleFields[] = $table . '.' . $titleField;
         }
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)

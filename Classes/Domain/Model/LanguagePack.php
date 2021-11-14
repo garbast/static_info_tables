@@ -37,7 +37,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * Language Pack object
@@ -50,11 +49,6 @@ class LanguagePack extends AbstractEntity
      * @var string
      */
     protected $extensionName = 'StaticInfoTables';
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
 
     /**
      * @var string
@@ -99,17 +93,6 @@ class LanguagePack extends AbstractEntity
      * @Validate("TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator")
      */
     protected $version;
-
-    /**
-     * Injects the object manager
-     *
-     * @param ObjectManagerInterface $objectManager
-     * @return void
-     */
-    public function injectObjectManager(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
 
     /**
      * @var CountryRepository
@@ -295,7 +278,7 @@ class LanguagePack extends AbstractEntity
     public function getLocalizationLabels()
     {
         // Build the localization labels of the language pack
-        $XliffParser = $this->objectManager->get(XliffParser::class);
+        $XliffParser = new XliffParser();
         $extensionKey = GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName);
         $extensionPath = ExtensionManagementUtility::extPath($extensionKey);
         $sourceXliffFilePath = $extensionPath . 'Resources/Private/Language/locallang_db.xlf';

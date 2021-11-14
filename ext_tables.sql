@@ -2,9 +2,9 @@
 # Table structure for table "static_countries"
 #
 CREATE TABLE static_countries (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	deleted smallint(6) DEFAULT '0' NOT NULL,
+	uid int(11) UNSIGNED NOT NULL auto_increment,
+	pid int(11) UNSIGNED DEFAULT '0' NOT NULL,
+	deleted smallint(6) UNSIGNED DEFAULT '0' NOT NULL,
 	cn_iso_2 varchar(2) DEFAULT '' NOT NULL,
 	cn_iso_3 varchar(3) DEFAULT '' NOT NULL,
 	cn_iso_nr int(11) DEFAULT '0' NOT NULL,
@@ -25,16 +25,17 @@ CREATE TABLE static_countries (
 	cn_short_local varchar(70) DEFAULT '' NOT NULL,
 	cn_short_en varchar(50) DEFAULT '' NOT NULL,
 	cn_country_zones int(11) DEFAULT '0' NOT NULL,
-	PRIMARY KEY (uid)
+	PRIMARY KEY (uid),
+	KEY parent (pid,deleted)
 );
 
 #
 # Table structure for table "static_country_zones"
 #
 CREATE TABLE static_country_zones (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	deleted smallint(6) DEFAULT '0' NOT NULL,
+	uid int(11) UNSIGNED NOT NULL auto_increment,
+	pid int(11) UNSIGNED DEFAULT '0' NOT NULL,
+	deleted smallint(6) UNSIGNED DEFAULT '0' NOT NULL,
 	zn_country_iso_2 varchar(2) DEFAULT '' NOT NULL,
 	zn_country_iso_3 varchar(3) DEFAULT '' NOT NULL,
 	zn_country_iso_nr int(11) DEFAULT '0' NOT NULL,
@@ -43,16 +44,17 @@ CREATE TABLE static_country_zones (
 	zn_name_en varchar(50) DEFAULT '' NOT NULL,
 	zn_country_uid int(11) DEFAULT '0' NOT NULL,
 	zn_country_table tinytext,
-	PRIMARY KEY (uid)
+	PRIMARY KEY (uid),
+	KEY parent (pid,deleted)
 );
 
 #
 # Table structure for table "static_currencies"
 #
 CREATE TABLE static_currencies (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	deleted smallint(6) DEFAULT '0' NOT NULL,
+	uid int(11) UNSIGNED NOT NULL auto_increment,
+	pid int(11) UNSIGNED DEFAULT '0' NOT NULL,
+	deleted smallint(6) UNSIGNED DEFAULT '0' NOT NULL,
 	cu_iso_3 varchar(3) DEFAULT '' NOT NULL,
 	cu_iso_nr int(11) DEFAULT '0' NOT NULL,
 	cu_name_en varchar(50) DEFAULT '' NOT NULL,
@@ -66,16 +68,16 @@ CREATE TABLE static_currencies (
 	cu_sub_symbol_left varchar(12) DEFAULT '' NOT NULL,
 	cu_sub_symbol_right varchar(12) DEFAULT '' NOT NULL,
 	PRIMARY KEY (uid),
-	KEY parent (pid)
+	KEY parent (pid,deleted)
 );
 
 #
 # Table structure for table "static_languages"
 #
 CREATE TABLE static_languages (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-  	deleted smallint(6) DEFAULT '0' NOT NULL,
+	uid int(11) UNSIGNED NOT NULL auto_increment,
+	pid int(11) UNSIGNED DEFAULT '0' NOT NULL,
+  	deleted smallint(6) UNSIGNED DEFAULT '0' NOT NULL,
 	lg_iso_2 varchar(2) DEFAULT '' NOT NULL,
 	lg_name_local varchar(99) DEFAULT '' NOT NULL,
 	lg_name_en varchar(50) DEFAULT '' NOT NULL,
@@ -85,21 +87,22 @@ CREATE TABLE static_languages (
 	lg_sacred smallint(6) DEFAULT '0' NOT NULL,
 	lg_constructed smallint(6) DEFAULT '0' NOT NULL,
 	PRIMARY KEY (uid),
-	KEY parent (pid)
+	KEY parent (pid,deleted)
 );
 
 #
 # Table structure for table "static_territories"
 #
 CREATE TABLE static_territories (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	deleted smallint(6) DEFAULT '0' NOT NULL,
+	uid int(11) UNSIGNED NOT NULL auto_increment,
+	pid int(11) UNSIGNED DEFAULT '0' NOT NULL,
+	deleted smallint(6) UNSIGNED DEFAULT '0' NOT NULL,
 	tr_iso_nr int(11) DEFAULT '0' NOT NULL,
 	tr_parent_territory_uid int(11) DEFAULT '0' NOT NULL,
 	tr_parent_iso_nr int(11) DEFAULT '0' NOT NULL,
 	tr_name_en varchar(50) DEFAULT '' NOT NULL,
-	PRIMARY KEY (uid)
+	PRIMARY KEY (uid),
+	KEY parent (pid,deleted)
 );
 
 #

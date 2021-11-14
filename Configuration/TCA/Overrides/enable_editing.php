@@ -1,14 +1,17 @@
 <?php
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
-if (TYPO3_MODE == 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_INSTALL)) {
-    if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['enableManager']) {
-        // Enable editing Static Info Tables
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['tables'])) {
-            $tableNames = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['tables']);
-            foreach ($tableNames as $tableName) {
-                $GLOBALS['TCA'][$tableName]['ctrl']['readOnly'] = 0;
-            }
-        }
-    }
-}
+call_user_func(
+    function ($extKey) {
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey]['enableManager']) {
+			// Enable editing Static Info Tables
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'])) {
+				$tableNames = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey]['tables']);
+				foreach ($tableNames as $tableName) {
+					$GLOBALS['TCA'][$tableName]['ctrl']['readOnly'] = 0;
+				}
+			}
+		}
+    },
+    'static_info_tables'
+);

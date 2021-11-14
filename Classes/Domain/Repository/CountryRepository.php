@@ -1,7 +1,6 @@
 <?php
 namespace SJBR\StaticInfoTables\Domain\Repository;
 
-use SJBR\StaticInfoTables\Domain\Model\Territory;
 /*
  *  Copyright notice
  *
@@ -27,7 +26,9 @@ use SJBR\StaticInfoTables\Domain\Model\Territory;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use SJBR\StaticInfoTables\Domain\Model\Territory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * Repository for \SJBR\StaticInfoTables\Domain\Model\Country
@@ -42,15 +43,14 @@ class CountryRepository extends AbstractEntityRepository
     protected $isoKeys = ['cn_iso_2'];
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository
+     * @var TerritoryRepository
      */
     protected $territoryRepository;
 
     /**
      * Dependency injection of the Territory Repository
      *
-     * @param \SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository $territoryRepository
-     *
+     * @param TerritoryRepository $territoryRepository
      * @return void
      */
     public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
@@ -61,9 +61,8 @@ class CountryRepository extends AbstractEntityRepository
     /**
      * Finds countries by territory
      *
-     * @param \SJBR\StaticInfoTables\Domain\Model\Territory $territory
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
+     * @param Territory $territory
+     * @return QueryResultInterface|array
      */
     public function findByTerritory(Territory $territory)
     {
@@ -83,8 +82,7 @@ class CountryRepository extends AbstractEntityRepository
     /**
      * Finds countries by territory ordered by localized name
      *
-     * @param \SJBR\StaticInfoTables\Domain\Model\Territory $territory
-     *
+     * @param Territory $territory
      * @return array Countries of the territory sorted by localized name
      */
     public function findByTerritoryOrderedByLocalizedName(Territory $territory)
@@ -97,7 +95,6 @@ class CountryRepository extends AbstractEntityRepository
      * Finds a set of allowed countries
      *
      * @param string $allowedCountries: list of alpha-3 country codes
-     *
      * @return array the selected countries
      */
     public function findAllowedByIsoCodeA3($allowedCountries = '')

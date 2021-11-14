@@ -1,15 +1,10 @@
 <?php
 namespace SJBR\StaticInfoTables\Controller;
 
-use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
-use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
-use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
-use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
-use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
-/***************************************************************
+/*
  *  Copyright notice
  *
- *  (c) 2013-2017 Stanislas Rolland <typo3@sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,13 +25,18 @@ use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use SJBR\StaticInfoTables\Domain\Model\Language;
 use SJBR\StaticInfoTables\Domain\Model\LanguagePack;
+use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
+use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
+use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
+use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Domain\Repository\LanguagePackRepository;
+use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocaleUtility;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -56,15 +56,14 @@ class ManagerController extends ActionController
     protected $extensionName = 'StaticInfoTables';
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository
+     * @var CountryRepository
      */
     protected $countryRepository;
 
     /**
      * Dependency injection of the Country Repository
      *
-     * @param \SJBR\StaticInfoTables\Domain\Repository\CountryRepository $countryRepository
-     *
+     * @param CountryRepository $countryRepository
      * @return void
      */
     public function injectCountryRepository(CountryRepository $countryRepository)
@@ -73,15 +72,14 @@ class ManagerController extends ActionController
     }
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository
+     * @var CountryZoneRepository
      */
     protected $countryZoneRepository;
 
     /**
      * Dependency injection of the Country Zone Repository
      *
-     * @param \SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository $countryZoneRepository
-     *
+     * @param CountryZoneRepository $countryZoneRepository
      * @return void
      */
     public function injectCountryZoneRepository(CountryZoneRepository $countryZoneRepository)
@@ -90,15 +88,14 @@ class ManagerController extends ActionController
     }
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository
+     * @var CurrencyRepository
      */
     protected $currencyRepository;
 
     /**
      * Dependency injection of the Currency Repository
      *
-     * @param \SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository $currencyRepository
-     *
+     * @param CurrencyRepository $currencyRepository
      * @return void
      */
     public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
@@ -107,15 +104,14 @@ class ManagerController extends ActionController
     }
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\LanguageRepository
+     * @var LanguageRepository
      */
     protected $languageRepository;
 
     /**
      * Dependency injection of the Language Repository
      *
-     * @param \SJBR\StaticInfoTables\Domain\Repository\LanguageRepository $languageRepository
-     *
+     * @param LanguageRepository $languageRepository
      * @return void
      */
     public function injectLanguageRepository(LanguageRepository $languageRepository)
@@ -124,15 +120,14 @@ class ManagerController extends ActionController
     }
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository
+     * @var TerritoryRepository
      */
     protected $territoryRepository;
 
     /**
      * Dependency injection of the Territory Repository
      *
-     * @param \SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository $territoryRepository
-     *
+     * @param TerritoryRepository $territoryRepository
      * @return void
      */
     public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
@@ -175,12 +170,12 @@ class ManagerController extends ActionController
     public function newLanguagePackAction(LanguagePack $languagePack = null)
     {
         if (!is_object($languagePack)) {
-            $languagePack = $this->objectManager->get(LanguagePack::class);
+            $languagePack = new LanguagePack();
         }
-        $languagePack->setVersion($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['version']);
+        $languagePack->setVersion($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['version']);
         $languagePack->setAuthor($GLOBALS['BE_USER']->user['realName']);
         $languagePack->setAuthorEmail($GLOBALS['BE_USER']->user['email']);
-        $localeUtility = $this->objectManager->get(LocaleUtility::class);
+        $localeUtility = GeneralUtility::makeInstance(LocaleUtility::class);
         $this->view->assign('locales', $localeUtility->getLocales());
         $this->view->assign('languagePack', $languagePack);
     }
@@ -195,13 +190,13 @@ class ManagerController extends ActionController
         // Add the localization columns
         $locale = $languagePack->getLocale();
         // Get the English name of the locale
-        $localeUtility = $this->objectManager->get(LocaleUtility::class);
+        $localeUtility = new LocaleUtility();
         $language = $localeUtility->getLanguageFromLocale($locale);
         $languagePack->setLanguage($language);
-        $languagePack->setTypo3VersionRange($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['constraints']['depends']['typo3']);
+        $languagePack->setTypo3VersionRange($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['constraints']['depends']['typo3']);
         // If version is not set, use the version of the base extension
         if (!$languagePack->getVersion()) {
-            $languagePack->setVersion($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['version']);
+            $languagePack->setVersion($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['version']);
         }
         $this->countryRepository->addLocalizationColumns($locale);
         $this->countryZoneRepository->addLocalizationColumns($locale);
@@ -209,7 +204,12 @@ class ManagerController extends ActionController
         $this->languageRepository->addLocalizationColumns($locale);
         $this->territoryRepository->addLocalizationColumns($locale);
         // Store the Language Pack
-        $languagePackRepository = $this->objectManager->get(LanguagePackRepository::class);
+        $languagePackRepository = GeneralUtility::makeInstance(LanguagePackRepository::class);
+		$languagePack->injectCountryRepository($this->countryRepository);
+		$languagePack->injectCountryZoneRepository($this->countryZoneRepository);
+		$languagePack->injectCurrencyRepository($this->currencyRepository);
+		$languagePack->injectLanguageRepository($this->languageRepository);
+		$languagePack->injectTerritoryRepository($this->territoryRepository);
         $messages = $languagePackRepository->writeLanguagePack($languagePack);
         if (count($messages)) {
             foreach ($messages as $message) {
@@ -296,12 +296,12 @@ class ManagerController extends ActionController
     protected function getLocales()
     {
         $localeArray = [];
-        $locales = $this->objectManager->get(Locales::class);
+        $locales = GeneralUtility::makeInstance(Locales::class);
         $languages = $locales->getLanguages();
         foreach ($languages as $locale => $language) {
             // No language pack for English
             if ($locale != 'default') {
-                $languageObject = $this->objectManager->get(Language::class);
+                $languageObject = new Language();
                 $languageObject->setCollatingLocale($locale);
                 $localizedLanguage = LocalizationUtility::translate('lang_' . $locale, 'Lang');
                 $label = ($localizedLanguage ? $localizedLanguage : $language) . ' (' . $locale . ')';
@@ -321,7 +321,7 @@ class ManagerController extends ActionController
      */
     protected function getLanguageFromLocale($locale)
     {
-        $locales = $this->objectManager->get(Locales::class);
+        $locales = GeneralUtility::makeInstance(Locales::class);
         $languages = $locales->getLanguages();
         $language = $languages[$locale];
         return $language . ' (' . $locale . ')';

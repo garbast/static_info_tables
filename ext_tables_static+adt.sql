@@ -7,9 +7,9 @@
 #
 DROP TABLE IF EXISTS static_countries;
 CREATE TABLE static_countries (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  deleted smallint(6) NOT NULL default '0',
+  uid int(11) unsigned NOT NULL auto_increment,
+  pid int(11) unsigned NOT NULL default '0',
+  deleted smallint(5) unsigned NOT NULL default '0',
   cn_iso_2 varchar(2) NOT NULL default '',
   cn_iso_3 varchar(3) NOT NULL default '',
   cn_iso_nr int(11) NOT NULL default '0',
@@ -299,9 +299,9 @@ INSERT INTO static_countries (uid, pid, deleted, cn_iso_2, cn_iso_3, cn_iso_nr, 
 #
 DROP TABLE IF EXISTS static_country_zones;
 CREATE TABLE static_country_zones (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  deleted smallint(6) NOT NULL default '0',
+  uid int(11) unsigned NOT NULL auto_increment,
+  pid int(11) unsigned NOT NULL default '0',
+  deleted smallint(5) unsigned NOT NULL default '0',
   zn_country_iso_2 varchar(2) NOT NULL default '',
   zn_country_iso_3 varchar(3) NOT NULL default '',
   zn_country_iso_nr int(11) NOT NULL default '0',
@@ -985,9 +985,9 @@ INSERT INTO static_country_zones (uid, pid, deleted, zn_country_iso_2, zn_countr
 #
 DROP TABLE IF EXISTS static_currencies;
 CREATE TABLE static_currencies (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  deleted smallint(6) NOT NULL default '0',
+  uid int(11) unsigned NOT NULL auto_increment,
+  pid int(11) unsigned NOT NULL default '0',
+  deleted smallint(5) unsigned NOT NULL default '0',
   cu_iso_3 varchar(3) NOT NULL default '',
   cu_iso_nr int(11) NOT NULL default '0',
   cu_name_en varchar(50) NOT NULL default '',
@@ -1001,7 +1001,7 @@ CREATE TABLE static_currencies (
   cu_sub_symbol_left varchar(12) NOT NULL default '',
   cu_sub_symbol_right varchar(12) NOT NULL default '',
   PRIMARY KEY (uid),
-  KEY parent (pid)
+  KEY parent (pid,deleted)
 );
 
 
@@ -1185,9 +1185,9 @@ INSERT INTO static_currencies (uid, pid, deleted, cu_iso_3, cu_iso_nr, cu_name_e
 #
 DROP TABLE IF EXISTS static_languages;
 CREATE TABLE static_languages (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  deleted smallint(6) NOT NULL default '0',
+  uid int(11) unsigned NOT NULL auto_increment,
+  pid int(11) unsigned NOT NULL default '0',
+  deleted smallint(5) unsigned NOT NULL default '0',
   lg_iso_2 varchar(2) NOT NULL default '',
   lg_name_local varchar(99) NOT NULL default '',
   lg_name_en varchar(50) NOT NULL default '',
@@ -1197,7 +1197,7 @@ CREATE TABLE static_languages (
   lg_sacred smallint(6) NOT NULL default '0',
   lg_constructed smallint(6) NOT NULL default '0',
   PRIMARY KEY (uid),
-  KEY parent (pid)
+  KEY parent (pid,deleted)
 );
 
 
@@ -1407,9 +1407,9 @@ INSERT INTO static_languages (uid, pid, deleted, lg_iso_2, lg_name_local, lg_nam
 #
 DROP TABLE IF EXISTS static_territories;
 CREATE TABLE static_territories (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  deleted smallint(6) NOT NULL default '0',
+  uid int(11) unsigned NOT NULL auto_increment,
+  pid int(11) unsigned NOT NULL default '0',
+  deleted smallint(5) unsigned NOT NULL default '0',
   tr_iso_nr int(11) NOT NULL default '0',
   tr_parent_territory_uid int(11) NOT NULL default '0',
   tr_parent_iso_nr int(11) NOT NULL default '0',

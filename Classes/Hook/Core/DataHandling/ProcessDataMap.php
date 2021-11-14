@@ -1,10 +1,10 @@
 <?php
 namespace SJBR\StaticInfoTables\Hook\Core\DataHandling;
 
-/***************************************************************
+/*
  *  Copyright notice
  *
- *  (c) 2013-2018 Stanislas Rolland <typo3(arobas)sjbr.ca>
+ *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -22,20 +22,26 @@ namespace SJBR\StaticInfoTables\Hook\Core\DataHandling;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
 use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Hook on Core/DataHandling/DataHandler to manage redundancy of ISO codes in static info tables
  */
 class ProcessDataMap
 {
+    private $territoryRepository;
+
+    public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
+    {
+        $this->territoryRepository = $territoryRepository;
+    }
+
     /**
      * Post-process redundant ISO codes fields
      *
@@ -50,11 +56,9 @@ class ProcessDataMap
     {
         switch ($table) {
             case 'static_territories':
-                $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
                 //Post-process containing territory ISO numeric code
                 if ($incomingFieldArray['tr_parent_territory_uid']) {
-                    $territoryRepository = $objectManager->get(TerritoryRepository::class);
-                    $territory = $territoryRepository->findOneByUid((int)$incomingFieldArray['tr_parent_territory_uid']);
+                    $territory = $this->territoryRepository->findOneByUid((int)$incomingFieldArray['tr_parent_territory_uid']);
                     if (is_object($territory)) {
                         $incomingFieldArray['tr_parent_iso_nr'] = $territory->getUnCodeNumber();
                     }
