@@ -100,31 +100,9 @@ class LanguagePack extends AbstractEntity
     protected $countryRepository;
 
     /**
-     * Dependency injection of the Country Repository
-     *
-     * @param CountryRepository $countryRepository
-     * @return void
-     */
-    public function injectCountryRepository(CountryRepository $countryRepository)
-    {
-        $this->countryRepository = $countryRepository;
-    }
-
-    /**
      * @var CountryZoneRepository
      */
     protected $countryZoneRepository;
-
-    /**
-     * Dependency injection of the Country Zone Repository
-     *
-     * @param CountryZoneRepository $countryZoneRepository
-     * @return void
-     */
-    public function injectCountryZoneRepository(CountryZoneRepository $countryZoneRepository)
-    {
-        $this->countryZoneRepository = $countryZoneRepository;
-    }
 
     /**
      * @var CurrencyRepository
@@ -132,47 +110,14 @@ class LanguagePack extends AbstractEntity
     protected $currencyRepository;
 
     /**
-     * Dependency injection of the Currency Repository
-     *
-     * @param CurrencyRepository $currencyRepository
-     * @return void
-     */
-    public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
-    {
-        $this->currencyRepository = $currencyRepository;
-    }
-
-    /**
      * @var LanguageRepository
      */
     protected $languageRepository;
 
     /**
-     * Dependency injection of the Language Repository
-     *
-     * @param LanguageRepository $languageRepository
-     * @return void
-     */
-    public function injectLanguageRepository(LanguageRepository $languageRepository)
-    {
-        $this->languageRepository = $languageRepository;
-    }
-
-    /**
      * @var TerritoryRepository
      */
     protected $territoryRepository;
-
-    /**
-     * Dependency injection of the Territory Repository
-     *
-     * @param TerritoryRepository $territoryRepository
-     * @return void
-     */
-    public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
-    {
-        $this->territoryRepository = $territoryRepository;
-    }
 
     public function __construct(
             $author = '',
@@ -182,6 +127,11 @@ class LanguagePack extends AbstractEntity
             $locale = '',
             $language = ''
         ) {
+    	$this->countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
+    	$this->countryZoneRepository = GeneralUtility::makeInstance(CountryZoneRepository::class);
+    	$this->currencyRepository = GeneralUtility::makeInstance(CurrencyRepository::class);
+    	$this->languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
+    	$this->territoryRepository = GeneralUtility::makeInstance(TerritoryRepository::class);
         $this->setAuthor($author);
         $this->setAuthorCompany($authorCompany);
         $this->setVendorName($vendorName);

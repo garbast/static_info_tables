@@ -14,3 +14,13 @@ services:
       - name: event.listener
         identifier: 'staticInfoTablesListener'
         event: TYPO3\CMS\Core\Package\Event\AfterPackageActivationEvent
+    public: true
+
+  SJBR\StaticInfoTables\Configuration\TypoScript\ConfigurationHelper:
+    public: true
+
+  SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor:
+    public: true
+
+  SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor:
+    public: true

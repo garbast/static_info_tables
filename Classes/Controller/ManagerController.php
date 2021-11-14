@@ -205,11 +205,6 @@ class ManagerController extends ActionController
         $this->territoryRepository->addLocalizationColumns($locale);
         // Store the Language Pack
         $languagePackRepository = GeneralUtility::makeInstance(LanguagePackRepository::class);
-		$languagePack->injectCountryRepository($this->countryRepository);
-		$languagePack->injectCountryZoneRepository($this->countryZoneRepository);
-		$languagePack->injectCurrencyRepository($this->currencyRepository);
-		$languagePack->injectLanguageRepository($this->languageRepository);
-		$languagePack->injectTerritoryRepository($this->territoryRepository);
         $messages = $languagePackRepository->writeLanguagePack($languagePack);
         if (count($messages)) {
             foreach ($messages as $message) {

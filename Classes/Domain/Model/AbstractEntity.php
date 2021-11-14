@@ -38,17 +38,6 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var DataMapper
      */
     protected $dataMapper;
-
-    /**
-     * Dependency injection of the Data Mapper
-     *
-     * @param DataMapper $dataMapper
-     * @return void
-     */
-    public function injectDataMapper(DataMapper $dataMapper)
-    {
-        $this->dataMapper = $dataMapper;
-    }
 	
     /**
      * Name of the table from persistence mapping of this model
@@ -62,6 +51,7 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function initializeObject()
     {
+    	$this->dataMapper = GeneralUtility::makeInstance(DataMapper::class);
     }
 
     /**
