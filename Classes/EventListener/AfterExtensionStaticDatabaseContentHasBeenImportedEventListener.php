@@ -24,28 +24,27 @@ namespace SJBR\StaticInfoTables\EventListener;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-use TYPO3\CMS\Core\Package\Event\AfterPackageActivationEvent;
+use TYPO3\CMS\Extensionmanager\Event\AfterExtensionStaticDatabaseContentHasBeenImportedEvent;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
 /*
- * AfterPackageActivation event listener
+ * AfterExtensionStaticDatabaseContentHasBeenImported event listener
  *
- * Always run the extension update script except on first install of base extension
+ * Run the update script after base data was re-imported
  */
-class AfterPackageActivationEventListener extends AbstractEventListener
+class AfterExtensionStaticDatabaseContentHasBeenImportedEventListener extends AbstractEventListener
 {
     /**
      * If the installed extension is static_info_tables or a language pack, execute the update
      *
-     * @param AfterPackageActivationEvent $event
+     * @param AfterExtensionStaticDatabaseContentHasBeenImportedEvent $event
      * @return void
      */
-    public function __invoke(AfterPackageActivationEvent $event): void
+    public function __invoke(AfterExtensionStaticDatabaseContentHasBeenImportedEvent $event): void
     {
         $extensionKey = $event->getPackageKey();
-        $packageType = $event->getType();
-        if ($packageType === 'typo3-cms-extension' && strpos($extensionKey, 'static_info_tables') === 0) {
+        if (strpos($extensionKey, 'static_info_tables') === 0) {
             $extensionKeyParts = explode('_', $extensionKey);
             if (count($extensionKeyParts) === 3) {
                 $extTablesStaticSqlRelFile = PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath($extensionKey)) . 'ext_tables_static+adt.sql';
@@ -53,10 +52,8 @@ class AfterPackageActivationEventListener extends AbstractEventListener
             if (
                 // Base extension with data already imported once
                 (count($extensionKeyParts) === 3 && $this->registry->get('extensionDataImport', $extTablesStaticSqlRelFile))
-                // Language pack
-                || (count($extensionKeyParts) === 4 && strlen($extensionKeyParts[3]) === 2)
-                || (count($extensionKeyParts) === 5 && strlen($extensionKeyParts[3]) === 2 && strlen($extensionKeyParts[4]) === 2)
             ) {
+            	$this->registry->remove('static_info_tables', 'last_update_status');
                 $this->executeUpdate($extensionKey);
             }
         }

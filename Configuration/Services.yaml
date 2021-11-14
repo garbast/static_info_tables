@@ -16,6 +16,13 @@ services:
         event: TYPO3\CMS\Core\Package\Event\AfterPackageActivationEvent
     public: true
 
+  SJBR\StaticInfoTables\EventListener\AfterExtensionStaticDatabaseContentHasBeenImportedEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'staticInfoTablesListener'
+        event: TYPO3\CMS\Extensionmanager\Event\AfterExtensionStaticDatabaseContentHasBeenImportedEvent
+    public: true
+
   SJBR\StaticInfoTables\Configuration\TypoScript\ConfigurationHelper:
     public: true
 
