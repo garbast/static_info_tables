@@ -31,3 +31,6 @@ services:
 
   SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor:
     public: true
+
+  SJBR\StaticInfoTables\Hook\Core\DataHandling\ProcessDataMap:
+    public: true

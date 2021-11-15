@@ -84,7 +84,7 @@ abstract class AbstractEntityRepository extends Repository
      */
     public function initializeObject()
     {
-        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);
     }
@@ -96,7 +96,7 @@ abstract class AbstractEntityRepository extends Repository
      */
     public function findAllDeletedIncluded()
     {
-        $querySettings = $this->objectManager->get(QuerySettingsInterface::class);
+        $querySettings = GeneralUtility::makeInstance(QuerySettingsInterface::class);
         $querySettings->setStoragePageIds([0]);
         $querySettings->setIncludeDeleted(true);
         $this->setDefaultQuerySettings($querySettings);
@@ -200,7 +200,7 @@ abstract class AbstractEntityRepository extends Repository
         } else {
             $query = $this->createQuery();
 
-            $object = $this->objectManager->get($this->objectType);
+            $object = new $this->objectType();
             if (!array_key_exists($propertyName, $object->_getProperties())) {
                 throw new \InvalidArgumentException('The model "' . $this->objectType . '" has no property "' . $propertyName . '" to order by.', 1316607579);
             }
@@ -341,7 +341,7 @@ abstract class AbstractEntityRepository extends Repository
         $dataMap = $this->dataMapper->getDataMap($this->objectType);
         $tableName = $dataMap->getTableName();
 
-        $sqlSchemaMigrationService = $this->objectManager->get(SqlSchemaMigrationService::class);
+        $sqlSchemaMigrationService = GeneralUtility::makeInstance(SqlSchemaMigrationService::class);
         $dbFieldDefinitions = $sqlSchemaMigrationService->getFieldDefinitions_database();
         $dbFields = [];
         $dbFields[$tableName] = $dbFieldDefinitions[$tableName];

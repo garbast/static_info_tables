@@ -35,7 +35,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ProcessDataMap
 {
-    private $territoryRepository;
+    protected $countryRepository;
+
+    public function injectCountryRepository(CountryRepository $countryRepository)
+    {
+        $this->countryRepository = $countryRepository;
+    }
+    protected $currencyRepository;
+
+    public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
+    {
+        $this->currencyRepository = $currencyRepository;
+    }
+
+    protected $territoryRepository;
 
     public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
     {
@@ -49,7 +62,6 @@ class ProcessDataMap
      * @param mixed $status
      * @param mixed $table
      * @param mixed $id
-     *
      * @return void
      */
     public function processDatamap_postProcessFieldArray($status, $table, $id, &$incomingFieldArray, &$fObj)
@@ -67,11 +79,9 @@ class ProcessDataMap
                 }
                 break;
             case 'static_countries':
-                $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
                 //Post-process containing territory ISO numeric code
                 if ($incomingFieldArray['cn_parent_territory_uid']) {
-                    $territoryRepository = $objectManager->get(TerritoryRepository::class);
-                    $territory = $territoryRepository->findOneByUid((int)$incomingFieldArray['cn_parent_territory_uid']);
+                    $territory = $this->territoryRepository->findOneByUid((int)$incomingFieldArray['cn_parent_territory_uid']);
                     if (is_object($territory)) {
                         $incomingFieldArray['cn_parent_tr_iso_nr'] = $territory->getUnCodeNumber();
                     }
@@ -80,8 +90,7 @@ class ProcessDataMap
                 }
                 //Post-process currency ISO numeric and A3 codes
                 if ($incomingFieldArray['cn_currency_uid']) {
-                    $currencyRepository = $objectManager->get(CurrencyRepository::class);
-                    $currency = $currencyRepository->findOneByUid((int)$incomingFieldArray['cn_currency_uid']);
+                    $currency = $this->currencyRepository->findOneByUid((int)$incomingFieldArray['cn_currency_uid']);
                     if (is_object($currency)) {
                         $incomingFieldArray['cn_currency_iso_nr'] = $currency->getIsoCodeNumber();
                         $incomingFieldArray['cn_currency_iso_3'] = $currency->getIsoCodeA3();
@@ -101,7 +110,6 @@ class ProcessDataMap
      * @param mixed $status
      * @param mixed $table
      * @param mixed $id
-     *
      * @return void
      */
     public function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, &$fObj)
@@ -114,9 +122,7 @@ class ProcessDataMap
                     $id = $fObj->substNEWwithIDs[$id];
                 }
                 // Get the country
-                $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-                $countryRepository = $objectManager->get(CountryRepository::class);
-                $country = $countryRepository->findOneByUid((int)$id);
+                $country = $this->countryRepository->findOneByUid((int)$id);
                 // Get the country zones
                 $countryZones = $country->getCountryZones()->toArray();
                 if (count($countryZones)) {
