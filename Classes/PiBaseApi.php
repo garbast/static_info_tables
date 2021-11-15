@@ -114,7 +114,7 @@ class PiBaseApi extends AbstractPlugin
      */
     public function init($conf = [])
     {
-    	if (ApplicationType::fromRequest($this->cObj->getRequest())->isFrontend()) {
+    	if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             $this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][$this->prefixId . '.'];
         }
 
@@ -343,7 +343,7 @@ class PiBaseApi extends AbstractPlugin
         }
         $query = $queryBuilder->execute();
         while ($row = $query->fetch()) {
-            foreach ($titleFields as $titleField) {
+            foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField]) {
                     $nameArray[$row['cn_iso_3']] = $row[$titleField];
                     break;
@@ -411,7 +411,7 @@ class PiBaseApi extends AbstractPlugin
         }
         $query = $queryBuilder->execute();
         while ($row = $query->fetch()) {
-            foreach ($titleFields as $titleField) {
+            foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField]) {
                     $nameArray[$row['zn_code']] = $row[$titleField];
                     break;
@@ -458,7 +458,7 @@ class PiBaseApi extends AbstractPlugin
         }
         $query = $queryBuilder->execute();
         while ($row = $query->fetch()) {
-            foreach ($titleFields as $titleField) {
+            foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField]) {
                     $nameArray[$row['cu_iso_3']] = $row[$titleField];
                     break;
@@ -511,7 +511,7 @@ class PiBaseApi extends AbstractPlugin
         $query = $queryBuilder->execute();
         while ($row = $query->fetch()) {
             $code = $row['lg_iso_2'] . ($row['lg_country_iso_2'] ? '_' . $row['lg_country_iso_2'] : '');
-            foreach ($titleFields as $titleField) {
+            foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField]) {
                     $nameArray[$code] = $row[$titleField];
                     break;
