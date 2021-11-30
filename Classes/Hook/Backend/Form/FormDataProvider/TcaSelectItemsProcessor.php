@@ -35,9 +35,9 @@ use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
 use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
-use SJBR\StaticInfoTables\Utility\ModelUtility;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 /**
  * Processor for TCA select items
@@ -199,36 +199,32 @@ class TcaSelectItemsProcessor
                         /** @var $territoryRepository SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository */
                         $territoryRepository = GeneralUtility::makeInstance(TerritoryRepository::class);
                         $objects = $territoryRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping(Territory::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_countries':
                         /** @var $countryRepository SJBR\StaticInfoTables\Domain\Repository\CountryRepository */
                         $countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
                         $objects = $countryRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping(Country::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_country_zones':
                         /** @var $countryZoneRepository SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository */
                         $countryZoneRepository = GeneralUtility::makeInstance(CountryZoneRepository::class);
                         $objects = $countryZoneRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping(CountryZone::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_languages':
                         /** @var $languageRepository SJBR\StaticInfoTables\Domain\Repository\LanguageRepository */
                         $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
                         $objects = $languageRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping(Language::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     case 'static_currencies':
                         /** @var $currencyRepository SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository */
                         $currencyRepository = GeneralUtility::makeInstance(CurrencyRepository::class);
                         $objects = $currencyRepository->findAllByUidInList($uidList)->toArray();
-                        $columnsMapping = ModelUtility::getModelMapping(Currency::class, ModelUtility::MAPPING_COLUMNS);
                         break;
                     default:
                         break;
                 }
                 if (!empty($objects)) {
+                	$columnsMapping = $this->getColumnsMapping($objects[0]);
                     // Map table column to object property
                     $indexProperties = [];
                     foreach ($indexFields as $indexField) {
@@ -257,5 +253,29 @@ class TcaSelectItemsProcessor
             }
         }
         return $items;
+    }
+
+    /**
+     * Get the columns mapping for the object
+     *
+     * @param object $object
+     * @return array
+     */
+    protected function getColumnsMapping($object)
+    {
+        $columnsMapping = [];
+        $dataMapper = GeneralUtility::makeInstance(DataMapper::class);
+        $className = get_class($object);
+        $dataMap = $dataMapper->getDataMap($className);
+        $properties = $object->_getProperties();
+        foreach ($properties as $propertyName => $propertyValue) {
+        	if (!$dataMap->isPersistableProperty($propertyName)) {
+                continue;
+            }
+            $columnMap = $dataMap->getColumnMap($propertyName);
+            $columnName = $columnMap->getColumnName();
+            $columnsMapping[$columnName] = ['mapOnProperty' => $propertyName];
+        }
+        return $columnsMapping;
     }
 }
