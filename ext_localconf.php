@@ -102,6 +102,8 @@ call_user_func(
         // In backend lists, order records according to language field of current language
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class]['modifyQuery'][] =
             \SJBR\StaticInfoTables\Hook\Backend\Recordlist\ModifyQuery::class;
+        // Add global fluid namespace
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sit'][] = 'SJBR\\StaticInfoTables\\ViewHelpers';
     },
     'static_info_tables'
 );

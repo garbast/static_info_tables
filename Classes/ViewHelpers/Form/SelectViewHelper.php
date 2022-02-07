@@ -40,21 +40,21 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  *
  * Default usage:
  * <code>
- * <s:form.select name="staticInfoTablesTestCountry" staticInfoTable="country" options="{}"/>
- * <s:form.select name="staticInfoTablesTestLanguage" staticInfoTable="language" options="{}"/>
- * <s:form.select name="staticInfoTablesTestTerritory" staticInfoTable="territory" options="{}"/>
- * <s:form.select name="staticInfoTablesTestCurrency" staticInfoTable="currency" options="{}"/>
- * <s:form.select name="staticInfoTablesTestCountryZones" staticInfoTable="countryZone" options="{}"/>
+ * <sit:form.select name="staticInfoTablesTestCountry" staticInfoTable="country" options="{}"/>
+ * <sit:form.select name="staticInfoTablesTestLanguage" staticInfoTable="language" options="{}"/>
+ * <sit:form.select name="staticInfoTablesTestTerritory" staticInfoTable="territory" options="{}"/>
+ * <sit:form.select name="staticInfoTablesTestCurrency" staticInfoTable="currency" options="{}"/>
+ * <sit:form.select name="staticInfoTablesTestCountryZones" staticInfoTable="countryZone" options="{}"/>
  * </code>
  *
  * Optional Usage:
  * <code>
- * <s:form.select name="staticInfoTablesTestCountry" id="staticInfoTablesTestCountry" staticInfoTable="country" options="{}" optionLabelField="isoCodeA2"/>
- * <s:form.select name="staticInfoTablesTestCountry" id="staticInfoTablesTestCountry" staticInfoTable="country" options="{}" optionLabelField="capitalCity"/>
+ * <sit:form.select name="staticInfoTablesTestCountry" id="staticInfoTablesTestCountry" staticInfoTable="country" options="{}" optionLabelField="isoCodeA2"/>
+ * <sit:form.select name="staticInfoTablesTestCountry" id="staticInfoTablesTestCountry" staticInfoTable="country" options="{}" optionLabelField="capitalCity"/>
  * </code>
  *
  * Subselect Usage: (only CountryZones of Germany)
- * <s:form.select name="staticInfoTablesTestCountryZones" id="staticInfoTablesTestCountryZones" staticInfoTable="countryZone" options="{}" staticInfoTableSubselect="{country: 54}"/>
+ * <sit:form.select name="staticInfoTablesTestCountryZones" id="staticInfoTablesTestCountryZones" staticInfoTable="countryZone" options="{}" staticInfoTableSubselect="{country: 54}"/>
  *
  * if you specify the Label-Field for the table use the Variable-Name from the StaticInfoTable-Model. (@see \SJBR\StaticInfoTables\Domain\Model\Country, ...)
  *
