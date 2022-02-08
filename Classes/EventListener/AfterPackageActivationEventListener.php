@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\EventListener;
 /*
  *  Copyright notice
  *
- *  (c) 2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -57,7 +57,7 @@ class AfterPackageActivationEventListener extends AbstractEventListener
                 || (count($extensionKeyParts) === 4 && strlen($extensionKeyParts[3]) === 2)
                 || (count($extensionKeyParts) === 5 && strlen($extensionKeyParts[3]) === 2 && strlen($extensionKeyParts[4]) === 2)
             ) {
-                $this->executeUpdate($extensionKey);
+                $this->executeUpdate();
             }
         }
     }

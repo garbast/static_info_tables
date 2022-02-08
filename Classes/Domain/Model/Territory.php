@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -90,7 +90,7 @@ class Territory extends AbstractEntity
      */
     public function setDeleted($deleted)
     {
-        return $this->deleted = $deleted;
+        $this->deleted = $deleted;
     }
 
     /**

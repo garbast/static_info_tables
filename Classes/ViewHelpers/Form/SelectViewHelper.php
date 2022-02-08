@@ -198,7 +198,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
     public function getOptions()
     {
         $this->settings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, $this->extensionName);
-        if (!$this->hasArgument('staticInfoTable') || $this->arguments['staticInfoTable'] == '') {
+        if (!$this->hasArgument('staticInfoTable') || ($this->arguments['staticInfoTable'] ?? '') == '') {
             throw new \Exception('Please configure the "staticInfoTable"-Argument for this ViewHelper.', 1378136534);
         }
         /** @var \SJBR\StaticInfoTables\Domain\Repository\AbstractEntityRepository $repository */
@@ -212,7 +212,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
         $valueFunction = $this->getMethodnameFromArgumentsAndUnset('optionValueField', 'uid');
         /** @var string $labelFunction */
         $labelFunction = $this->getMethodnameFromArgumentsAndUnset('optionLabelField', 'nameLocalized');
-        if (!$this->settings['countriesAllowed'] && (!$this->hasArgument('sortByOptionLabel') || $this->arguments['sortByOptionLabel'] == '')) {
+        if (!$this->settings['countriesAllowed'] && (!$this->hasArgument('sortByOptionLabel') || ($this->arguments['sortByOptionLabel'] ?? '') == '')) {
             $this->arguments['sortByOptionLabel'] = true;
         }
         /** @var bool $test Test only the first item if they have the needed functions */
@@ -280,7 +280,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
     protected function getItemsWithSubselect($repository)
     {
         $items = [];
-        $subselects = $this->arguments['staticInfoTableSubselect'];
+        $subselects = $this->arguments['staticInfoTableSubselect'] ?? [];
         foreach ($subselects as $fieldname => $fieldvalue) {
             // default implemented Subselect
             if (strtolower($fieldname) === 'country' && MathUtility::canBeInterpretedAsInteger($fieldvalue)) {

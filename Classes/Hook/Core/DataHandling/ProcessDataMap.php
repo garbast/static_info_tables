@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Hook\Core\DataHandling;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -69,7 +69,7 @@ class ProcessDataMap
         switch ($table) {
             case 'static_territories':
                 //Post-process containing territory ISO numeric code
-                if ($incomingFieldArray['tr_parent_territory_uid']) {
+                if ($incomingFieldArray['tr_parent_territory_uid'] ?? 0) {
                     $territory = $this->territoryRepository->findOneByUid((int)$incomingFieldArray['tr_parent_territory_uid']);
                     if (is_object($territory)) {
                         $incomingFieldArray['tr_parent_iso_nr'] = $territory->getUnCodeNumber();
@@ -80,7 +80,7 @@ class ProcessDataMap
                 break;
             case 'static_countries':
                 //Post-process containing territory ISO numeric code
-                if ($incomingFieldArray['cn_parent_territory_uid']) {
+                if ($incomingFieldArray['cn_parent_territory_uid'] ?? 0) {
                     $territory = $this->territoryRepository->findOneByUid((int)$incomingFieldArray['cn_parent_territory_uid']);
                     if (is_object($territory)) {
                         $incomingFieldArray['cn_parent_tr_iso_nr'] = $territory->getUnCodeNumber();
@@ -89,7 +89,7 @@ class ProcessDataMap
                     $incomingFieldArray['cn_parent_tr_iso_nr'] = 0;
                 }
                 //Post-process currency ISO numeric and A3 codes
-                if ($incomingFieldArray['cn_currency_uid']) {
+                if ($incomingFieldArray['cn_currency_uid'] ?? 0) {
                     $currency = $this->currencyRepository->findOneByUid((int)$incomingFieldArray['cn_currency_uid']);
                     if (is_object($currency)) {
                         $incomingFieldArray['cn_currency_iso_nr'] = $currency->getIsoCodeNumber();

@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables;
 /*
  *  Copyright notice
  *
- *  (c) 2004-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2004-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -27,6 +27,7 @@ namespace SJBR\StaticInfoTables;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use Psr\Http\Message\ServerRequestInterface;
 use SJBR\StaticInfoTables\Domain\Model\Currency;
 use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
 use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
@@ -78,12 +79,12 @@ class PiBaseApi extends AbstractPlugin
     ];
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository
+     * @var CountryRepository
      */
     protected $countryRepository;
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository
+     * @var CurrencyRepository
      */
     protected $currencyRepository;
 
@@ -109,40 +110,40 @@ class PiBaseApi extends AbstractPlugin
      * Initializing the class: sets the language based on the TS configuration language property
      *
      * @param array $conf ... overwriting setup of extension
-     *
      * @return bool Always returns true
      */
     public function init($conf = [])
     {
-    	if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            $this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][$this->prefixId . '.'];
+    	if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
+            && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
+            $this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][$this->prefixId . '.'] ?? [];
         }
 
         $this->countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
         $this->currencyRepository = GeneralUtility::makeInstance(CurrencyRepository::class);
 
         //Get the default currency and make sure it does exist in table static_currencies
-        $this->currency = $conf['currencyCode'];
+        $this->currency = $conf['currencyCode'] ?? '';
         if (!$this->currency) {
-            $this->currency = (trim($this->conf['currencyCode'])) ? trim($this->conf['currencyCode']) : 'EUR';
+            $this->currency = (trim($this->conf['currencyCode'] ?? '')) ? trim($this->conf['currencyCode']) : 'EUR';
         }
         //If nothing is set, we use the Euro because TYPO3 is spread more in this area
         if (!$this->getStaticInfoName('CURRENCIES', $this->currency)) {
             $this->currency = 'EUR';
         }
         $this->currencyInfo = $this->loadCurrencyInfo($this->currency);
-        $this->defaultCountry = $conf['countryCode'];
 
+        $this->defaultCountry = $conf['countryCode'] ?? '';
         if (!$this->defaultCountry) {
-            $this->defaultCountry = trim($this->conf['countryCode']);
+            $this->defaultCountry = trim($this->conf['countryCode'] ?? '');
         }
         if (!$this->getStaticInfoName('COUNTRIES', $this->defaultCountry)) {
             $this->defaultCountry = 'DEU';
         }
 
-        $this->defaultCountryZone = $conf['countryZoneCode'];
+        $this->defaultCountryZone = $conf['countryZoneCode'] ?? '';
         if (!$this->defaultCountryZone) {
-            $this->defaultCountryZone = trim($this->conf['countryZoneCode']);
+            $this->defaultCountryZone = trim($this->conf['countryZoneCode'] ?? '');
         }
         if (!$this->getStaticInfoName('SUBDIVISIONS', $this->defaultCountryZone, $this->defaultCountry)) {
             if ($this->defaultCountry == 'DEU') {
@@ -152,9 +153,9 @@ class PiBaseApi extends AbstractPlugin
             }
         }
 
-        $this->defaultLanguage = $conf['languageCode'];
+        $this->defaultLanguage = $conf['languageCode'] ?? '';
         if (!$this->defaultLanguage) {
-            $this->defaultLanguage = trim($this->conf['languageCode']);
+            $this->defaultLanguage = trim($this->conf['languageCode'] ?? '');
         }
         if (!$this->getStaticInfoName('LANGUAGES', $this->defaultLanguage)) {
             $this->defaultLanguage = 'EN';
@@ -180,7 +181,7 @@ class PiBaseApi extends AbstractPlugin
      *
      * @return string|bool The name of the object in the current language or false
      */
-    public function getStaticInfoName($type = 'COUNTRIES', $code, $country = '', $countrySubdivision = '', $local = false)
+    public function getStaticInfoName($type = 'COUNTRIES', $code = '', $country = '', $countrySubdivision = '', $local = false)
     {
         $names = false;
         if (in_array($type, $this->types) && trim($code)) {

@@ -145,7 +145,7 @@ class SqlSchemaMigrationService
         if ($row['Extra']) {
             $field[] = $row['Extra'];
         }
-        if (trim($row['Comment']) !== '') {
+        if (trim($row['Comment'] ?? '') !== '') {
             $field[] = "COMMENT '" . $row['Comment'] . "'";
         }
         return implode(' ', $field);

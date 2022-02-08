@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Utility;
  *  Copyright notice
  *
  *  (c) 2009 Sebastian Kurfürst <sebastian@typo3.org>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA@sjbr.ca>
+ *  (c) 2013-2022 Stanislas Rolland <typo3AAAA@sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -160,7 +160,8 @@ class LocalizationUtility
     public static function getLabelFields($tableName, $lang, $local = false)
     {
         $labelFields = [];
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'])) {
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields']) &&
+        	is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'])) {
             $alternativeLanguages = [];
             if (count(self::$alternativeLanguageKeys)) {
                 $alternativeLanguages = array_reverse(self::$alternativeLanguageKeys);
@@ -202,13 +203,12 @@ class LocalizationUtility
      * @param mixed $table
      * @param mixed $isoCode
      * @param mixed $index
-     *
      * @return string field name
      */
     public static function getIsoCodeField($table, $isoCode, $index = 0)
     {
         $isoCodeField = '';
-        $isoCodeFieldTemplate = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['isocode_field'][$index];
+        $isoCodeFieldTemplate = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['isocode_field'][$index] ?? '';
         if ($isoCode && $table && $isoCodeFieldTemplate) {
             $field = str_replace('##', self::isoCodeType($isoCode), $isoCodeFieldTemplate);
             if (is_array($GLOBALS['TCA'][$table]['columns'][$field])) {

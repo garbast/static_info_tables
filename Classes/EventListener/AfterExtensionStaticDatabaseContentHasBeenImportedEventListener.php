@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\EventListener;
 /*
  *  Copyright notice
  *
- *  (c) 2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -54,7 +54,7 @@ class AfterExtensionStaticDatabaseContentHasBeenImportedEventListener extends Ab
                 (count($extensionKeyParts) === 3 && $this->registry->get('extensionDataImport', $extTablesStaticSqlRelFile))
             ) {
             	$this->registry->remove('static_info_tables', 'last_update_status');
-                $this->executeUpdate($extensionKey);
+                $this->executeUpdate();
             }
         }
     }

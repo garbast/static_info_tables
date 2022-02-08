@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Configuration\TypoScript;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,7 +54,7 @@ class ConfigurationHelper
     public function buildEntitySelector(array $params, ExtendedTemplateService $pObj, $arg = '')
     {
         $field = '';
-        switch ($params['fieldName']) {
+        switch ($params['fieldName'] ?? '') {
             case 'data[plugin.tx_staticinfotables_pi1.countryCode]':
             case 'data[plugin.tx_staticinfotables_pi1.countriesAllowed]':
                 $repository = GeneralUtility::makeInstance(CountryRepository::class);
@@ -87,7 +87,7 @@ class ConfigurationHelper
         if (is_array($entities) && count($entities)) {
             $options = [];
             foreach ($entities as $entity) {
-                switch ($params['fieldName']) {
+                switch ($params['fieldName'] ?? '') {
                     case 'data[plugin.tx_staticinfotables_pi1.countryZoneCode]':
                         $value = $entity->getIsoCode();
                         $options[] = ['name' => $entity->getNameLocalized() . ' (' . $value . ')', 'value' => $value];

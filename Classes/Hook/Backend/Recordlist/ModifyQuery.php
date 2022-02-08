@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Recordlist;
 /*
  *  Copyright notice
  *
- *  (c) 2018-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2018-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -41,19 +41,23 @@ class ModifyQuery
      * @param string $additionalConstraints
      * @param string $fieldList
      * @param QueryBuilder $queryBuilder
-     *
      * @return void
      */
     public function modifyQuery(&$parameters, $table, $pageId, $additionalConstraints, $fieldList, QueryBuilder $queryBuilder)
     {
-        if (in_array($table, array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables']))) {
+        if (in_array($table, array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'] ?? []))) {
             $lang = substr(strtolower($this->getLanguageService()->lang), 0, 2);
-            if (ExtensionManagementUtility::isLoaded('static_info_tables_' . $lang)) {
-                $orderBy = str_replace('##', $lang, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['label_fields'][0]);
-                $orderByFields = QueryHelper::parseOrderBy((string)$orderBy);
-                foreach ($orderByFields as $fieldNameAndSorting) {
-                    list($fieldName, $sorting) = $fieldNameAndSorting;
-                    $queryBuilder->orderBy($fieldName, $sorting);
+            if (ExtensionManagementUtility::isLoaded('static_info_tables_' . $lang) &&
+            	isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['label_fields']) &&
+                is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['label_fields'])) {
+            	$label = array_key_first($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['label_fields']);
+            	if ($label) {
+					$orderBy = str_replace('##', $lang, $label);
+					$orderByFields = QueryHelper::parseOrderBy((string)$orderBy);
+					foreach ($orderByFields as $fieldNameAndSorting) {
+						list($fieldName, $sorting) = $fieldNameAndSorting;
+						$queryBuilder->orderBy($fieldName, $sorting);
+					}
                 }
             }
         }

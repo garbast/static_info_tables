@@ -4,7 +4,7 @@ defined('TYPO3') or die();
 /**
  * Registers the Static Info Tables Manager backend module, if enabled
  */
-if ($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['enableManager']) {
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['enableManager'] ?? false) {
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
 		'StaticInfoTables',
 		// Make module a submodule of 'tools'

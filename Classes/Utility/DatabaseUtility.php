@@ -35,7 +35,6 @@ class DatabaseUtility implements SingletonInterface
      * Dump content for static tables
      *
      * @param array $dbFields
-     *
      * @return string
      */
     public function dumpStaticTables($dbFields)
@@ -43,7 +42,7 @@ class DatabaseUtility implements SingletonInterface
         $out = '';
         // Traverse the table list and dump each:
         foreach ($dbFields as $table => $fields) {
-            if (is_array($dbFields[$table]['fields'])) {
+            if (isset($dbFields[$table]['fields']) && is_array($dbFields[$table]['fields'])) {
                 $header = $this->dumpHeader();
                 $tableHeader = $this->dumpTableHeader($table, $dbFields[$table], true);
                 $insertStatements = $this->dumpTableContent($table, $dbFields[$table]['fields']);
@@ -80,13 +79,13 @@ class DatabaseUtility implements SingletonInterface
         $lines = [];
         $dump = '';
         // Create field definitions
-        if (is_array($fieldKeyInfo['fields'])) {
+        if (isset($fieldKeyInfo['fields']) && is_array($fieldKeyInfo['fields'])) {
             foreach ($fieldKeyInfo['fields'] as $fieldN => $data) {
                 $lines[] = '  ' . $fieldN . ' ' . $data;
             }
         }
         // Create index key definitions
-        if (is_array($fieldKeyInfo['keys'])) {
+        if (isset($fieldKeyInfo['keys']) && is_array($fieldKeyInfo['keys'])) {
             foreach ($fieldKeyInfo['keys'] as $fieldN => $data) {
                 $lines[] = '  ' . $data;
             }

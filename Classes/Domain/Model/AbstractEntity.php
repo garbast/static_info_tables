@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,7 +38,7 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var DataMapper
      */
     protected $dataMapper;
-	
+
     /**
      * Name of the table from persistence mapping of this model
      *
@@ -83,8 +83,8 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $language = LocalizationUtility::getCurrentLanguage();
         $labelFields = LocalizationUtility::getLabelFields($this->tableName, $language);
         foreach ($labelFields as $labelField => $map) {
-            if ($this->_hasProperty($map['mapOnProperty'])) {
-                $value = $this->_getProperty($map['mapOnProperty']);
+            if ($this->_hasProperty($map['mapOnProperty'] ?? '')) {
+                $value = $this->_getProperty($map['mapOnProperty'] ?? '');
                 if ($value) {
                     $this->nameLocalized = $value;
                     break;

@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\EventListener;
 /*
  *  Copyright notice
  *
- *  (c) 2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -59,10 +59,9 @@ abstract class AbstractEventListener
     /**
      * Execute the update
      *
-     * @param string $extensionKey
      * @return void
      */
-    public function executeUpdate($extensionKey)
+    public function executeUpdate()
     {
         $databaseUpdateUtility = GeneralUtility::makeInstance(DatabaseUpdateUtility::class);
         // Clear the class cache

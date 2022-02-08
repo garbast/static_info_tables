@@ -6,7 +6,7 @@ namespace SJBR\StaticInfoTables\Configuration\Tca;
  *  Copyright notice
  *
  *  (c) 2017 Manuel Selbach <manuel_selbach@yahoo.de>
- *  (c) 2020-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2020-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -47,7 +47,7 @@ class Provider
     {
         foreach ($additionalFields as $sourceField => $destField) {
             $additionalColumns = [];
-            $additionalColumns[$destField] = $GLOBALS['TCA'][$tableName]['columns'][$sourceField];
+            $additionalColumns[$destField] = $GLOBALS['TCA'][$tableName]['columns'][$sourceField] ?? [];
             $additionalColumns[$destField]['label'] = sprintf(
                 static::$LL,
                 $extensionKey,

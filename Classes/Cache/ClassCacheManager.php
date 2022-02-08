@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Cache;
 /*
  *  Copyright notice
  *  (c) 2012 Georg Ringer <typo3@ringerge.org>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *
  *  All rights reserved
  *
@@ -84,7 +84,8 @@ class ClassCacheManager implements SingletonInterface
     protected function initializeCache()
     {
         if (!$this->cacheManager->hasCache($this->extensionKey)) {
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$this->extensionKey])) {
+            if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$this->extensionKey]) &&
+            	is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$this->extensionKey])) {
                 ArrayUtility::mergeRecursiveWithOverrule($this->cacheConfiguration[$this->extensionKey], $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$this->extensionKey]);
             }
             $this->cacheManager->setCacheConfigurations($this->cacheConfiguration);
@@ -101,7 +102,7 @@ class ClassCacheManager implements SingletonInterface
     public function build()
     {
         $extensibleExtensions = $this->getExtensibleExtensions();
-        $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$this->extensionKey]['entities'];
+        $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$this->extensionKey]['entities'] ?? [];
         foreach ($entities as $entity) {
             $key = 'Domain/Model/' . $entity;
 
@@ -239,7 +240,7 @@ class ClassCacheManager implements SingletonInterface
     public function clear()
     {
         $this->cacheInstance->flush();
-        if (isset($GLOBALS['BE_USER'])) {
+        if (isset($GLOBALS['BE_USER']) && isset($GLOBALS['BE_USER']->user)) {
             $GLOBALS['BE_USER']->writelog(3, 1, 0, 0, '[StaticInfoTables]: User %s has cleared the class cache', [$GLOBALS['BE_USER']->user['username']]);
         }
     }

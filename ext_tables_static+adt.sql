@@ -1399,6 +1399,7 @@ INSERT INTO static_languages (uid, pid, deleted, lg_iso_2, lg_name_local, lg_nam
 INSERT INTO static_languages (uid, pid, deleted, lg_iso_2, lg_name_local, lg_name_en, lg_typo3, lg_country_iso_2, lg_collate_locale, lg_sacred, lg_constructed) VALUES ('199', '0', '0', 'ES', 'Español (México)', 'Spanish (Mexico)', '', 'MX', 'es_MX', '0', '0');
 
 
+
 # TYPO3 Extension Manager dump 1.1
 #--------------------------------------------------------
 
