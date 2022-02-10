@@ -38,7 +38,11 @@
       "SJBR\\StaticInfoTables\\": "Classes/"
     },
     "exclude-from-classmap": [
-      "Classes/Domain/Model/*"
+      "Classes/Domain/Model/Country",
+      "Classes/Domain/Model/CountryZone",
+      "Classes/Domain/Model/Currency",
+      "Classes/Domain/Model/Language",
+      "Classes/Domain/Model/Territory"
     ]
   },
   "extra": {
