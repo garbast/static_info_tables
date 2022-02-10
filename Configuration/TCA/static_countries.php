@@ -5,7 +5,7 @@ return [
         'label' => 'cn_short_en',
         'label_alt' => 'cn_iso_2',
         'label_alt_force' => 1,
-        'label_userFunc' => 'SJBR\\StaticInfoTables\\Hook\\Backend\\Form\\FormDataProvider\\TcaLabelProcessor->addIsoCodeToLabel',
+        'label_userFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor::class . '->addIsoCodeToLabel',
         'adminOnly' => true,
         'rootLevel' => 1,
         'is_static' => 1,
@@ -19,7 +19,7 @@ return [
     'columns' => [
         'cn_official_name_local' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_official_name_local',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '25',
@@ -31,7 +31,7 @@ return [
         ],
         'cn_official_name_en' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_official_name_en',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '25',
@@ -50,7 +50,7 @@ return [
         ],
         'cn_iso_2' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_iso_2',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '4',
@@ -61,7 +61,7 @@ return [
         ],
         'cn_iso_3' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_iso_3',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '5',
@@ -72,7 +72,7 @@ return [
         ],
         'cn_iso_nr' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_iso_nr',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '7',
@@ -82,7 +82,7 @@ return [
             ],
         ],
         'cn_parent_territory_uid' => [
-            'exclude' => 0,
+            'exclude' => false,
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_parent_territory_uid',
             'config' => [
                 'type' => 'select',
@@ -92,7 +92,7 @@ return [
                 ],
                 'foreign_table' => 'static_territories',
                 'foreign_table_where' => 'ORDER BY static_territories.tr_name_en',
-                'itemsProcFunc' => 'SJBR\\StaticInfoTables\\Hook\\Backend\\Form\\FormDataProvider\\TcaSelectItemsProcessor->translateTerritoriesSelector',
+                'itemsProcFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor::class . '->translateTerritoriesSelector',
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
@@ -105,7 +105,7 @@ return [
         ],
         'cn_capital' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_capital',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '15',
@@ -117,7 +117,7 @@ return [
         ],
         'cn_tldomain' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_tldomain',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '5',
@@ -127,7 +127,7 @@ return [
             ],
         ],
         'cn_currency_uid' => [
-            'exclude' => 0,
+            'exclude' => false,
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_currency_uid',
             'config' => [
                 'type' => 'group',
@@ -165,7 +165,7 @@ return [
         ],
         'cn_phone' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_phone',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '10',
@@ -176,7 +176,7 @@ return [
         ],
         'cn_eu_member' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_eu_member',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'check',
                 'default' => '0',
@@ -184,7 +184,7 @@ return [
         ],
         'cn_uno_member' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_uno_member',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'check',
                 'default' => '0',
@@ -192,7 +192,7 @@ return [
         ],
         'cn_address_format' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -240,7 +240,7 @@ return [
         ],
         'cn_zone_flag' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_zone_flag',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'check',
                 'default' => '0',
@@ -248,7 +248,7 @@ return [
         ],
         'cn_short_local' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_short_local',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '25',
@@ -260,7 +260,7 @@ return [
         ],
         'cn_short_en' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_short_en',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '25',
@@ -272,7 +272,7 @@ return [
         ],
         'cn_country_zones' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_country_zones',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'inline',
                 'foreign_table' => 'static_country_zones',
