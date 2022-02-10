@@ -5,7 +5,7 @@ return [
         'label' => 'cu_name_en',
         'label_alt' => 'cu_iso_3',
         'label_alt_force' => 1,
-        'label_userFunc' => 'SJBR\\StaticInfoTables\\Hook\\Backend\\Form\\FormDataProvider\\TcaLabelProcessor->addIsoCodeToLabel',
+        'label_userFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor::class . '->addIsoCodeToLabel',
         'adminOnly' => true,
         'rootLevel' => 1,
         'is_static' => 1,
@@ -26,7 +26,7 @@ return [
         ],
         'cu_iso_3' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_iso_3',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '5',
@@ -37,7 +37,7 @@ return [
         ],
         'cu_iso_nr' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_iso_nr',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '7',
@@ -48,7 +48,7 @@ return [
         ],
         'cu_name_en' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_name_en',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '18',
@@ -60,7 +60,7 @@ return [
         ],
         'cu_sub_name_en' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_sub_name_en',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '18',
@@ -72,7 +72,7 @@ return [
         ],
         'cu_symbol_left' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_symbol_left',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '8',
@@ -84,7 +84,7 @@ return [
         ],
         'cu_symbol_right' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_symbol_right',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '8',
@@ -96,7 +96,7 @@ return [
         ],
         'cu_thousands_point' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_thousands_point',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '3',
@@ -107,7 +107,7 @@ return [
         ],
         'cu_decimal_point' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_decimal_point',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '3',
@@ -118,7 +118,7 @@ return [
         ],
         'cu_decimal_digits' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_decimal_digits',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '5',
@@ -129,7 +129,7 @@ return [
         ],
         'cu_sub_divisor' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_sub_divisor',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '8',
@@ -140,7 +140,7 @@ return [
         ],
         'cu_sub_symbol_left' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_sub_symbol_left',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '8',
@@ -152,7 +152,7 @@ return [
         ],
         'cu_sub_symbol_right' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_sub_symbol_right',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '8',
