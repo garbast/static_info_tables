@@ -49,7 +49,7 @@ return [
         ],
         'zn_code' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_country_zones_item.zn_code',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '18',
@@ -61,7 +61,7 @@ return [
         ],
         'zn_name_local' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.name',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '18',
@@ -73,7 +73,7 @@ return [
         ],
         'zn_name_en' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_country_zones_item.zn_name_en',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '18',

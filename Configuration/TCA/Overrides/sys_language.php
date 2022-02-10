@@ -3,7 +3,7 @@ defined('TYPO3') or die();
 
 // Configure static_lang_isocode field in TCA
 $GLOBALS['TCA']['sys_language']['columns']['static_lang_isocode'] = [
-    'exclude' => 1,
+    'exclude' => true,
     'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_language.isocode',
     'config' => [
         'type' => 'group',

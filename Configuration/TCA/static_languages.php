@@ -5,7 +5,7 @@ return [
         'label' => 'lg_name_en',
         'label_alt' => 'lg_iso_2',
         'label_alt_force' => 1,
-        'label_userFunc' => 'SJBR\\StaticInfoTables\\Hook\\Backend\\Form\\FormDataProvider\\TcaLabelProcessor->addIsoCodeToLabel',
+        'label_userFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor::class . '->addIsoCodeToLabel',
         'adminOnly' => true,
         'rootLevel' => 1,
         'is_static' => 1,
@@ -26,7 +26,7 @@ return [
         ],
         'lg_iso_2' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_languages_item.lg_iso_2',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '4',
@@ -37,7 +37,7 @@ return [
         ],
         'lg_name_local' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.name',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '25',
@@ -49,7 +49,7 @@ return [
         ],
         'lg_name_en' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_languages_item.lg_name_en',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '18',
@@ -61,7 +61,7 @@ return [
         ],
         'lg_typo3' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_languages_item.lg_typo3',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '3',
@@ -72,7 +72,7 @@ return [
         ],
         'lg_country_iso_2' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_iso_2',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '3',
@@ -83,7 +83,7 @@ return [
         ],
         'lg_collate_locale' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_languages_item.lg_collate_locale',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'input',
                 'size' => '5',
@@ -94,7 +94,7 @@ return [
         ],
         'lg_sacred' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_languages_item.lg_sacred',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'check',
                 'default' => '0',
@@ -102,7 +102,7 @@ return [
         ],
         'lg_constructed' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_languages_item.lg_constructed',
-            'exclude' => '0',
+            'exclude' => false,
             'config' => [
                 'type' => 'check',
                 'default' => '0',

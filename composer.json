@@ -49,5 +49,11 @@
     "typo3/cms": {
       "extension-key": "static_info_tables"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "typo3/class-alias-loader": true,
+      "typo3/cms-composer-installers": true
+    }
   }
 }

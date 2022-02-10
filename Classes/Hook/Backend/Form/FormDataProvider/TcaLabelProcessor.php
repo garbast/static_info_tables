@@ -75,7 +75,7 @@ class TcaLabelProcessor
                         }
                     }
                     if ($isoCode) {
-                        $PA['title'] = $PA['title'] . ' (' . $isoCode . ')';
+                        $PA['title'] .= ' (' . $isoCode . ')';
                     }
                     break;
                 case 'static_countries':
@@ -88,7 +88,7 @@ class TcaLabelProcessor
                         }
                     }
                     if ($isoCode) {
-                        $PA['title'] = $PA['title'] . ' (' . $isoCode . ')';
+                        $PA['title'] .= ' (' . $isoCode . ')';
                     }
                     break;
                 case 'static_languages':
@@ -109,7 +109,7 @@ class TcaLabelProcessor
                         }
                     }
                     if ($isoCode) {
-                        $PA['title'] = $PA['title'] . ' (' . $isoCode . ')';
+                        $PA['title'] .= ' (' . $isoCode . ')';
                     }
                     break;
                 case 'static_currencies':
@@ -122,7 +122,7 @@ class TcaLabelProcessor
                         }
                     }
                     if ($isoCode) {
-                        $PA['title'] = $PA['title'] . ' (' . $isoCode . ')';
+                        $PA['title'] .= ' (' . $isoCode . ')';
                     }
                     break;
                 default:
