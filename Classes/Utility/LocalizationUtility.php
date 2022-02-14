@@ -327,7 +327,7 @@ class LocalizationUtility
             $languageCode = self::getCurrentLanguage();
             $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
             list($languageIsoCodeA2, $countryIsoCodeA2) = explode('_', $languageCode, 2);
-            $language = $languageRepository->findOneByIsoCodes($languageIsoCodeA2, $countryIsoCodeA2 ? $countryIsoCodeA2 : '');
+            $language = $languageRepository->findOneByIsoCodes($languageIsoCodeA2, $countryIsoCodeA2 ?? '');
             // If $language is NULL, current language was not found in the Language repository. Most probably, the repository is empty.
             self::$collatingLocale = ($language instanceof Language) ? $language->getCollatingLocale() : 'en_GB';
         }
