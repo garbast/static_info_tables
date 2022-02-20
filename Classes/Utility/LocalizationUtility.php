@@ -104,7 +104,7 @@ class LocalizationUtility
                 $queryBuilder->addSelect($labelField);
             }
             $whereCount = 0;
-            if ($identifiers['uid']) {
+            if ($identifiers['uid'] ?? false) {
                 $queryBuilder->where(
                     $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$identifiers['uid']), \PDO::PARAM_INT)
                 );
@@ -160,8 +160,8 @@ class LocalizationUtility
     public static function getLabelFields($tableName, $lang, $local = false)
     {
         $labelFields = [];
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields']) &&
-        	is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'])) {
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'])
+        	&& is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'])) {
             $alternativeLanguages = [];
             if (count(self::$alternativeLanguageKeys)) {
                 $alternativeLanguages = array_reverse(self::$alternativeLanguageKeys);
@@ -175,7 +175,9 @@ class LocalizationUtility
                     $property = str_replace('##', ucfirst(strtolower($lang)), $map['mapOnProperty']);
                 }
                 // Make sure the resulting field name exists in the table
-                if (is_array($GLOBALS['TCA'][$tableName]['columns'][$labelField])) {
+                if (isset($GLOBALS['TCA'][$tableName]['columns'][$labelField])
+                	&& is_array($GLOBALS['TCA'][$tableName]['columns'][$labelField])
+                ) {
                     $labelFields[$labelField] = ['mapOnProperty' => $property];
                 }
                 // Add fields for alternative languages

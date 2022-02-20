@@ -269,7 +269,7 @@ class PiBaseApi extends AbstractPlugin
                 break;
         }
 
-        if (!$defaultSelectedArray) {
+        if (!isset($defaultSelectedArray) || !$defaultSelectedArray) {
             reset($nameArray);
             $defaultSelectedArray = [key($nameArray)];
         }

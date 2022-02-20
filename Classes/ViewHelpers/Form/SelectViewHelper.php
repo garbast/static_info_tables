@@ -212,7 +212,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
         $valueFunction = $this->getMethodnameFromArgumentsAndUnset('optionValueField', 'uid');
         /** @var string $labelFunction */
         $labelFunction = $this->getMethodnameFromArgumentsAndUnset('optionLabelField', 'nameLocalized');
-        if (!$this->settings['countriesAllowed'] && (!$this->hasArgument('sortByOptionLabel') || ($this->arguments['sortByOptionLabel'] ?? '') == '')) {
+        if (!($this->settings['countriesAllowed'] ?? false) && (!$this->hasArgument('sortByOptionLabel') || ($this->arguments['sortByOptionLabel'] ?? '') == '')) {
             $this->arguments['sortByOptionLabel'] = true;
         }
         /** @var bool $test Test only the first item if they have the needed functions */
@@ -255,7 +255,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
         if ($this->hasArgument('staticInfoTableSubselect')) {
             $items = $this->getItemsWithSubselect($repository);
         } elseif ($repository === 'countryRepository') {
-            if ($this->settings['countriesAllowed']) {
+            if (isset($this->settings['countriesAllowed']) && $this->settings['countriesAllowed']) {
                 $items = $this->{$repository}->findAllowedByIsoCodeA3($this->settings['countriesAllowed']);
             } else {
                 $items = $this->{$repository}->findAll()
