@@ -345,13 +345,13 @@ class PiBaseApi extends AbstractPlugin
         $query = $queryBuilder->execute();
         while ($row = $query->fetch()) {
             foreach ($titleFields as $titleField => $map) {
-                if ($row[$titleField]) {
+                if ($row[$titleField] ?? false) {
                     $nameArray[$row['cn_iso_3']] = $row[$titleField];
                     break;
                 }
             }
         }
-        if ($this->conf['countriesAllowed'] != '') {
+        if (isset($this->conf['countriesAllowed']) && $this->conf['countriesAllowed'] != '') {
             $countriesAllowedArray = GeneralUtility::trimExplode(',', $this->conf['countriesAllowed']);
             $newNameArray = [];
             foreach ($countriesAllowedArray as $iso3) {
@@ -413,7 +413,7 @@ class PiBaseApi extends AbstractPlugin
         $query = $queryBuilder->execute();
         while ($row = $query->fetch()) {
             foreach ($titleFields as $titleField => $map) {
-                if ($row[$titleField]) {
+                if ($row[$titleField] ?? false) {
                     $nameArray[$row['zn_code']] = $row[$titleField];
                     break;
                 }
@@ -460,7 +460,7 @@ class PiBaseApi extends AbstractPlugin
         $query = $queryBuilder->execute();
         while ($row = $query->fetch()) {
             foreach ($titleFields as $titleField => $map) {
-                if ($row[$titleField]) {
+                if ($row[$titleField] ?? false) {
                     $nameArray[$row['cu_iso_3']] = $row[$titleField];
                     break;
                 }
@@ -513,7 +513,7 @@ class PiBaseApi extends AbstractPlugin
         while ($row = $query->fetch()) {
             $code = $row['lg_iso_2'] . ($row['lg_country_iso_2'] ? '_' . $row['lg_country_iso_2'] : '');
             foreach ($titleFields as $titleField => $map) {
-                if ($row[$titleField]) {
+                if ($row[$titleField] ?? false) {
                     $nameArray[$code] = $row[$titleField];
                     break;
                 }
