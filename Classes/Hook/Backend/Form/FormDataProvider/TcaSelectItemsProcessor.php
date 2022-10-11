@@ -243,7 +243,7 @@ class TcaSelectItemsProcessor
                         if (is_array($items[$key]) && array_key_exists(1, $items[$key]) && ($items[$key][1] ?? 0)) {
                             $object = $uidIndexedObjects[$items[$key][1]];
                             $items[$key][1] = $object->_getProperty($indexProperties[0]);
-                            if ($indexFields[1] && $object->_getProperty($indexProperties[1] ?? '')) {
+                            if (($indexFields[1] ?? false) && $object->_getProperty($indexProperties[1] ?? '')) {
                                 $items[$key][1] .=  '_' . $object->_getProperty($indexProperties[1]);
                             }
                         }

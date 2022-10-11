@@ -62,6 +62,9 @@ class TcaLabelProcessor
      */
     public function addIsoCodeToLabel(&$PA)
     {
+        if (!isset($PA['row']['uid'])) {
+            return;
+        }
         $PA['title'] = LocalizationUtility::translate(['uid' => $PA['row']['uid']], $PA['table']);
         if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
             && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
