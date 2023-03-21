@@ -38,6 +38,7 @@ use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
 
 /**
@@ -48,7 +49,7 @@ class PiBaseApi extends AbstractPlugin
     /**
      * The backReference to the mother cObj object set at call time
      */
-    public $cObj;
+    protected ?ContentObjectRenderer $cObj = null;
 
     // Same as class name
     public $prefixId = 'tx_staticinfotables_pi1';

@@ -25,6 +25,7 @@ namespace SJBR\StaticInfoTables\ViewHelpers\Form;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use SJBR\StaticInfoTables\Domain\Model\AbstractEntity;
 use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
 use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
@@ -32,6 +33,9 @@ use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 
 /**
  * StaticInfoTables SelectViewHelper
@@ -67,118 +71,27 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  * currency
  * countryZone
  */
-class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper
+class SelectViewHelper extends AbstractFormFieldViewHelper
 {
-    /**
-     * Extension name
-     *
-     * @var string
-     */
-    protected $extensionName = 'StaticInfoTables';
+    protected string $extensionName = 'StaticInfoTables';
 
-    /**
-     * Settings
-     *
-     * @var array
-     */
-    protected $settings;
+    protected array $settings;
 
-    /**
-     * Country repository
-     *
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository
-     */
-    protected $countryRepository;
-
-    /**
-     * Dependency injection of the Country Repository
-     *
-     * @param CountryRepository $countryRepository
-     * @return void
-     */
-    public function injectCountryRepository(CountryRepository $countryRepository)
-    {
-        $this->countryRepository = $countryRepository;
-    }
-
-    /**
-     * Language repository
-     *
-     * @var \SJBR\StaticInfoTables\Domain\Repository\LanguageRepository
-     */
-    protected $languageRepository;
-
-    /**
-     * Dependency injection of the Language Repository
-     *
-     * @param LanguageRepository $languageRepository
-     * @return void
-     */
-    public function injectLanguageRepository(LanguageRepository $languageRepository)
-    {
-        $this->languageRepository = $languageRepository;
-    }
-
-    /**
-     * Territory repository
-     *
-     * @var \SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository
-     */
-    protected $territoryRepository;
-
-    /**
-     * Dependency injection of the Territory Repository
-     *
-     * @param TerritoryRepository $territoryRepository
-     * @return void
-     */
-    public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
-    {
-        $this->territoryRepository = $territoryRepository;
-    }
-
-    /**
-     * Currency repository
-     *
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository
-     */
-    protected $currencyRepository;
-
-    /**
-     * Dependency injection of the Currency Repository
-     *
-     * @param CurrencyRepository $currencyRepository
-     * @return void
-     */
-    public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
-    {
-        $this->currencyRepository = $currencyRepository;
-    }
-
-    /**
-     * Country Zone repository
-     *
-     * @var \SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository
-     */
-    protected $countryZoneRepository;
-
-    /**
-     * Dependency injection of the CountryZone Repository
-     *
-     * @param CountryZoneRepository $countryZoneRepository
-     * @return void
-     */
-    public function injectCountryZoneRepository(CountryZoneRepository $countryZoneRepository)
-    {
-        $this->countryZoneRepository = $countryZoneRepository;
+    public function __construct(
+        protected CountryRepository $countryRepository,
+        protected LanguageRepository $languageRepository,
+        protected TerritoryRepository $territoryRepository,
+        protected CurrencyRepository $currencyRepository,
+        protected CountryZoneRepository $countryZoneRepository,
+        protected ConfigurationManagerInterface $configurationManager
+    ) {
+        parent::__construct();
     }
 
     /**
      * Initialize arguments.
-     *
-     * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('staticInfoTable', 'string', 'set the tablename of the StaticInfoTable to build the Select-Tag.');
@@ -187,38 +100,262 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
         $this->registerArgument('defaultOptionValue', 'string', 'if set, add default option with given label');
     }
 
+    public function render(): string
+    {
+        if ($this->arguments['required']) {
+            $this->tag->addAttribute('required', 'required');
+        }
+        $name = $this->getName();
+        if ($this->arguments['multiple']) {
+            $this->tag->addAttribute('multiple', 'multiple');
+            $name .= '[]';
+        }
+        $this->tag->addAttribute('name', $name);
+        $options = $this->getSpecialOptions();
+
+        $viewHelperVariableContainer = $this->renderingContext->getViewHelperVariableContainer();
+
+        $this->addAdditionalIdentityPropertiesIfNeeded();
+        $this->setErrorClassAttribute();
+        $content = '';
+
+        // register field name for token generation.
+        $this->registerFieldNameForFormTokenGeneration($name);
+        // in case it is a multi-select, we need to register the field name
+        // as often as there are elements in the box
+        if ($this->arguments['multiple']) {
+            $content .= $this->renderHiddenFieldForEmptyValue();
+            // Register the field name additional times as required by the total number of
+            // options. Since we already registered it once above, we start the counter at 1
+            // instead of 0.
+            $optionsCount = count($options);
+            for ($i = 1; $i < $optionsCount; $i++) {
+                $this->registerFieldNameForFormTokenGeneration($name);
+            }
+            // save the parent field name so that any child f:form.select.option
+            // tag will know to call registerFieldNameForFormTokenGeneration
+            // this is the reason why "self::class" is used instead of static::class (no LSB)
+            $viewHelperVariableContainer->addOrUpdate(
+                self::class,
+                'registerFieldNameForFormTokenGeneration',
+                $name
+            );
+        }
+
+        $viewHelperVariableContainer->addOrUpdate(self::class, 'selectedValue', $this->getSelectedValue());
+        $prependContent = $this->renderPrependOptionTag();
+        $tagContent = $this->renderOptionTags($options);
+        $childContent = $this->renderChildren();
+        $viewHelperVariableContainer->remove(self::class, 'selectedValue');
+        $viewHelperVariableContainer->remove(self::class, 'registerFieldNameForFormTokenGeneration');
+        if (isset($this->arguments['optionsAfterContent']) && $this->arguments['optionsAfterContent']) {
+            $tagContent = $childContent . $tagContent;
+        } else {
+            $tagContent .= $childContent;
+        }
+        $tagContent = $prependContent . $tagContent;
+
+        $this->tag->forceClosingTag(true);
+        $this->tag->setContent($tagContent);
+        $content .= $this->tag->render();
+        return $content;
+    }
+
+    /**
+     * Render prepended option tag
+     *
+     * @return string rendered prepended empty option
+     */
+    protected function renderPrependOptionTag(): string
+    {
+        $output = '';
+        if ($this->hasArgument('prependOptionLabel')) {
+            $value = $this->hasArgument('prependOptionValue') ? $this->arguments['prependOptionValue'] : '';
+            $label = $this->arguments['prependOptionLabel'];
+            $output .= $this->renderOptionTag($value, $label, false) . LF;
+        }
+        return $output;
+    }
+
+    /**
+     * Render the option tags.
+     *
+     * @param array $options the options for the form.
+     * @return string rendered tags.
+     */
+    protected function renderOptionTags(array $options): string
+    {
+        $output = '';
+        foreach ($options as $value => $label) {
+            $isSelected = $this->isSelected($value);
+            $output .= $this->renderOptionTag($value, $label, $isSelected) . LF;
+        }
+        return $output;
+    }
+
+    protected function getOptions(): array
+    {
+        if (!is_array($this->arguments['options']) && !$this->arguments['options'] instanceof \Traversable) {
+            return [];
+        }
+        $options = [];
+        $optionsArgument = $this->arguments['options'];
+        foreach ($optionsArgument as $key => $value) {
+            if (is_object($value) || is_array($value)) {
+                if ($this->hasArgument('optionValueField')) {
+                    $key = ObjectAccess::getPropertyPath($value, $this->arguments['optionValueField']);
+                    if (is_object($key)) {
+                        if (method_exists($key, '__toString')) {
+                            $key = (string)$key;
+                        } else {
+                            throw new Exception('Identifying value for object of class "' . (is_object($value) ? get_class($value) : gettype($value)) . '" was an object.', 1247827428);
+                        }
+                    }
+                } elseif ($this->persistenceManager->getIdentifierByObject($value) !== null) {
+                    // @todo use $this->persistenceManager->isNewObject() once it is implemented
+                    $key = $this->persistenceManager->getIdentifierByObject($value);
+                } elseif (is_object($value) && method_exists($value, '__toString')) {
+                    $key = (string)$value;
+                } elseif (is_object($value)) {
+                    throw new Exception('No identifying value for object of class "' . get_class($value) . '" found.', 1247826696);
+                }
+                if ($this->hasArgument('optionLabelField')) {
+                    $value = ObjectAccess::getPropertyPath($value, $this->arguments['optionLabelField']);
+                    if (is_object($value)) {
+                        if (method_exists($value, '__toString')) {
+                            $value = (string)$value;
+                        } else {
+                            throw new Exception('Label value for object of class "' . get_class($value) . '" was an object without a __toString() method.', 1247827553);
+                        }
+                    }
+                } elseif (is_object($value) && method_exists($value, '__toString')) {
+                    $value = (string)$value;
+                } elseif ($this->persistenceManager->getIdentifierByObject($value) !== null) {
+                    // @todo use $this->persistenceManager->isNewObject() once it is implemented
+                    $value = $this->persistenceManager->getIdentifierByObject($value);
+                }
+            }
+            $options[$key] = $value;
+        }
+        if ($this->arguments['sortByOptionLabel']) {
+            asort($options, SORT_LOCALE_STRING);
+        }
+        return $options;
+    }
+
+    /**
+     * Render the option tags.
+     *
+     * @param mixed $value Value to check for
+     * @return bool TRUE if the value should be marked as selected; FALSE otherwise
+     */
+    protected function isSelected(mixed $value): bool
+    {
+        $selectedValue = $this->getSelectedValue();
+        if ($value === $selectedValue || (string)$value === $selectedValue) {
+            return true;
+        }
+        if ($this->hasArgument('multiple')) {
+            if ($selectedValue === null && $this->arguments['selectAllByDefault'] === true) {
+                return true;
+            }
+            if (is_array($selectedValue) && in_array($value, $selectedValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retrieves the selected value(s)
+     *
+     * @return mixed value string or an array of strings
+     */
+    protected function getSelectedValue(): array|string
+    {
+        $this->setRespectSubmittedDataValue(true);
+        $value = $this->getValueAttribute();
+        if (!is_array($value) && !$value instanceof \Traversable) {
+            return $this->getOptionValueScalar($value);
+        }
+        $selectedValues = [];
+        foreach ($value as $selectedValueElement) {
+            $selectedValues[] = $this->getOptionValueScalar($selectedValueElement);
+        }
+        return $selectedValues;
+    }
+
+    /**
+     * Get the option value for an object
+     *
+     * @param mixed $valueElement
+     * @return string
+     */
+    protected function getOptionValueScalar(mixed $valueElement): string
+    {
+        if (is_object($valueElement)) {
+            if ($this->hasArgument('optionValueField')) {
+                return (string)ObjectAccess::getPropertyPath($valueElement, $this->arguments['optionValueField']);
+            }
+            // @todo use $this->persistenceManager->isNewObject() once it is implemented
+            if ($this->persistenceManager->getIdentifierByObject($valueElement) !== null) {
+                return $this->persistenceManager->getIdentifierByObject($valueElement);
+            }
+            return (string)$valueElement;
+        }
+        return (string)$valueElement;
+    }
+
+    /**
+     * Render one option tag
+     *
+     * @param string $value value attribute of the option tag (will be escaped)
+     * @param string $label content of the option tag (will be escaped)
+     * @param bool $isSelected specifies whether to add selected attribute
+     * @return string the rendered option tag
+     */
+    protected function renderOptionTag(mixed $value, mixed $label, bool $isSelected): string
+    {
+        $output = '<option value="' . htmlspecialchars((string)$value) . '"';
+        if ($isSelected) {
+            $output .= ' selected="selected"';
+        }
+        $output .= '>' . htmlspecialchars((string)$label) . '</option>';
+        return $output;
+    }
+
     /**
      * Render the Options.
      *
-     * @throws Exception
-     * @return string
+     * @throws \Exception
      *
      * @api
      */
-    public function getOptions()
+    public function getSpecialOptions(): array
     {
         $this->settings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, $this->extensionName);
         if (!$this->hasArgument('staticInfoTable') || ($this->arguments['staticInfoTable'] ?? '') == '') {
             throw new \Exception('Please configure the "staticInfoTable"-Argument for this ViewHelper.', 1378136534);
         }
-        /** @var \SJBR\StaticInfoTables\Domain\Repository\AbstractEntityRepository $repository */
+
+        // is class name extending \SJBR\StaticInfoTables\Domain\Repository\AbstractEntityRepository
         $repository = lcfirst($this->arguments['staticInfoTable']) . 'Repository';
         if (!array_key_exists($repository, get_object_vars($this))) {
             throw new \Exception('Please configure the right table in the "staticInfoTable"-Argument for this ViewHelper.', 1378136533);
         }
-        /** @var array $items */
+
         $items = $this->getItems($repository);
-        /** @var string $valueFunction */
-        $valueFunction = $this->getMethodnameFromArgumentsAndUnset('optionValueField', 'uid');
-        /** @var string $labelFunction */
-        $labelFunction = $this->getMethodnameFromArgumentsAndUnset('optionLabelField', 'nameLocalized');
+        $valueFunction = $this->getMethodNameFromArgumentsAndUnset('optionValueField', 'uid');
+
+        $labelFunction = $this->getMethodNameFromArgumentsAndUnset('optionLabelField', 'nameLocalized');
         if (!($this->settings['countriesAllowed'] ?? false) && (!$this->hasArgument('sortByOptionLabel') || ($this->arguments['sortByOptionLabel'] ?? '') == '')) {
             $this->arguments['sortByOptionLabel'] = true;
         }
-        /** @var bool $test Test only the first item if they have the needed functions */
+
+        // Test only the first item if they have the needed functions
         $test = true;
         $options = [];
-        /** @var \SJBR\StaticInfoTables\Domain\Model\AbstractEntity $item */
+        /** @var AbstractEntity $item */
         foreach ($items as $item) {
             if ($test && !method_exists($item, $valueFunction)) {
                 throw new \Exception('Wrong optionValueField.', 1378136535);
@@ -246,14 +383,11 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
 
     /**
      * Get Items
-     *
-     * @param string $repository
-     * @return array
      */
-    protected function getItems($repository)
+    protected function getItems(string $repository): array
     {
         if ($this->hasArgument('staticInfoTableSubselect')) {
-            $items = $this->getItemsWithSubselect($repository);
+            $items = $this->getItemsWithSubSelect($repository);
         } elseif ($repository === 'countryRepository') {
             if (isset($this->settings['countriesAllowed']) && $this->settings['countriesAllowed']) {
                 $items = $this->{$repository}->findAllowedByIsoCodeA3($this->settings['countriesAllowed']);
@@ -273,23 +407,20 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
 
     /**
      * Get items with custom sub select.
-     *
-     * @param string $repository
-     * @return array
      */
-    protected function getItemsWithSubselect($repository)
+    protected function getItemsWithSubSelect(string $repository): array
     {
         $items = [];
-        $subselects = $this->arguments['staticInfoTableSubselect'] ?? [];
-        foreach ($subselects as $fieldname => $fieldvalue) {
+        $subSelects = $this->arguments['staticInfoTableSubselect'] ?? [];
+        foreach ($subSelects as $fieldName => $fieldValue) {
             // default implemented Subselect
-            if (strtolower($fieldname) === 'country' && MathUtility::canBeInterpretedAsInteger($fieldvalue)) {
-                $findby = 'findBy' . ucfirst($fieldname);
-                $fieldvalue = $this->countryRepository->findByUid((int)$fieldvalue);
+            if (strtolower($fieldName) === 'country' && MathUtility::canBeInterpretedAsInteger($fieldValue)) {
+                $findby = 'findBy' . ucfirst($fieldName);
+                $fieldValue = $this->countryRepository->findByUid((int)$fieldValue);
                 $items = call_user_func_array([
                     $this->{$repository},
                     $findby,
-                ], [$fieldvalue]);
+                ], [$fieldValue]);
                 $items = $items->toArray();
             }
         }
@@ -304,7 +435,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
      * @param string $default default value like 'nameLocalized'
      * @return string
      */
-    protected function getMethodnameFromArgumentsAndUnset($field, $default)
+    protected function getMethodNameFromArgumentsAndUnset(string $field, string $default): string
     {
         if (!$this->hasArgument($field) || $this->arguments[$field] == '') {
             $this->arguments[$field] = $default;
