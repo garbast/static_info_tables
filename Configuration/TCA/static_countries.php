@@ -90,7 +90,7 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                    	'label' => '', 
+                    	'label' => '',
                     	'value' => 0
                     ]
                 ],
