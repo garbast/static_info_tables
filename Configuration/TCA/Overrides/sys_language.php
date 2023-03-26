@@ -7,7 +7,6 @@ $GLOBALS['TCA']['sys_language']['columns']['static_lang_isocode'] = [
     'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_language.isocode',
     'config' => [
         'type' => 'group',
-        'internal_type' => 'db',
         'allowed' => 'static_languages',
         'foreign_table' => 'static_languages',
         'suggestOptions' => [

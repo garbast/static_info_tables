@@ -28,11 +28,9 @@ return [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_territories_item.tr_iso_nr',
             'exclude' => false,
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => '7',
-                'max' => '7',
-                'eval' => 'int',
-                'default' => '0',
+                'default' => 0,
             ],
         ],
         'tr_parent_territory_uid' => [

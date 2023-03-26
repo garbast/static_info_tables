@@ -74,11 +74,13 @@ return [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_iso_nr',
             'exclude' => false,
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => '7',
-                'max' => '7',
-                'eval' => 'int',
-                'default' => '0',
+                'range' => [
+                    'lower' => 0,
+                    'upper' => 1000000
+                ],
+                'default' => 0,
             ],
         ],
         'cn_parent_territory_uid' => [
@@ -131,7 +133,6 @@ return [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_currency_uid',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'static_currencies',
                 'foreign_table' => 'static_currencies',
                 'foreign_table_where' => 'ORDER BY static_currencies.cu_name_en',
