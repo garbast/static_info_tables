@@ -40,7 +40,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    [ 'label' => '', 'value' => 0 ],
                 ],
                 'foreign_table' => 'static_territories',
                 'foreign_table_where' => 'ORDER BY static_territories.tr_name_en',
