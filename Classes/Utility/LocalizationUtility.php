@@ -186,7 +186,9 @@ class LocalizationUtility
                         $labelField = str_replace('##', strtolower($language), $field);
                         $property = str_replace('##', ucfirst(strtolower($language)), $map['mapOnProperty']);
                         // Make sure the resulting field name exists in the table
-                        if (is_array($GLOBALS['TCA'][$tableName]['columns'][$labelField])) {
+                        if (isset($GLOBALS['TCA'][$tableName]['columns'][$labelField])
+                            && is_array($GLOBALS['TCA'][$tableName]['columns'][$labelField])
+                        ) {
                             $labelFields[$labelField] = ['mapOnProperty' => $property];
                         }
                     }
