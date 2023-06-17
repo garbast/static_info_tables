@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Utility;
  *  Copyright notice
  *
  *  (c) 2009 Sebastian Kurfürst <sebastian@typo3.org>
- *  (c) 2013-2022 Stanislas Rolland <typo3AAAA@sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA@sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,6 +28,7 @@ namespace SJBR\StaticInfoTables\Utility;
 use Psr\Http\Message\ServerRequestInterface;
 use SJBR\StaticInfoTables\Domain\Model\Language;
 use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -42,6 +43,56 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class LocalizationUtility
 {
+	public const TABLES = [
+		'static_territories' => [
+			'label_fields' => [
+				'tr_name_##' => ['mapOnProperty' => 'name##'],
+				'tr_name_en' => ['mapOnProperty' => 'nameEn']
+			],
+			'isocode_field' => [
+				'tr_iso_##'
+			]
+		],
+		'static_countries' => [
+			'label_fields' => [
+				'cn_short_##' => ['mapOnProperty' => 'shortName##'],
+				'cn_short_en' => ['mapOnProperty' => 'shortNameEn']
+			],
+			'isocode_field' => [
+				'cn_iso_##'
+			]
+		],
+		'static_country_zones' => [
+			'label_fields' => [
+				'zn_name_##' => ['mapOnProperty' => 'name##'],
+				'zn_name_local' => ['mapOnProperty' => 'localName']
+			],
+			'isocode_field' => [
+				'zn_code',
+				'zn_country_iso_##'
+			]
+		],
+		'static_languages' => [
+			'label_fields' => [
+				'lg_name_##' => ['mapOnProperty' => 'name##'],
+				'lg_name_en' => ['mapOnProperty' => 'nameEn']
+			],
+			'isocode_field' => [
+				'lg_iso_##',
+				'lg_country_iso_##'
+			]
+		],
+		'static_currencies' => [
+			'label_fields' => [
+				'cu_name_##' => ['mapOnProperty' => 'name##'],
+				'cu_name_en' => ['mapOnProperty' => 'nameEn']
+			],
+			'isocode_field' => [
+				'cu_iso_##'
+			]
+		]
+	];
+
     /**
      * Key of the language to use
      *
@@ -132,7 +183,7 @@ class LocalizationUtility
             }
             // Get the entity
             if ($whereCount) {
-                $row = $queryBuilder->execute()->fetch();
+                $row = $queryBuilder->executeQuery()->fetch();
                 if ($row) {
                     foreach ($labelFields as $labelField => $map) {
                         if ($row[$labelField]) {
@@ -159,14 +210,16 @@ class LocalizationUtility
      */
     public static function getLabelFields($tableName, $lang, $local = false)
     {
-        $labelFields = [];
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'])
-        	&& is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'])) {
+        $labelFields = static::TABLES[$tableName]['label_fields'];
+        if (isset($labelFields)
+        	&& is_array($labelFields)
+        ) {
             $alternativeLanguages = [];
             if (count(self::$alternativeLanguageKeys)) {
                 $alternativeLanguages = array_reverse(self::$alternativeLanguageKeys);
             }
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$tableName]['label_fields'] as $field => $map) {
+            $cleanedLabelFields = [];
+            foreach ($labelFields as $field => $map) {
                 if ($local) {
                     $labelField = str_replace('##', 'local', $field);
                     $property = str_replace('##', 'Local', $map['mapOnProperty']);
@@ -178,7 +231,7 @@ class LocalizationUtility
                 if (isset($GLOBALS['TCA'][$tableName]['columns'][$labelField])
                 	&& is_array($GLOBALS['TCA'][$tableName]['columns'][$labelField])
                 ) {
-                    $labelFields[$labelField] = ['mapOnProperty' => $property];
+                    $cleanedLabelFields[$labelField] = ['mapOnProperty' => $property];
                 }
                 // Add fields for alternative languages
                 if (strpos($field, '##') !== false && count($alternativeLanguages)) {
@@ -189,13 +242,13 @@ class LocalizationUtility
                         if (isset($GLOBALS['TCA'][$tableName]['columns'][$labelField])
                             && is_array($GLOBALS['TCA'][$tableName]['columns'][$labelField])
                         ) {
-                            $labelFields[$labelField] = ['mapOnProperty' => $property];
+                            $cleanedLabelFields[$labelField] = ['mapOnProperty' => $property];
                         }
                     }
                 }
             }
         }
-        return $labelFields;
+        return $cleanedLabelFields;
     }
 
     /**
@@ -212,7 +265,7 @@ class LocalizationUtility
     public static function getIsoCodeField($table, $isoCode, $index = 0)
     {
         $isoCodeField = '';
-        $isoCodeFieldTemplate = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['isocode_field'][$index] ?? '';
+        $isoCodeFieldTemplate = static::TABLES[$table]['isocode_field'];
         if ($isoCode && $table && $isoCodeFieldTemplate) {
             $field = str_replace('##', self::isoCodeType($isoCode), $isoCodeFieldTemplate);
             if (is_array($GLOBALS['TCA'][$table]['columns'][$field])) {

@@ -1,33 +1,38 @@
-<f:be.container includeCssFiles="{0:'{f:uri.resource(path:\'StyleSheets/manager.css\')}'}">
-	<div class="typo3-fullDoc">
-		<div id="typo3-docheader">
-			<div class="typo3-docheader-functions">
-				<div class="left">
-					<f:be.buttons.csh />
-					<f:be.menus.actionMenu>
-						<f:be.menus.actionMenuItem label="{f:translate(key: 'information')}" controller="Manager" action="information" />
-						<f:be.menus.actionMenuItem label="{f:translate(key: 'newLanguagePack')}" controller="Manager" action="newLanguagePack" />
-						<f:be.menus.actionMenuItem label="{f:translate(key: 'testForm')}" controller="Manager" action="testForm" />
-						<f:be.menus.actionMenuItem label="{f:translate(key: 'sqlDumpNonLocalizedData')}" controller="Manager" action="sqlDumpNonLocalizedData" />
-					</f:be.menus.actionMenu>
-				</div>
-				<div class="right">
-				</div>
-			</div>
-			<div class="typo3-docheader-buttons">
-				<div class="left">
-				</div>
-				<div class="right">
-					<f:be.buttons.shortcut />
-				</div>
-			</div>
-		</div>
-		<div id="typo3-docbody">
-			<div id="typo3-inner-docbody">
-				<h2><f:translate key="title">Static Info Tables Manager</f:translate></h2>
-				<f:flashMessages />
-				<f:render section="Content" />
-			</div>
-		</div>
-	</div>
-</f:be.container>
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+<f:asset.css identifier="Static_info_tables_manager" href="EXT:static_info_tables/Resources/Public/StyleSheets/manager.css" />
+
+<f:render section="Before" arguments="{_all}" optional="true" />
+
+<div class="module {moduleClass}" data-module-id="{moduleId}" data-module-name="{moduleName}">
+    <f:if condition="{formTag}">
+        <f:then>
+            <f:format.raw>{formTag}</f:format.raw>
+        </f:then>
+    </f:if>
+    <f:if condition="{docHeader.enabled}">
+        <f:render partial="DocHeader" arguments="{docHeader:docHeader}" />
+    </f:if>
+    <div class="module-body t3js-module-body">
+        <f:if condition="{uiBlock}">
+            <div id="t3js-ui-block" class="ui-block">
+                <core:icon identifier="spinner-circle-light" size="large" />
+            </div>
+        </f:if>
+        <f:flashMessages queueIdentifier="{flashMessageQueueIdentifier}" />
+
+        <f:render section="Content" arguments="{_all}" optional="true" />
+
+    </div>
+    <f:if condition="{formTag}">
+        <f:then>
+            </form>
+        </f:then>
+    </f:if>
+</div>
+
+<f:render section="After" arguments="{_all}" optional="true" />
+
+</html>

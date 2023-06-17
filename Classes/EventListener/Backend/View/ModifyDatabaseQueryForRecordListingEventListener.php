@@ -1,10 +1,12 @@
 <?php
-namespace SJBR\StaticInfoTables\Hook\Backend\Recordlist;
+declare(strict_types=1);
+
+namespace SJBR\StaticInfoTables\EventListener\Backend\View;
 
 /*
  *  Copyright notice
  *
- *  (c) 2018-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -23,37 +25,33 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Recordlist;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use SJBR\StaticInfoTables\Utility\LocalizationUtility;
+use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForRecordListingEvent;
 use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Order records according to language field of current language
  */
-class ModifyQuery
+final class ModifyDatabaseQueryForRecordListingEventListener
 {
     /**
-     * Specify records order
-     *
-     * @param array $parameters
-     * @param string $table
-     * @param int $pageId
-     * @param string $additionalConstraints
-     * @param string $fieldList
-     * @param QueryBuilder $queryBuilder
+     * @param ModifyDatabaseQueryForRecordListingEvent $event
      * @return void
      */
-    public function modifyQuery(&$parameters, $table, $pageId, $additionalConstraints, $fieldList, QueryBuilder $queryBuilder)
+    public function __invoke(ModifyDatabaseQueryForRecordListingEvent $event): void
     {
-        if (in_array($table, array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'] ?? []))) {
+    	$table = $event->getTable();
+        if (in_array($table, array_keys(LocalizationUtility::TABLES ?? []))) {
             $lang = substr(strtolower($this->getLanguageService()->lang), 0, 2);
-            if (ExtensionManagementUtility::isLoaded('static_info_tables_' . $lang) &&
-            	isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['label_fields']) &&
-                is_array($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['label_fields'])) {
-            	$label = array_key_first($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'][$table]['label_fields']);
+            $labelFields = LocalizationUtility::TABLES[$table]['label_fields'] ?? [];
+            if (ExtensionManagementUtility::isLoaded('static_info_tables_' . $lang) && is_array($labelFields) && !empty($labelFields)) {
+            	$label = array_key_first($labelFields);
             	if ($label) {
 					$orderBy = str_replace('##', $lang, $label);
 					$orderByFields = QueryHelper::parseOrderBy((string)$orderBy);
+					$queryBuilder = $event->getQueryBuilder();
 					foreach ($orderByFields as $fieldNameAndSorting) {
 						list($fieldName, $sorting) = $fieldNameAndSorting;
 						$queryBuilder->orderBy($fieldName, $sorting);

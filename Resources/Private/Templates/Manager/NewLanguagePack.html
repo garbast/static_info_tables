@@ -1,10 +1,16 @@
+<html
+   xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+   xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+   xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+   data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 <f:section name="Content">
-	<h3>{f:translate(key: 'createLanguagePackTitle')}</h3>
+	<h1>{f:translate(key: 'createLanguagePackTitle')}</h1>
 	<f:form method="post" controller="Manager" action="createLanguagePack" name="languagePack" object="{languagePack}" class="sjbr-static-info-tables-manager">
 		<fieldset>
-		<dl>
+		<dl class="t3-overview-list">
 			<dt>
 				<label for="sjbr-static-info-tables-manager-locale">{f:translate(key: 'language')}:</label>
 			</dt>
@@ -55,3 +61,4 @@
 		</fieldset>
 	</f:form>
 </f:section>
+</html>

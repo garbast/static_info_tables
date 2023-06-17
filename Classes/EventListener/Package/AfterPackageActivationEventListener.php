@@ -1,5 +1,5 @@
 <?php
-namespace SJBR\StaticInfoTables\EventListener;
+namespace SJBR\StaticInfoTables\EventListener\Package;
 
 /*
  *  Copyright notice
@@ -33,7 +33,7 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  *
  * Always run the extension update script except on first install of base extension
  */
-class AfterPackageActivationEventListener extends AbstractEventListener
+class AfterPackageActivationEventListener extends AbstractPackageEventListener
 {
     /**
      * If the installed extension is static_info_tables or a language pack, execute the update

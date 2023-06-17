@@ -130,7 +130,7 @@ class DatabaseUtility implements SingletonInterface
             ->removeAll();
         $result = $queryBuilder->select('*')
             ->from($table)
-            ->execute();
+            ->executeQuery();
         // Traverse the selected rows and dump each row as a line in the file:
         while ($row = $result->fetch()) {
             $values = [];

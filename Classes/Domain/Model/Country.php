@@ -34,6 +34,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Country extends AbstractEntity
 {
+	protected $tableName = 'static_countries';
+
     /**
      * @var string
      */
@@ -163,15 +165,10 @@ class Country extends AbstractEntity
      */
     protected $zoneFlag = false;
 
-    /**
-     * On initialization, get the columns mapping configuration
-     */
-    public function initializeObject()
-    {
-        parent::initializeObject();
-        $this->tableName = $this->dataMapper->getDataMap(self::class)->getTableName();
+	public function __construct()
+	{
         $this->countryZones = new ObjectStorage();
-    }
+	}
 
     /**
      * Sets the address format.

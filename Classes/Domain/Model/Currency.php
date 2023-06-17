@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,6 +34,8 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 
 class Currency extends AbstractEntity
 {
+	protected $tableName = 'static_currencies';
+
     /**
      * The number of decimals to be shown when an amount is presented in this currency
      *
@@ -126,15 +128,6 @@ class Currency extends AbstractEntity
      * @var string
      */
     protected $thousandsPoint = '';
-
-    /**
-     * On initialization, get the columns mapping configuration
-     */
-    public function initializeObject()
-    {
-        parent::initializeObject();
-        $this->tableName = $this->dataMapper->getDataMap(self::class)->getTableName();
-    }
 
     /**
      * Sets the number of decimal digits.

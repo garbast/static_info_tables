@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -62,10 +62,7 @@ class TcaLabelProcessor
      */
     public function addIsoCodeToLabel(&$PA)
     {
-        if (!isset($PA['row']['uid'])) {
-            return;
-        }
-        $PA['title'] = LocalizationUtility::translate(['uid' => $PA['row']['uid']], $PA['table']);
+        $PA['title'] = LocalizationUtility::translate(['uid' => $PA['row']['uid'] ?? 0], $PA['table']);
         if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
             && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
             switch ($PA['table']) {

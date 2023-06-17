@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,6 +34,8 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 
 class CountryZone extends AbstractEntity
 {
+	protected $tableName = 'static_country_zones';
+
     /**
      * Country code as two digit string (i.e. AT)
      * ISO 3166-1 A2 Country code
@@ -86,15 +88,6 @@ class CountryZone extends AbstractEntity
      * @var string
      */
     protected $nameEn = '';
-
-    /**
-     * On initialization, get the columns mapping configuration
-     */
-    public function initializeObject()
-    {
-        parent::initializeObject();
-        $this->tableName = $this->dataMapper->getDataMap(self::class)->getTableName();
-    }
 
     /**
      * Sets the country ISO alpha-2 code.

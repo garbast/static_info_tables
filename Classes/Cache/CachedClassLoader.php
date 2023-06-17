@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Cache;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,6 +28,7 @@ namespace SJBR\StaticInfoTables\Cache;
  */
 
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -84,11 +85,11 @@ class CachedClassLoader
         $className = ltrim($className, '\\');
         if (strpos($className, static::$namespace) !== false) {
             // Lookup the class in the array of static info entities and check its presence in the class cache
-            $entities = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][static::$extensionKey]['entities'] ?? [];
             // ClassCacheManager instantiation creates the class cache if not already available
             $classCacheManager = GeneralUtility::makeInstance(ClassCacheManager::class);
             $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
             $classCache = $cacheManager->getCache(static::$extensionKey);
+            $entities = ClassCacheManager::ENTITIES;
             foreach ($entities as $entity) {
                 if ($className === static::$namespace . $entity) {
                     $entryIdentifier = 'DomainModel' . $entity;

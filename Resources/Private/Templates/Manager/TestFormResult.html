@@ -1,8 +1,14 @@
+<html
+   xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+   xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+   xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+   data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 <f:section name="Content">
-	<h3>{f:translate(key: 'testFormResultTitle')}</h3>
-		<dl class="sjbr-static-info-tables-manager">
+	<h1>{f:translate(key: 'testFormResultTitle')}</h1>
+		<dl class="t3-overview-list">
 			<dt>
 				<label for="sjbr-static-info-tables-manager-country">{f:translate(key: 'countryLocalizedName')}:</label>
 			</dt>
@@ -42,3 +48,4 @@
 			</dd>
 		</dl>
 </f:section>
+</html>

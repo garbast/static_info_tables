@@ -74,12 +74,13 @@ return [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_iso_nr',
             'exclude' => false,
             'config' => [
-                'type' => 'input',
-                'size' => '7',
-                'max' => '7',
-                'eval' => 'int',
-                'default' => '0',
-            ],
+                'type' => 'number',
+				'range' => [
+					'lower' => 0
+				],
+				'size' => 20,
+                'default' => 0
+            ]
         ],
         'cn_parent_territory_uid' => [
             'exclude' => false,
@@ -88,7 +89,10 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    [
+                    	'label' => '', 
+                    	'value' => 0
+                    ]
                 ],
                 'foreign_table' => 'static_territories',
                 'foreign_table_where' => 'ORDER BY static_territories.tr_name_en',
@@ -96,6 +100,7 @@ return [
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
+                'default' => 0
             ],
         ],
         'cn_parent_tr_iso_nr' => [
@@ -131,7 +136,6 @@ return [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_currency_uid',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'static_currencies',
                 'foreign_table' => 'static_currencies',
                 'foreign_table_where' => 'ORDER BY static_currencies.cu_name_en',
@@ -197,46 +201,49 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', '0'],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_1',
-                        '1',
+                    	'label' => '',
+                    	'value' => 0
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_2',
-                        '2',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_1',
+                        'value' => 1
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_3',
-                        '3',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_2',
+                        'value' => 2
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_4',
-                        '4',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_3',
+                        'value' => 3
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_5',
-                        '5',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_4',
+                        'value' => 4
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_6',
-                        '6',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_5',
+                        'value' => 5
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_7',
-                        '7',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_6',
+                        'value' => 6
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_8',
-                        '8',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_7',
+                        'value' => 7
                     ],
                     [
-                        'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_9',
-                        '9',
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_8',
+                        'value' => 8
                     ],
+                    [
+                        'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_address_format_9',
+                        'value' => 9
+                    ]
                 ],
-                'default' => '0',
-            ],
+                'default' => 0
+            ]
         ],
         'cn_zone_flag' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries_item.cn_zone_flag',

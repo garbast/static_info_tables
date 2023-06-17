@@ -28,11 +28,11 @@ return [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_territories_item.tr_iso_nr',
             'exclude' => false,
             'config' => [
-                'type' => 'input',
-                'size' => '7',
-                'max' => '7',
-                'eval' => 'int',
-                'default' => '0',
+                'type' => 'number',
+				'range' => [
+					'lower' => 0
+				],
+                'default' => 0,
             ],
         ],
         'tr_parent_territory_uid' => [
@@ -42,7 +42,10 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    [
+                    	'label' => '', 
+                    	'value' => 0
+                    ]
                 ],
                 'foreign_table' => 'static_territories',
                 'foreign_table_where' => 'ORDER BY static_territories.tr_name_en',
@@ -50,7 +53,8 @@ return [
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
-            ],
+                'default' => 0
+            ]
         ],
         'tr_parent_iso_nr' => [
             'config' => [

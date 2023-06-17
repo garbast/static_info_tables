@@ -120,23 +120,25 @@ return [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_decimal_digits',
             'exclude' => false,
             'config' => [
-                'type' => 'input',
-                'size' => '5',
-                'max' => '',
-                'eval' => 'int',
-                'default' => '',
+                'type' => 'number',
+				'range' => [
+					'lower' => 0
+				],
+				'size' => 20,
+                'default' => 0
             ],
         ],
         'cu_sub_divisor' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_sub_divisor',
             'exclude' => false,
             'config' => [
-                'type' => 'input',
-                'size' => '8',
-                'max' => '20',
-                'eval' => 'int',
-                'default' => '1',
-            ],
+                'type' => 'number',
+				'range' => [
+					'lower' => 1
+				],
+				'size' => 20,
+                'default' => 1
+            ]
         ],
         'cu_sub_symbol_left' => [
             'label' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies_item.cu_sub_symbol_left',

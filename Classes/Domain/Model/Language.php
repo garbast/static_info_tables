@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,6 +34,8 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 
 class Language extends AbstractEntity
 {
+	protected $tableName = 'static_languages';
+
     /**
      * @var string
      */
@@ -92,14 +94,10 @@ class Language extends AbstractEntity
      */
     protected $typo3Code = '';
 
-    /**
-     * On initialization, get the columns mapping configuration
-     */
-    public function initializeObject()
-    {
-        parent::initializeObject();
-        $this->tableName = $this->dataMapper->getDataMap(self::class)->getTableName();
-    }
+	public function __construct()
+	{
+        $this->tableName = 'static_languages';
+	}
 
     /**
      * Sets the collating locale.

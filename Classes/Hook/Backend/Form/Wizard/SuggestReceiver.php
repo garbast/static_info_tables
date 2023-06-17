@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Form\Wizard;
  *  Copyright notice
  *
  *  (c) 2007-2011 Andreas Wolf <andreas.wolf@ikt-werk.de>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -63,15 +63,15 @@ class SuggestReceiver extends SuggestWizardDefaultReceiver
             $selectFieldsList = $labelFields[0] . ',' . $this->config['additionalSearchFields'];
             $selectFields = GeneralUtility::trimExplode(',', $selectFieldsList, true);
             $selectFields = array_unique($selectFields);
-            $selectParts = $expressionBuilder->orX();
+            $selectParts = $expressionBuilder->or();
             foreach ($selectFields as $field) {
                 $selectParts->add($expressionBuilder->like($field, $this->queryBuilder->createPositionalParameter($likeCondition)));
             }
-            $searchClause = $expressionBuilder->orX($selectParts);
+            $searchClause = $expressionBuilder->or($selectParts);
             if ($searchUid > 0 && $searchUid == $searchString) {
                 $searchClause->add($expressionBuilder->eq('uid', $searchUid));
             }
-            $this->queryBuilder->andWhere($expressionBuilder->orX($searchClause));
+            $this->queryBuilder->andWhere($expressionBuilder->or($searchClause));
         }
         if (!empty($this->allowedPages)) {
             $pidList = array_map('intval', $this->allowedPages);

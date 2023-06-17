@@ -1,10 +1,10 @@
 <?php
-namespace SJBR\StaticInfoTables\EventListener;
+namespace SJBR\StaticInfoTables\EventListener\Package;
 
 /*
  *  Copyright notice
  *
- *  (c) 2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2022-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -33,7 +33,7 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  *
  * Run the update script after base data was re-imported
  */
-class AfterExtensionStaticDatabaseContentHasBeenImportedEventListener extends AbstractEventListener
+class AfterExtensionStaticDatabaseContentHasBeenImportedEventListener extends AbstractPackageEventListener
 {
     /**
      * If the installed extension is static_info_tables or a language pack, execute the update

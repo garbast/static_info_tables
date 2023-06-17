@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Controller;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,12 +38,21 @@ use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Domain\Repository\LanguagePackRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocaleUtility;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Attribute\Controller;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Localization\Locales;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Package\PackageManager;
+use TYPO3\CMS\Core\Package\MetaData;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extensionmanager\Utility\EmConfUtility;
 
 /**
  * Static Info Tables Manager controller
@@ -54,6 +63,24 @@ class ManagerController extends ActionController
      * @var string Name of the extension this controller belongs to
      */
     protected $extensionName = 'StaticInfoTables';
+
+    protected $actions = [
+		[
+			'code' => 'newLanguagePack',
+			'title' => 'createLanguagePackTitle',
+			'description' => 'createLanguagePackDescription',
+		],
+		[
+			'code' => 'testForm',
+			'title' => 'testFormTitle',
+			'description' => 'testFormDescription',
+		],
+		[
+			'code' => 'sqlDumpNonLocalizedData',
+			'title' => 'sqlDumpNonLocalizedDataTitle',
+			'description' => 'sqlDumpNonLocalizedDataDescription',
+		]
+    ];
 
     /**
      * @var CountryRepository
@@ -136,30 +163,69 @@ class ManagerController extends ActionController
     }
 
     /**
+     * Dependency injection of the Module Template Factory
+     *
+     * @param ModuleTemplateFactory $moduleTemplateFactory
+     * @return void
+     */
+    public function injectModuleTemplateFactory(ModuleTemplateFactory $moduleTemplateFactory)
+    {
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
+    }
+
+    /**
+     * Init module state.
+     * This isn't done within __construct() since the controller
+     * object is only created once in extbase when multiple actions are called in
+     * one call. When those change module state, the second action would see old state.
+     */
+    public function initializeAction(): void
+    {
+        $this->moduleData = $this->request->getAttribute('moduleData');
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $this->uriBuilder->setRequest($this->request);
+        $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:static_info_tables/Resources/Private/Language/locallang_mod.xlf:mlang_labels_tablabel'));
+        $this->moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
+        $this->makeFunctionMenu();
+    }
+
+    /**
+     * Build function menu
+     */
+    protected function makeFunctionMenu(): void
+    {
+        $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('ManagerFunctionMenu');
+        $menuItem = $menu->makeMenuItem()
+            ->setTitle(LocalizationUtility::translate('LLL:EXT:static_info_tables/Resources/Private/Language/locallang.xlf:information'))
+            ->setHref($this->uriBuilder->uriFor('information'));
+        if ($this->request->getControllerActionName() === 'information') {
+        	$menuItem->setActive(true);
+        }
+        $menu->addMenuItem($menuItem);
+        foreach ($this->actions as $action) {
+            $menuItem = $menu->makeMenuItem()
+                ->setTitle(LocalizationUtility::translate('LLL:EXT:static_info_tables/Resources/Private/Language/locallang.xlf:' . $action['title']))
+                ->setHref($this->uriBuilder->uriFor($action['code']));
+				if ($this->request->getControllerActionName() === $action['code']) {
+					$menuItem->setActive(true);
+				}
+				if ($this->request->getControllerActionName() === 'testFormResult' && $action['code'] === 'testForm') {
+					$menuItem->setActive(true);
+				}
+            $menu->addMenuItem($menuItem);
+        }
+        $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+    }
+
+    /**
      * Display general information
      */
-    public function informationAction()
+    public function informationAction(): ResponseInterface
     {
-        $this->view->assign(
-            'actions',
-            [
-                [
-                    'code' => 'newLanguagePack',
-                    'title' => 'createLanguagePackTitle',
-                    'description' => 'createLanguagePackDescription',
-                ],
-                [
-                    'code' => 'testForm',
-                    'title' => 'testFormTitle',
-                    'description' => 'testFormDescription',
-                ],
-                [
-                    'code' => 'sqlDumpNonLocalizedData',
-                    'title' => 'sqlDumpNonLocalizedDataTitle',
-                    'description' => 'sqlDumpNonLocalizedDataDescription',
-                ],
-            ]
-        );
+        $this->moduleTemplate->assign('actions', $this->actions);
+        return $this->moduleTemplate->renderResponse('Manager/Information');
     }
 
     /**
@@ -167,17 +233,18 @@ class ManagerController extends ActionController
      *
      * @param LanguagePack $languagePack
      */
-    public function newLanguagePackAction(LanguagePack $languagePack = null)
+    public function newLanguagePackAction(LanguagePack $languagePack = null): ResponseInterface
     {
         if (!is_object($languagePack)) {
             $languagePack = new LanguagePack();
         }
-        $languagePack->setVersion($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['version']);
+        $languagePack->setVersion(ExtensionManagementUtility::getExtensionVersion(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)));
         $languagePack->setAuthor($GLOBALS['BE_USER']->user['realName']);
         $languagePack->setAuthorEmail($GLOBALS['BE_USER']->user['email']);
         $localeUtility = GeneralUtility::makeInstance(LocaleUtility::class);
-        $this->view->assign('locales', $localeUtility->getLocales());
-        $this->view->assign('languagePack', $languagePack);
+        $this->moduleTemplate->assign('locales', $localeUtility->getLocales());
+        $this->moduleTemplate->assign('languagePack', $languagePack);
+        return $this->moduleTemplate->renderResponse('Manager/NewLanguagePack');
     }
 
     /**
@@ -185,7 +252,7 @@ class ManagerController extends ActionController
      *
      * @param LanguagePack $languagePack
      */
-    public function createLanguagePackAction(LanguagePack $languagePack)
+    public function createLanguagePackAction(LanguagePack $languagePack): ResponseInterface
     {
         // Add the localization columns
         $locale = $languagePack->getLocale();
@@ -193,10 +260,17 @@ class ManagerController extends ActionController
         $localeUtility = new LocaleUtility();
         $language = $localeUtility->getLanguageFromLocale($locale);
         $languagePack->setLanguage($language);
-        $languagePack->setTypo3VersionRange($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['constraints']['depends']['typo3']);
+        // Get the extension constraints
+        $emConfUtility = GeneralUtility::makeInstance(EmConfUtility::class);
+		$emConf =
+			$emConfUtility->includeEmConf(
+				GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName), ExtensionManagementUtility::extPath(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName))
+			);
+        $constraints = $emConf['constraints'];
+        $languagePack->setTypo3VersionRange($constraints['depends']['typo3'] ?? '');
         // If version is not set, use the version of the base extension
         if (!$languagePack->getVersion()) {
-            $languagePack->setVersion($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)]['version']);
+            $languagePack->setVersion(ExtensionManagementUtility::getExtensionVersion(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)));
         }
         $this->countryRepository->addLocalizationColumns($locale);
         $this->countryZoneRepository->addLocalizationColumns($locale);
@@ -208,10 +282,10 @@ class ManagerController extends ActionController
         $messages = $languagePackRepository->writeLanguagePack($languagePack);
         if (count($messages)) {
             foreach ($messages as $message) {
-                $this->addFlashMessage($message, '', AbstractMessage::OK);
+                $this->addFlashMessage($message, '', ContextualFeedbackSeverity::OK);
             }
         }
-        $this->forward('information');
+        return new ForwardResponse('information');
     }
 
     /**
@@ -221,20 +295,24 @@ class ManagerController extends ActionController
      * @param CountryZone $countryZone
      * @param Language $language
      */
-    public function testFormAction(Country $country = null, CountryZone $countryZone = null, Language $language = null)
+    public function testFormAction(Country $country = null, CountryZone $countryZone = null, Language $language = null): ResponseInterface
     {
         if (is_object($country) && (is_object($countryZone) || !$country->getCountryZones()->count())) {
-            $this->forward('testFormResult', 'Manager', $this->extensionName, ['country' => $country, 'countryZone' => $countryZone, 'language' => $language]);
+            return (new ForwardResponse('testFormResult'))
+               ->withControllerName('Manager')
+               ->withExtensionName($this->extensionName)
+               ->withArguments(['country' => $country, 'countryZone' => $countryZone, 'language' => $language]);
         }
         if (is_object($country)) {
-            $this->view->assign('selectedCountry', $country);
+            $this->moduleTemplate->assign('selectedCountry', $country);
         }
         if (is_object($countryZone)) {
-            $this->view->assign('selectedCountryZone', $countryZone);
+            $this->moduleTemplate->assign('selectedCountryZone', $countryZone);
         }
         if (is_object($language)) {
-            $this->view->assign('selectedLanguage', $language);
+            $this->moduleTemplate->assign('selectedLanguage', $language);
         }
+        return $this->moduleTemplate->renderResponse('Manager/TestForm');
     }
 
     /**
@@ -244,27 +322,28 @@ class ManagerController extends ActionController
      * @param CountryZone $countryZone
      * @param Language $language
      */
-    public function testFormResultAction(Country $country = null, CountryZone $countryZone = null, Language $language = null)
+    public function testFormResultAction(Country $country = null, CountryZone $countryZone = null, Language $language = null): ResponseInterface
     {
-        $this->view->assign('country', $country);
+        $this->moduleTemplate->assign('country', $country);
         $currencies = $this->currencyRepository->findByCountry($country);
         if ($currencies->count()) {
-            $this->view->assign('currency', $currencies[0]);
+            $this->moduleTemplate->assign('currency', $currencies[0]);
         }
         if (is_object($countryZone)) {
-            $this->view->assign('countryZone', $countryZone);
+            $this->moduleTemplate->assign('countryZone', $countryZone);
         }
-        $this->view->assign('language', $language);
+        $this->moduleTemplate->assign('language', $language);
         $territories = $this->territoryRepository->findByCountry($country);
         if ($territories->count()) {
-            $this->view->assign('territory', $territories[0]);
+            $this->moduleTemplate->assign('territory', $territories[0]);
         }
+        return $this->moduleTemplate->renderResponse('Manager/TestFormResult');
     }
 
     /**
      * Creation/update a language pack for the Static Info Tables
      */
-    public function sqlDumpNonLocalizedDataAction()
+    public function sqlDumpNonLocalizedDataAction(): ResponseInterface
     {
         // Create a SQL dump of non-localized data
         $dumpContent = [];
@@ -279,8 +358,8 @@ class ManagerController extends ActionController
         $filename = 'export-ext_tables_static+adt.sql';
         GeneralUtility::writeFile($extensionPath . $filename, implode(LF, $dumpContent));
         $message = LocalizationUtility::translate('sqlDumpCreated', $this->extensionName) . ' ' . $extensionPath . $filename;
-        $this->addFlashMessage($message, '', AbstractMessage::OK);
-        $this->forward('information');
+        $this->addFlashMessage($message, '', ContextualFeedbackSeverity::OK);
+        return new ForwardResponse('information');
     }
 
     /**

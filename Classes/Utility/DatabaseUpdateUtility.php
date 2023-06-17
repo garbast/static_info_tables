@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Utility;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2022 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -25,6 +25,7 @@ namespace SJBR\StaticInfoTables\Utility;
  */
 
 use Doctrine\DBAL\DBALException;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Schema\SchemaMigrator;
 use TYPO3\CMS\Core\Database\Schema\SqlReader;
@@ -99,7 +100,7 @@ class DatabaseUpdateUtility
         if ($extTablesStaticSqlContent !== '') {
             $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
             // Drop all tables
-            foreach (array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['tables'] ?? []) as $tableName) {
+            foreach (array_keys(LocalizationUtility::TABLES ?? []) as $tableName) {
                 $connection = $connectionPool->getConnectionForTable($tableName);
                 try {
                     $connection->executeUpdate($connection->getDatabasePlatform()

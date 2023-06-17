@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables;
 /*
  *  Copyright notice
  *
- *  (c) 2004-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2004-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -38,12 +38,12 @@ use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Class for handling static info tables: countries, and subdivisions, currencies, languages and taxes
  */
-class PiBaseApi extends AbstractPlugin
+class PiBaseApi
 {
     /**
      * The backReference to the mother cObj object set at call time
@@ -94,6 +94,22 @@ class PiBaseApi extends AbstractPlugin
      * @var bool
      */
     protected $bHasBeenInitialised = false;
+
+	/**
+	 * This setter is called when the plugin is called from UserContentObject (USER)
+	 * via ContentObjectRenderer->callUserFunction().
+	 *
+	 * @param ContentObjectRenderer $cObj
+	 */
+	public function setContentObjectRenderer(ContentObjectRenderer $cObj): void
+	{
+		$this->cObj = $cObj;
+	}
+
+	public function main(string $content, array $conf): string
+	{
+		$this->conf = $conf;
+	}
 
     /**
      * Returns info if the tx_staticinfotables_pi1 object has already been initialised.
@@ -342,7 +358,7 @@ class PiBaseApi extends AbstractPlugin
                 $queryBuilder->andWhere($addWhere);
             }
         }
-        $query = $queryBuilder->execute();
+        $query = $queryBuilder->executeQuery();
         while ($row = $query->fetch()) {
             foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField] ?? false) {
@@ -410,7 +426,7 @@ class PiBaseApi extends AbstractPlugin
                 $queryBuilder->andWhere($addWhere);
             }
         }
-        $query = $queryBuilder->execute();
+        $query = $queryBuilder->executeQuery();
         while ($row = $query->fetch()) {
             foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField] ?? false) {
@@ -457,7 +473,7 @@ class PiBaseApi extends AbstractPlugin
             $addWhere = QueryHelper::stripLogicalOperatorPrefix($addWhere);
             $queryBuilder->where($addWhere);
         }
-        $query = $queryBuilder->execute();
+        $query = $queryBuilder->executeQuery();
         while ($row = $query->fetch()) {
             foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField] ?? false) {
@@ -509,7 +525,7 @@ class PiBaseApi extends AbstractPlugin
             $addWhere = QueryHelper::stripLogicalOperatorPrefix($addWhere);
             $queryBuilder->andWhere($addWhere);
         }
-        $query = $queryBuilder->execute();
+        $query = $queryBuilder->executeQuery();
         while ($row = $query->fetch()) {
             $code = $row['lg_iso_2'] . ($row['lg_country_iso_2'] ? '_' . $row['lg_country_iso_2'] : '');
             foreach ($titleFields as $titleField => $map) {

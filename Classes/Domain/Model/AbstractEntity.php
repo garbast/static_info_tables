@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,8 +26,6 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMap;
-use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 /**
  * Abstract model for static entities
@@ -35,24 +33,11 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     /**
-     * @var DataMapper
-     */
-    protected $dataMapper;
-
-    /**
-     * Name of the table from persistence mapping of this model
+     * Name of the table of this model
      *
      * @var string
      */
     protected $tableName = '';
-
-    /**
-     * On initialization, get the columns mapping configuration
-     */
-    public function initializeObject()
-    {
-    	$this->dataMapper = GeneralUtility::makeInstance(DataMapper::class);
-    }
 
     /**
      * Localized name of the entity

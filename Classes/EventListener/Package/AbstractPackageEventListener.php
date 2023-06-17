@@ -1,10 +1,10 @@
 <?php
-namespace SJBR\StaticInfoTables\EventListener;
+namespace SJBR\StaticInfoTables\EventListener\Package;
 
 /*
  *  Copyright notice
  *
- *  (c) 2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2022-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -26,7 +26,10 @@ namespace SJBR\StaticInfoTables\EventListener;
 
 use SJBR\StaticInfoTables\Cache\ClassCacheManager;
 use SJBR\StaticInfoTables\Utility\DatabaseUpdateUtility;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Registry;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -36,7 +39,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * Always run the extension update script except on first install of base extension
  */
-abstract class AbstractEventListener
+abstract class AbstractPackageEventListener
 {
     /**
      * @var string Name of the extension this controller belongs to
@@ -67,14 +70,18 @@ abstract class AbstractEventListener
         // Clear the class cache
         $classCacheManager = GeneralUtility::makeInstance(ClassCacheManager::class);
         $classCacheManager->reBuild();
-
         if ($this->isUpdateRequired()) {
+        	$flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+			$messageQueue = $flashMessageService->getMessageQueueByIdentifier('extbase.flashmessages.tx_extensionmanager_tools_extensionmanagerextensionmanager');
+			//extbase.flashmessages.tx_extensionmanager_tools_extensionmanagerextensionmanager
 			// Process the database updates of this base extension (we want to re-process these updates every time the update script is invoked)
 			// unless there was no change in the version numbers of the static info tables and language packs installed
 			$extensionSitePath = ExtensionManagementUtility::extPath(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName));
 			if (isset($GLOBALS['BE_USER'])) {
 				$GLOBALS['BE_USER']->writelog(3, 1, 0, 0, '[StaticInfoTables]: ' . LocalizationUtility::translate('updateTables', $this->extensionName) ?? '', [$GLOBALS['BE_USER']->user['username']]);
 			}
+			$message = GeneralUtility::makeInstance(FlashMessage::class, LocalizationUtility::translate('updateTables', $this->extensionName), '', ContextualFeedbackSeverity::OK, true);
+			$messageQueue->addMessage($message);
 			$databaseUpdateUtility->importStaticSqlFile($extensionSitePath);
 			// Get the extensions which want to extend static_info_tables
 			$loadedExtensions = array_unique(ExtensionManagementUtility::getLoadedExtensionListArray());
@@ -89,6 +96,8 @@ abstract class AbstractEventListener
 					if (isset($GLOBALS['BE_USER'])) {
 						$GLOBALS['BE_USER']->writelog(3, 1, 0, 0, '[StaticInfoTables]: ' . LocalizationUtility::translate('updateLanguageLabels', $this->extensionName, [$extensionKey]) ?? '', [$GLOBALS['BE_USER']->user['username']]);
 					}
+					$message = GeneralUtility::makeInstance(FlashMessage::class, LocalizationUtility::translate('updateLanguageLabels', $this->extensionName, [$extensionKey]), '', ContextualFeedbackSeverity::OK, true);
+					$messageQueue->addMessage($message);
 				    $languagePackUpdated = true;
 				}
 			}

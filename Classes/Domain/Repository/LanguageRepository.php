@@ -45,7 +45,7 @@ class LanguageRepository extends AbstractEntityRepository
     public function findAllNonConstructedNonSacred()
     {
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd([$query->equals('constructedLanguage', false), $query->equals('sacredLanguage', false)]));
+        $query->matching($query->logicalAnd($query->equals('constructedLanguage', false), $query->equals('sacredLanguage', false)));
         return $query->execute();
     }
 
@@ -59,7 +59,7 @@ class LanguageRepository extends AbstractEntityRepository
     public function findOneByIsoCodes($languageIsoCodeA2, $countryIsoCodeA2 = '')
     {
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd([$query->equals('isoCodeA2', $languageIsoCodeA2), $query->equals('countryIsoCodeA2', $countryIsoCodeA2)]));
+        $query->matching($query->logicalAnd($query->equals('isoCodeA2', $languageIsoCodeA2), $query->equals('countryIsoCodeA2', $countryIsoCodeA2)));
         return $query->execute()->getFirst();
     }
 }
