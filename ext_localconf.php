@@ -26,8 +26,6 @@ call_user_func(
         // Configure clear cache post processing for extended domain model
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc']['static_info_tables'] =
             \SJBR\StaticInfoTables\Cache\ClassCacheManager::class . '->reBuild';
-        // Register cached domain model classes autoloader
-        \SJBR\StaticInfoTables\Cache\CachedClassLoader::registerAutoloader();
         // Add data handling hook to manage ISO codes redundancies on records
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
             \SJBR\StaticInfoTables\Hook\Core\DataHandling\ProcessDataMap::class;

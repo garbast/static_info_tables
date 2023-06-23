@@ -30,6 +30,13 @@ services:
         event: TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForRecordListingEvent
     public: true
 
+  SJBR\StaticInfoTables\EventListener\Bootstrap\BootCompletedEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'StaticInfoTables/Bootstrap/BootCompletedEventListener'
+        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
+    public: true
+
   SJBR\StaticInfoTables\Configuration\TypoScript\ConfigurationHelper:
     public: true
 
