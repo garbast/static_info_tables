@@ -182,16 +182,5 @@ return [
                 'fieldName' => 'deleted'
             ],
         ]
-    ],
-    \SJBR\StaticInfoTables\Domain\Model\SystemLanguage::class => [
-        'tableName' => 'sys_language',
-        'properties' => [
-            'title' => [
-                'fieldName' => 'title'
-            ],
-            'isoLanguage' => [
-                'fieldName' => 'static_lang_isocode'
-            ],
-        ]
     ]
 ];
