@@ -210,7 +210,7 @@ class LocalizationUtility
      */
     public static function getLabelFields($tableName, $lang, $local = false)
     {
-        $labelFields = static::TABLES[$tableName]['label_fields'];
+        $labelFields = static::TABLES[$tableName]['label_fields'] ?? null;
         if (isset($labelFields)
         	&& is_array($labelFields)
         ) {
@@ -265,7 +265,7 @@ class LocalizationUtility
     public static function getIsoCodeField($table, $isoCode, $index = 0)
     {
         $isoCodeField = '';
-        $isoCodeFieldTemplate = static::TABLES[$table]['isocode_field'];
+        $isoCodeFieldTemplate = static::TABLES[$table]['isocode_field'][$index] ?? '';
         if ($isoCode && $table && $isoCodeFieldTemplate) {
             $field = str_replace('##', self::isoCodeType($isoCode), $isoCodeFieldTemplate);
             if (is_array($GLOBALS['TCA'][$table]['columns'][$field])) {
