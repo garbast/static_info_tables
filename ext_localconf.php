@@ -39,7 +39,7 @@ call_user_func(
 			ExtensionManagementUtility::addTypoScript(
 				'static_info_tables',
 				'setup',
-				'<INCLUDE_TYPOSCRIPT: source="FILE:EXT:static_info_tables/Configuration/TypoScript/Manager/setup.txt">'
+				'<INCLUDE_TYPOSCRIPT: source="FILE:EXT:static_info_tables/Configuration/TypoScript/Manager/setup.typoscript">'
 			);
 		}
     },

@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Configuration\TypoScript;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,7 +32,6 @@ use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
 use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Utility\HtmlElementUtility;
-use TYPO3\CMS\Core\TypoScript\ExtendedTemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -46,21 +45,18 @@ class ConfigurationHelper
      * Renders a select element to select an entity
      *
      * @param array $params: Field information to be rendered
-     * @param \TYPO3\CMS\Core\TypoScript\ExtendedTemplateService $pObj: The calling parent object.
-     * @param mixed $arg
-     *
      * @return string The HTML input field
      */
-    public function buildEntitySelector(array $params, ExtendedTemplateService $pObj, $arg = '')
+    public function buildEntitySelector(array $params): string
     {
         $field = '';
         switch ($params['fieldName'] ?? '') {
-            case 'data[plugin.tx_staticinfotables_pi1.countryCode]':
-            case 'data[plugin.tx_staticinfotables_pi1.countriesAllowed]':
+            case 'countryCode':
+            case 'countriesAllowed':
                 $repository = GeneralUtility::makeInstance(CountryRepository::class);
                 $entities = $repository->findAllOrderedBy('nameLocalized');
                 break;
-            case 'data[plugin.tx_staticinfotables_pi1.countryZoneCode]':
+            case 'countryZoneCode':
                 $repository = GeneralUtility::makeInstance(CountryZoneRepository::class);
                 $countryCode = $this->getConfiguredCountryCode();
                 if ($countryCode) {
@@ -74,11 +70,11 @@ class ConfigurationHelper
                     $entities = $repository->findAllOrderedBy('nameLocalized');
                 }
                 break;
-            case 'data[plugin.tx_staticinfotables_pi1.currencyCode]':
+            case 'currencyCode':
                 $repository = GeneralUtility::makeInstance(CurrencyRepository::class);
                 $entities = $repository->findAllOrderedBy('nameLocalized');
                 break;
-            case 'data[plugin.tx_staticinfotables_pi1.languageCode]':
+            case 'languageCode':
                 $repository = GeneralUtility::makeInstance(LanguageRepository::class);
                 $entities = $repository->findAllNonConstructedNonSacred();
                 $entities = $repository->localizedSort($entities);
@@ -88,17 +84,17 @@ class ConfigurationHelper
             $options = [];
             foreach ($entities as $entity) {
                 switch ($params['fieldName'] ?? '') {
-                    case 'data[plugin.tx_staticinfotables_pi1.countryZoneCode]':
+                    case 'countryZoneCode':
                         $value = $entity->getIsoCode();
                         $options[] = ['name' => $entity->getNameLocalized() . ' (' . $value . ')', 'value' => $value];
                         break;
-                    case 'data[plugin.tx_staticinfotables_pi1.countryCode]':
-                    case 'data[plugin.tx_staticinfotables_pi1.countriesAllowed]':
-                    case 'data[plugin.tx_staticinfotables_pi1.currencyCode]':
+                    case 'countryCode':
+                    case 'countriesAllowed':
+                    case 'currencyCode':
                         $value = $entity->getIsoCodeA3();
                         $options[] = ['name' => $entity->getNameLocalized() . ' (' . $value . ')', 'value' => $value];
                         break;
-                    case 'data[plugin.tx_staticinfotables_pi1.languageCode]':
+                    case 'languageCode':
                         $countryCode = $entity->getCountryIsoCodeA2();
                         $value = $entity->getIsoCodeA2() . ($countryCode ? '_' . $countryCode : '');
                         $options[] = ['name' => $entity->getNameLocalized() . ' (' . $value . ')', 'value' => $value];
@@ -106,8 +102,8 @@ class ConfigurationHelper
                 }
             }
             $outSelected = [];
-            $size = $params['fieldName'] == 'data[plugin.tx_staticinfotables_pi1.countriesAllowed]' ? 5 : 1;
-            $field = HtmlElementUtility::selectConstructor($options, [$params['fieldValue']], $outSelected, $params['fieldName'], '', '', '', '', $size);
+            $size = $params['fieldName'] === 'countriesAllowed' ? 5 : 1;
+            $field = HtmlElementUtility::selectConstructor($options, [$params['fieldValue']], $outSelected, 'data[plugin.tx_staticinfotables_pi1.' . $params['fieldName'] . ']', '', '', '', '', $size);
         }
         return $field;
     }
