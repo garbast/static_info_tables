@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  */
 
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
-use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -49,9 +49,9 @@ class Country extends AbstractEntity
     /**
      * Country zones of this country
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone>
-     * @Lazy
+     * @var ObjectStorage<CountryZone>
      */
+    #[Extbase\ORM\Lazy()]
     protected $countryZones;
 
     /**
