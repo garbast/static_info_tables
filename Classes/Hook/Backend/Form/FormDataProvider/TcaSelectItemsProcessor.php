@@ -36,6 +36,7 @@ use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
+use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
@@ -240,7 +241,17 @@ class TcaSelectItemsProcessor
                     }
                     // Replace the items index field
                     foreach ($items as $key => $item) {
-                        if (is_array($items[$key]) && array_key_exists(1, $items[$key]) && ($items[$key][1] ?? 0)) {
+                        if (is_a($item, SelectItem::class) && $item->getValue() > 0) {
+                        	// Since TYPO3 12 LTS
+                            $object = $uidIndexedObjects[$item->getValue()] ?? false;
+                            if ($object) {
+                                $value = $object->_getProperty($indexProperties[0]);
+                                if ($indexFields[1] && $object->_getProperty($indexProperties[1])) {
+                                    $value .=  '_' . $object->_getProperty($indexProperties[1]);
+                                }
+                                $item->offsetSet('value', $value);
+                            }
+                        } elseif (is_array($items[$key]) && array_key_exists(1, $items[$key]) && ($items[$key][1] ?? 0)) {
                             $object = $uidIndexedObjects[$items[$key][1]];
                             $items[$key][1] = $object->_getProperty($indexProperties[0]);
                             if ($indexFields[1] && $object->_getProperty($indexProperties[1])) {
