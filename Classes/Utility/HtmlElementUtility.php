@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2017 StanislasRolland <typo3@sjbr.ca>
+ *  (c) 2013-2013 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -26,6 +26,12 @@ namespace SJBR\StaticInfoTables\Utility;
 /**
  * HTML form element utility functions
  */
+
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Domain\ConsumableString;
+use TYPO3\CMS\Core\Page\AssetCollector;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class HtmlElementUtility
 {
     /**
@@ -53,12 +59,18 @@ class HtmlElementUtility
             $classAttribute = (trim($class)) ? 'class="' . htmlspecialchars(trim($class)) . '" ' : '';
 
             if ($onChange) {
-                $onChangeAttribute = $onChange;
-                $onChangeAttribute = str_replace('"', '\'', $onChangeAttribute);
-                $onChangeAttribute = self::quoteJsValue($onChangeAttribute);
-                $onChangeAttribute = 'onchange=' . $onChangeAttribute . ' ';
+                $onChangeScript = '
+					if (document.getElementById("' . $id . '") !== null) {
+					    SJBRStaticInfoTablesSelectCountryOnChangeFunction = function (event) {
+					        if (event.target.form) {'
+					            . $onChange .	
+					        '}
+					    };
+						document.getElementById("' . $id . '").addEventListener("change", SJBRStaticInfoTablesSelectCountryOnChangeFunction, false);
+					}
+                ';
             } else {
-                $onChangeAttribute = '';
+                $onChangeScript = '';
             }
 
             if ($size > 1) {
@@ -68,10 +80,19 @@ class HtmlElementUtility
                 $multiple = '';
             }
 
-            $selector = '<select size="' . $size . '" ' . $idAttribute . $nameAttribute . $titleAttribute . $classAttribute . $onChangeAttribute . $multiple . '>' . LF;
+            $selector = '<select size="' . $size . '" ' . $idAttribute . $nameAttribute . $titleAttribute . $classAttribute . $multiple . '>' . LF;
             $selector .= self::optionsConstructor($items, $selected, $outSelected);
             $selector .= '</select>' . LF;
-        }
+            if ($onChangeScript) {
+            	// Include the required JavaScript
+				$assetCollector = GeneralUtility::makeInstance(AssetCollector::class);
+				$nonceAttribute = self::getRequest()->getAttribute('nonce');
+				if ($nonceAttribute instanceof ConsumableString) {
+					$nonce = $nonceAttribute->consume();
+				}
+				$selector .= '<script nonce="' . $nonce . '" >' . $onChangeScript .'</script>';
+			}
+		}
         return $selector;
     }
 
@@ -116,4 +137,9 @@ class HtmlElementUtility
         $value = htmlspecialchars($value);
         return '"' . $value . '"';
     }
+
+	private static function getRequest(): ServerRequestInterface
+	{
+		return $GLOBALS['TYPO3_REQUEST'];
+	}
 }

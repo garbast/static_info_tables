@@ -15,6 +15,6 @@ plugin.tx_staticinfotables_pi1 {
     # cat=plugin.tx_staticinfotables_pi1//4; type=user[SJBR\StaticInfoTables\Configuration\TypoScript\ConfigurationHelper->buildEntitySelector]; label= Default language: ISO alpha-2 code of the default selected language in drop-down selector.
     languageCode =
 
-    # cat=plugin.tx_staticinfotables_pi1//6; type=string; label= Onchange attribute: Value of onchange attribute of drop-down selectors, when present.
-    onChangeAttribute = javascript:this.form.submit();
+    # cat=plugin.tx_staticinfotables_pi1//6; type=string; label= Onchange script: Script to be executed by the onChange event handler of built select elements.
+    onChangeAttribute = event.target.form.submit();
 }
