@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2013 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -29,8 +29,6 @@ namespace SJBR\StaticInfoTables\Utility;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Domain\ConsumableString;
-use TYPO3\CMS\Core\Page\AssetCollector;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class HtmlElementUtility
 {
@@ -84,13 +82,11 @@ class HtmlElementUtility
             $selector .= self::optionsConstructor($items, $selected, $outSelected);
             $selector .= '</select>' . LF;
             if ($onChangeScript) {
-            	// Include the required JavaScript
-				$assetCollector = GeneralUtility::makeInstance(AssetCollector::class);
 				$nonceAttribute = self::getRequest()->getAttribute('nonce');
 				if ($nonceAttribute instanceof ConsumableString) {
 					$nonce = $nonceAttribute->consume();
 				}
-				$selector .= '<script nonce="' . $nonce . '" >' . $onChangeScript .'</script>';
+				$selector .= '<script' . (isset($nonce) ? (' nonce="' . $nonce . '"') : '') . '>' . $onChangeScript .'</script>';
 			}
 		}
         return $selector;
