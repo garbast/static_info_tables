@@ -26,6 +26,7 @@ namespace SJBR\StaticInfoTables\EventListener\Package;
 
 use SJBR\StaticInfoTables\Cache\ClassCacheManager;
 use SJBR\StaticInfoTables\Utility\DatabaseUpdateUtility;
+use TYPO3\CMS\Core\Authentication\CommandLineUserAuthentication;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Registry;
@@ -81,7 +82,9 @@ abstract class AbstractPackageEventListener
 				$GLOBALS['BE_USER']->writelog(3, 1, 0, 0, '[StaticInfoTables]: ' . LocalizationUtility::translate('updateTables', $this->extensionName) ?? '', [$GLOBALS['BE_USER']->user['username']]);
 			}
 			$message = GeneralUtility::makeInstance(FlashMessage::class, LocalizationUtility::translate('updateTables', $this->extensionName), '', ContextualFeedbackSeverity::OK, true);
-			$messageQueue->addMessage($message);
+			if (!($GLOBALS['BE_USER'] instanceof CommandLineUserAuthentication)) {
+				$messageQueue->addMessage($message);
+			}
 			$databaseUpdateUtility->importStaticSqlFile($extensionSitePath);
 			// Get the extensions which want to extend static_info_tables
 			$loadedExtensions = array_unique(ExtensionManagementUtility::getLoadedExtensionListArray());
@@ -97,7 +100,9 @@ abstract class AbstractPackageEventListener
 						$GLOBALS['BE_USER']->writelog(3, 1, 0, 0, '[StaticInfoTables]: ' . LocalizationUtility::translate('updateLanguageLabels', $this->extensionName, [$extensionKey]) ?? '', [$GLOBALS['BE_USER']->user['username']]);
 					}
 					$message = GeneralUtility::makeInstance(FlashMessage::class, LocalizationUtility::translate('updateLanguageLabels', $this->extensionName, [$extensionKey]), '', ContextualFeedbackSeverity::OK, true);
-					$messageQueue->addMessage($message);
+					if (!($GLOBALS['BE_USER'] instanceof CommandLineUserAuthentication)) {
+						$messageQueue->addMessage($message);
+					}
 				    $languagePackUpdated = true;
 				}
 			}
