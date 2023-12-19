@@ -139,11 +139,6 @@ return [
                 'allowed' => 'static_currencies',
                 'foreign_table' => 'static_currencies',
                 'foreign_table_where' => 'ORDER BY static_currencies.cu_name_en',
-                'suggestOptions' => [
-                    'default' => [
-                        'pidList' => '0',
-                    ],
-                ],
                 'fieldWizard' => [
                     'recordsOverview' => [
                         'disabled' => true,
