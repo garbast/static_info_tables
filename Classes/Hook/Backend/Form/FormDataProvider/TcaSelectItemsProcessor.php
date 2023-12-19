@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -35,7 +35,6 @@ use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
 use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
-use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
 use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
@@ -49,10 +48,8 @@ class TcaSelectItemsProcessor
      * Translate and sort the territories selector using the current locale
      *
      * @param array $PA: parameters: items, config, TSconfig, table, row, field
-     * @param DataPreprocessor $fObj
-     * @return void
      */
-    public function translateTerritoriesSelector($PA, TcaSelectItems $fObj)
+    public function translateTerritoriesSelector($PA): void
     {
         switch ($PA['table'] ?? '') {
             case 'static_territories':
@@ -73,11 +70,8 @@ class TcaSelectItemsProcessor
      * Translate and sort the countries selector using the current locale
      *
      * @param array $PA: parameters: items, config, TSconfig, table, row, field
-     * @param DataPreprocessor $fObj
-     *
-     * @return void
      */
-    public function translateCountriesSelector($PA, TcaSelectItems $fObj)
+    public function translateCountriesSelector($PA): void
     {
         $PA['items'] = $this->translateSelectorItems($PA['items'], 'static_countries');
         $PA['items'] = $this->replaceSelectorIndexField($PA);
@@ -87,11 +81,8 @@ class TcaSelectItemsProcessor
      * Translate and sort the country zones selector using the current locale
      *
      * @param array $PA: parameters: items, config, TSconfig, table, row, field
-     * @param DataPreprocessor $fObj
-     *
-     * @return void
      */
-    public function translateCountryZonesSelector($PA, TcaSelectItems $fObj)
+    public function translateCountryZonesSelector($PA): void
     {
         $PA['items'] = $this->translateSelectorItems($PA['items'], 'static_country_zones');
         $PA['items'] = $this->replaceSelectorIndexField($PA);
@@ -101,11 +92,8 @@ class TcaSelectItemsProcessor
      * Translate and sort the currencies selector using the current locale
      *
      * @param array $PA: parameters: items, config, TSconfig, table, row, field
-     * @param DataPreprocessor $fObj
-     *
-     * @return void
      */
-    public function translateCurrenciesSelector($PA, TcaSelectItems $fObj)
+    public function translateCurrenciesSelector($PA): void
     {
         $PA['items'] = $this->translateSelectorItems($PA['items'], 'static_currencies');
         $PA['items'] = $this->replaceSelectorIndexField($PA);
@@ -115,11 +103,8 @@ class TcaSelectItemsProcessor
      * Translate and sort the languages selector using the current locale
      *
      * @param array $PA: parameters: items, config, TSconfig, table, row, field
-     * @param DataPreprocessor $fObj
-     *
-     * @return void
      */
-    public function translateLanguagesSelector($PA, TcaSelectItems $fObj)
+    public function translateLanguagesSelector($PA): void
     {
         $PA['items'] = $this->translateSelectorItems($PA['items'], 'static_languages');
         $PA['items'] = $this->replaceSelectorIndexField($PA);
