@@ -33,6 +33,7 @@ use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
 use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
 use SJBR\StaticInfoTables\Utility\HtmlElementUtility;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
@@ -346,9 +347,9 @@ class PiBaseApi
             $queryBuilder->addSelect($titleField);
         }
         if ($param === 'UN') {
-            $queryBuilder->where($queryBuilder->expr()->eq('cn_uno_member', $queryBuilder->createNamedParameter(1, \PDO::PARAM_INT)));
+            $queryBuilder->where($queryBuilder->expr()->eq('cn_uno_member', $queryBuilder->createNamedParameter(1, Connection::PARAM_INT)));
         } elseif ($param === 'EU') {
-            $queryBuilder->where($queryBuilder->expr()->eq('cn_eu_member', $queryBuilder->createNamedParameter(1, \PDO::PARAM_INT)));
+            $queryBuilder->where($queryBuilder->expr()->eq('cn_eu_member', $queryBuilder->createNamedParameter(1, Connection::PARAM_INT)));
         }
         if ($addWhere) {
             $addWhere = QueryHelper::stripLogicalOperatorPrefix($addWhere);
@@ -416,7 +417,7 @@ class PiBaseApi
             $queryBuilder->addSelect($titleField);
         }
         if (strlen($param) == 3) {
-            $queryBuilder->where($queryBuilder->expr()->eq('zn_country_iso_3', $queryBuilder->createNamedParameter($param, \PDO::PARAM_STR)));
+            $queryBuilder->where($queryBuilder->expr()->eq('zn_country_iso_3', $queryBuilder->createNamedParameter($param, Connection::PARAM_STR)));
         }
         if ($addWhere) {
             $addWhere = QueryHelper::stripLogicalOperatorPrefix($addWhere);
@@ -518,8 +519,8 @@ class PiBaseApi
             $queryBuilder->addSelect($titleField);
         }
         $queryBuilder->where(
-            $queryBuilder->expr()->eq('lg_sacred', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)),
-            $queryBuilder->expr()->eq('lg_constructed', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
+            $queryBuilder->expr()->eq('lg_sacred', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
+            $queryBuilder->expr()->eq('lg_constructed', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
         );
         if ($addWhere) {
             $addWhere = QueryHelper::stripLogicalOperatorPrefix($addWhere);

@@ -29,6 +29,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use SJBR\StaticInfoTables\Domain\Model\Language;
 use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -157,7 +158,7 @@ class LocalizationUtility
             $whereCount = 0;
             if ($identifiers['uid'] ?? false) {
                 $queryBuilder->where(
-                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$identifiers['uid']), \PDO::PARAM_INT)
+                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$identifiers['uid']), Connection::PARAM_INT)
                 );
                 $whereCount++;
             } elseif (!empty($identifiers['iso'])) {
