@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *
  *  All rights reserved
  *
@@ -25,6 +25,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use SJBR\StaticInfoTables\Domain\Model\Language;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -54,7 +55,7 @@ class LanguageRepository extends AbstractEntityRepository
      *
      * @param string $languageIsoCodeA2
      * @param string $countryIsoCodeA2
-     * @return QueryResultInterface|array all entries ordered by $propertyName
+     * @return Language|null
      */
     public function findOneByIsoCodes($languageIsoCodeA2, $countryIsoCodeA2 = '')
     {
