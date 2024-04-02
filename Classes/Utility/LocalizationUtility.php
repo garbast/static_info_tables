@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Utility;
  *  Copyright notice
  *
  *  (c) 2009 Sebastian Kurfürst <sebastian@typo3.org>
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA@sjbr.ca>
+ *  (c) 2013-2024 Stanislas Rolland <typo3AAAA@sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -421,7 +421,7 @@ class LocalizationUtility
      */
     protected static function getTypoScriptFrontendController()
     {
-        return $GLOBALS['TSFE'];
+        return $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.controller');
     }
 
     /**

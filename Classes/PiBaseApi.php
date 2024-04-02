@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables;
 /*
  *  Copyright notice
  *
- *  (c) 2004-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2004-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -133,7 +133,7 @@ class PiBaseApi
     {
     	if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
             && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            $this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][$this->prefixId . '.'] ?? [];
+            $this->conf = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.controller')->tmpl->setup['plugin.'][$this->prefixId . '.'] ?? [];
         }
 
         $this->countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
