@@ -37,6 +37,7 @@ use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 /**
@@ -161,7 +162,7 @@ class TcaSelectItemsProcessor
     /**
      * Replace the selector's uid index with configured indexField
      *
-     * @param array	 $PA: TCA select field parameters array
+     * @param array $PA: TCA select field parameters array
      * @return array The new $items array
      */
     protected function replaceSelectorIndexField($PA)
@@ -173,8 +174,14 @@ class TcaSelectItemsProcessor
             // Collect items uid's
             $uids = [];
             foreach ($items as $key => $item) {
-                if (is_array($items[$key]) && array_key_exists(1, $items[$key]) && ($items[$key][1] ?? 0)) {
-                    $uids[] = $item[1];
+                if ((int)VersionNumberUtility::getCurrentTypo3Version() < 12) {
+                    if (is_array($items[$key]) && array_key_exists(1, $items[$key]) && ($items[$key][1] ?? 0)) {
+                        $uids[] = $item[1];
+                    }
+                } else {
+                    if (isset($items[$key]) && $items[$key] instanceof SelectItem) {
+                        $uids[] = $items[$key]->getValue();
+                    }
                 }
             }
             $uidList = implode(',', $uids);
@@ -209,7 +216,7 @@ class TcaSelectItemsProcessor
                         break;
                 }
                 if (!empty($objects)) {
-                	$columnsMapping = $this->getColumnsMapping($objects[0]);
+                    $columnsMapping = $this->getColumnsMapping($objects[0]);
                     // Map table column to object property
                     $indexProperties = [];
                     foreach ($indexFields as $indexField) {
@@ -227,11 +234,11 @@ class TcaSelectItemsProcessor
                     // Replace the items index field
                     foreach ($items as $key => $item) {
                         if (is_a($item, SelectItem::class) && $item->getValue() > 0) {
-                        	// Since TYPO3 12 LTS
+                            // Since TYPO3 12 LTS
                             $object = $uidIndexedObjects[$item->getValue()] ?? false;
                             if ($object) {
                                 $value = $object->_getProperty($indexProperties[0]);
-                                if ($indexFields[1] && $object->_getProperty($indexProperties[1])) {
+                                if (isset($indexFields[1]) && $object->_getProperty($indexProperties[1])) {
                                     $value .=  '_' . $object->_getProperty($indexProperties[1]);
                                 }
                                 $item->offsetSet('value', $value);
@@ -264,7 +271,7 @@ class TcaSelectItemsProcessor
         $dataMap = $dataMapper->getDataMap($className);
         $properties = $object->_getProperties();
         foreach ($properties as $propertyName => $propertyValue) {
-        	if (!$dataMap->isPersistableProperty($propertyName)) {
+            if (!$dataMap->isPersistableProperty($propertyName)) {
                 continue;
             }
             $columnMap = $dataMap->getColumnMap($propertyName);
