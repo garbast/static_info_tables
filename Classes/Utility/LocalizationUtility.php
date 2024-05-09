@@ -302,12 +302,18 @@ class LocalizationUtility
      * Get the ISO language key corresponding to a TYPO3 language key
      *
      * @param string $key The TYPO3 language key
-     *
      * @return string the ISO language key
      */
     public static function getIsoLanguageKey($key)
     {
-        return $key === 'default' ? 'EN' : $key;
+    	$locales = GeneralUtility::makeInstance(Locales::class)->getLocales();
+    	if (in_array($key, $locales)) {
+    		$isoLanguageKey = $key === 'default' ? 'EN' : $key;
+    	} else {
+    		$isoLanguageKeyParts = explode('_', $key);
+    		$isoLanguageKey = $isoLanguageKeyParts[0];
+    	}
+        return $isoLanguageKey;
     }
 
     /**
