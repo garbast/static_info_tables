@@ -4,6 +4,7 @@ defined('TYPO3') or die();
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 call_user_func(
     function ($extKey) {
@@ -30,8 +31,10 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
             \SJBR\StaticInfoTables\Hook\Core\DataHandling\ProcessDataMap::class;
         // Configure translation of suggestions labels
-        ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:'
-            . $extKey . '/Configuration/PageTSconfig/Suggest.tsconfig">');
+        if ((int)VersionNumberUtility::getCurrentTypo3Version() < 13) {
+            ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:'
+                . $extKey . '/Configuration/PageTSconfig/Suggest.tsconfig">');
+        }
         // Add global fluid namespace
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sit'][] = 'SJBR\\StaticInfoTables\\ViewHelpers';
 		// Add module configuration setup

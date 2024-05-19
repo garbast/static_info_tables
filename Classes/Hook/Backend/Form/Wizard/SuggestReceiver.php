@@ -28,6 +28,7 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Form\Wizard;
 
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
 use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -90,10 +91,8 @@ class SuggestReceiver extends SuggestWizardDefaultReceiver
     /**
      * Prepares the clause by which the result elements are sorted. See description of ORDER BY in
      * SQL standard for reference.
-     *
-     * @return void
      */
-    protected function prepareOrderByStatement()
+    protected function prepareOrderByStatement(QueryBuilder $queryBuilder): QueryBuilder
     {
         // Get the label field for the current language, if any is available
         $lang = LocalizationUtility::getCurrentLanguage();
@@ -101,11 +100,12 @@ class SuggestReceiver extends SuggestWizardDefaultReceiver
         $labelFields = LocalizationUtility::getLabelFields($this->table, $lang);
         if (!empty($labelFields)) {
             foreach ($labelFields as $labelField) {
-                $this->queryBuilder->addOrderBy($labelField);
+                $queryBuilder->addOrderBy($labelField);
             }
         } elseif ($GLOBALS['TCA'][$this->table]['ctrl']['label']) {
-            $this->queryBuilder->addOrderBy($GLOBALS['TCA'][$this->table]['ctrl']['label']);
+            $queryBuilder->addOrderBy($GLOBALS['TCA'][$this->table]['ctrl']['label']);
         }
+        return $queryBuilder;
     }
 
     /**
