@@ -184,7 +184,7 @@ class LocalizationUtility
             }
             // Get the entity
             if ($whereCount) {
-                $row = $queryBuilder->executeQuery()->fetch();
+                $row = $queryBuilder->executeQuery()->fetchAssociative();
                 if ($row) {
                     foreach ($labelFields as $labelField => $map) {
                         if ($row[$labelField]) {

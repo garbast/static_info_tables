@@ -401,7 +401,7 @@ class ManagerController extends ActionController
         return $language . ' (' . $locale . ')';
     }
 
-    protected function getErrorFlashMessage(): string|bool
+    protected function getErrorFlashMessage(): bool|string
     {
     	return false;
     }
