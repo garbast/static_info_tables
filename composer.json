@@ -26,12 +26,12 @@
     "typo3-ter/static-info-tables": "self.version"
   },
   "require": {
-    "typo3/cms-backend": "12.*.*@dev || 13.*.*@dev",
-    "typo3/cms-core": "12.*.*@dev || 13.*.*@dev",
-    "typo3/cms-extbase": "12.*.*@dev || 13.*.*@dev",
-    "typo3/cms-extensionmanager": "12.*.*@dev || 13.*.*@dev",
-    "typo3/cms-fluid": "12.*.*@dev || 13.*.*@dev",
-    "typo3/cms-frontend": "12.*.*@dev || 13.*.*@dev"
+    "typo3/cms-backend": "12.*.*@dev || 13.*.*@dev || dev-main",
+    "typo3/cms-core": "12.*.*@dev || 13.*.*@dev || dev-main",
+    "typo3/cms-extbase": "12.*.*@dev || 13.*.*@dev || dev-main",
+    "typo3/cms-extensionmanager": "12.*.*@dev || 13.*.*@dev || dev-main",
+    "typo3/cms-fluid": "12.*.*@dev || 13.*.*@dev || dev-main",
+    "typo3/cms-frontend": "12.*.*@dev || 13.*.*@dev || dev-main"
   },
   "autoload": {
     "psr-4": {
