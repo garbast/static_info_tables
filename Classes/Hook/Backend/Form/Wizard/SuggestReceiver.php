@@ -101,11 +101,12 @@ class SuggestReceiver extends SuggestWizardDefaultReceiver
         $labelFields = LocalizationUtility::getLabelFields($this->table, $lang);
         if (!empty($labelFields)) {
             foreach ($labelFields as $labelField) {
-                $this->queryBuilder->addOrderBy($labelField);
+                $queryBuilder->addOrderBy($labelField);
             }
         } elseif ($GLOBALS['TCA'][$this->table]['ctrl']['label']) {
-            $this->queryBuilder->addOrderBy($GLOBALS['TCA'][$this->table]['ctrl']['label']);
+            $queryBuilder->addOrderBy($GLOBALS['TCA'][$this->table]['ctrl']['label']);
         }
+        return $queryBuilder;
     }
 
     /**
